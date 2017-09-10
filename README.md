@@ -6,6 +6,6 @@
 ##### To design an omnidirectional tradmill for an improved VR experience.
 
 Date | Update | Notes
----------------------
+-----|---------|------
 2017/08 | Started website template | Using Bootstrap template
 2017/09/10 | Began using Unity for demo game | Game is called Little World
