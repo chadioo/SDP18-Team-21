@@ -3,7 +3,7 @@
 ##### Matthew Bolognese, Charles Klinefelter, Jacqueline Lagasse, Ethan Miller
 
 ### Our Purpose
-##### To design an omnidirectional tradmill for an improved VR experience.
+##### To design an omnidirectional treadmill for an improved VR experience.
 
 ### Code Milestone Log
 
