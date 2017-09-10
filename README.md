@@ -2,8 +2,10 @@
 ### University of Massachusetts Amherst | Electrical and Computer Engineering
 ##### Matthew Bolognese, Charles Klinefelter, Jacqueline Lagasse, Ethan Miller
 
-### Our Purpose:
+### Our Purpose
 ##### To design an omnidirectional tradmill for an improved VR experience.
+
+### Code Milestone Log
 
 Date | Update | Notes
 -----|---------|------
