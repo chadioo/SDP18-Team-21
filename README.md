@@ -1,5 +1,5 @@
-# SDP18 Team 21
-### University of Massachusetts Amherst | Electrical and Computer Engineering
+# OmniRoll
+### University of Massachusetts Amherst | Electrical and Computer Engineering | SDP18 Team 21
 ##### Matthew Bolognese, Charles Klinefelter, Jacqueline Lagasse, Ethan Miller
 
 ### Our Purpose
