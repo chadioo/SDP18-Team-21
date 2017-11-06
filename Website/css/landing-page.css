@@ -26,14 +26,14 @@ h6 {
     padding-bottom: 50px;
     text-align: center;
     color: #f8f8f8;
-    background: url(../img/intro-bg.jpg) no-repeat center center;
+    background: url(../img/ar-gal.jpg) no-repeat center center;
     background-size: cover;
 }
 
 .intro-message {
     position: relative;
-    padding-top: 20%;
-    padding-bottom: 20%;
+    padding-top: 10%;
+    padding-bottom: 10%;
 }
 
 .intro-message > h1 {
@@ -79,9 +79,14 @@ h6 {
     letter-spacing: 2px;
 }
 
-.content-section-a {
+.content-section-x {
     padding: 50px 0;
     background-color: #f8f8f8;
+}
+
+.content-section-y {
+    padding: 50px 0;
+    background-color: #e5e5e5;
 }
 
 .content-section-b {
@@ -100,10 +105,24 @@ h6 {
     border-top: 3px solid #e7e7e7;
 }
 
-.banner {
+.banner1 {
     padding: 100px 0;
     color: #f8f8f8;
-    background: url(../img/banner-bg.jpg) no-repeat center center;
+    background: url(../img/ar-guy.jpg) no-repeat center center;
+    background-size: cover;
+}
+
+.banner2 {
+    padding: 100px 0;
+    color: #f8f8f8;
+    background: url(../img/ar-hand.jpg) no-repeat center center;
+    background-size: cover;
+}
+
+.banner3 {
+    padding: 100px 0;
+    color: #f8f8f8;
+    background: url(../img/ar-hand.jpg) no-repeat center center;
     background-size: cover;
 }
 
