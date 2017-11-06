@@ -1,9 +1,9 @@
-# SDP18 Team 21
-### University of Massachusetts Amherst | Electrical and Computer Engineering
+# OmniRoll
+### University of Massachusetts Amherst | Electrical and Computer Engineering | SDP18 Team 21
 ##### Matthew Bolognese, Charles Klinefelter, Jacqueline Lagasse, Ethan Miller
 
 ### Our Purpose
-##### To design an omnidirectional treadmill for an improved VR experience.
+##### Our goal is to create a low-cost, omnidirectional treadmill that allows for unlimited movement in a virtual space while keeping the user stationary. In addition, the treadmill should maintain immersion in the virtual space and allow for freedom of movement on a level surface.
 
 ### Code Milestone Log
 
