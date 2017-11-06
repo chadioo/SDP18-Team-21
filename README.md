@@ -3,7 +3,7 @@
 ##### Matthew Bolognese, Charles Klinefelter, Jacqueline Lagasse, Ethan Miller
 
 ### Our Purpose
-##### Our goal is to create a low-cost, omnidirectional treadmill that allows for unlimited movement in a virtual space while keeping the user stationary. In addition, the treadmill should maintain immersion in the virtual space and allow for freedom of movement on a level surface.
+##### Our mission is to implement non-camera-based extremity tracking for use in AR.
 
 ### Code Milestone Log
 
