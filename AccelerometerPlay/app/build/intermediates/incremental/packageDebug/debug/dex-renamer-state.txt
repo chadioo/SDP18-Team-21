@@ -1,19 +1,19 @@
-#Thu Nov 16 23:26:25 EST 2017
+#Fri Nov 17 00:31:27 EST 2017
 renamed.5=classes6.dex
 renamed.4=classes5.dex
 renamed.3=classes4.dex
 renamed.2=classes3.dex
 renamed.1=classes2.dex
 renamed.0=classes.dex
-base.5=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\16
-base.4=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\15
-base.3=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\14
-base.2=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\13
-base.1=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\12
-base.0=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\11
-file.5=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\16\\classes.dex
-file.4=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\15\\classes.dex
-file.3=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\14\\classes.dex
-file.2=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\13\\classes.dex
-file.1=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\12\\classes.dex
-file.0=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\11\\classes.dex
+base.5=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/16
+base.4=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/13
+base.3=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/15
+base.2=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/12
+base.1=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/17
+base.0=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/14
+file.5=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/16/classes.dex
+file.4=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/13/classes.dex
+file.3=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/15/classes.dex
+file.2=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/12/classes.dex
+file.1=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/17/classes.dex
+file.0=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/14/classes.dex

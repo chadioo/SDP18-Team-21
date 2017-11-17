@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <instant-run
-    abi="arm64-v8a,armeabi-v7a,armeabi"
+    abi="x86"
     api-level="25"
     build-mode="FULL"
     density="560dpi"
     format="10"
     plugin-version="3.0.0"
-    timestamp="1510895459064"
-    token="7360478960323036682"
+    timestamp="1510896685564"
+    token="8797561308720242260"
     verifier="FULL_BUILD_REQUESTED" >
 
     <task
@@ -18,81 +18,81 @@
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="88" />
+        duration="70" />
     <task
         name="verifier"
-        duration="0" />
+        duration="9" />
 
     <artifact
-        location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
+        location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_4.apk"
         type="SPLIT" />
     <artifact
-        location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_4.apk"
+        location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_1.apk"
         type="SPLIT" />
     <artifact
-        location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
+        location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_0.apk"
         type="SPLIT" />
     <artifact
-        location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
+        location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_6.apk"
         type="SPLIT" />
     <artifact
-        location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
+        location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_5.apk"
         type="SPLIT" />
     <artifact
-        location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
+        location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_2.apk"
         type="SPLIT" />
     <artifact
-        location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_7.apk"
+        location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
         type="SPLIT" />
     <artifact
-        location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_6.apk"
+        location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_3.apk"
         type="SPLIT" />
     <artifact
-        location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
+        location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_8.apk"
         type="SPLIT" />
     <artifact
-        location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
+        location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_9.apk"
         type="SPLIT" />
     <artifact
-        location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\outputs\apk\debug\app-debug.apk"
+        location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/outputs/apk/debug/app-debug.apk"
         type="SPLIT_MAIN" />
 
     <build
         build-mode="FULL"
-        timestamp="1510895459064"
+        timestamp="1510896685564"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
-            location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
+            location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_4.apk"
             type="SPLIT" />
         <artifact
-            location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_4.apk"
+            location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_1.apk"
             type="SPLIT" />
         <artifact
-            location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
+            location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_0.apk"
             type="SPLIT" />
         <artifact
-            location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
+            location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_6.apk"
             type="SPLIT" />
         <artifact
-            location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
+            location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_5.apk"
             type="SPLIT" />
         <artifact
-            location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_2.apk"
+            location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_2.apk"
             type="SPLIT" />
         <artifact
-            location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_7.apk"
+            location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
             type="SPLIT" />
         <artifact
-            location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_6.apk"
+            location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_3.apk"
             type="SPLIT" />
         <artifact
-            location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_8.apk"
+            location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_8.apk"
             type="SPLIT" />
         <artifact
-            location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
+            location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/split-apk/debug/slices/slice_9.apk"
             type="SPLIT" />
         <artifact
-            location="C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\build\outputs\apk\debug\app-debug.apk"
+            location="/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/outputs/apk/debug/app-debug.apk"
             type="SPLIT_MAIN" />
     </build>
 

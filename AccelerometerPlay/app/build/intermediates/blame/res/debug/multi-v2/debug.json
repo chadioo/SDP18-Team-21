@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\merged\\debug\\values_values.arsc.flat",
+            "outputFile": "/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/merged/debug/values_values.arsc.flat",
             "map": [
                 {
-                    "source": "C:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\src\\main\\res\\values\\strings.xml",
+                    "source": "/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/res/values/strings.xml",
                     "from": {
                         "startLines": "17",
                         "startColumns": "4",
