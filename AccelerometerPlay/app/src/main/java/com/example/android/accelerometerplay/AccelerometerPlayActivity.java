@@ -18,7 +18,9 @@ package com.example.android.accelerometerplay;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.bluetooth.*;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.BitmapFactory.Options;
@@ -38,6 +40,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 /**
  * This is an example of using the accelerometer to integrate the device's
@@ -59,6 +62,8 @@ public class AccelerometerPlayActivity extends Activity {
     private WindowManager mWindowManager;
     private Display mDisplay;
     private WakeLock mWakeLock;
+    private int REQUEST_ENABLE_BT = 1;
+
 
     /** Called when the activity is first created. */
     @Override
@@ -81,8 +86,30 @@ public class AccelerometerPlayActivity extends Activity {
 
         // instantiate our simulation view and set it as the activity's content
         mSimulationView = new SimulationView(this);
-        mSimulationView.setBackgroundResource(R.drawable.wood);
+        mSimulationView.setBackgroundResource(R.drawable.grass);
         setContentView(mSimulationView);
+
+        // code to add bluetooth
+
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            // Device does not support Bluetooth
+            Toast.makeText(getApplicationContext(), "Device does not support Bluetooth", Toast.LENGTH_LONG).show();
+        }
+        else{
+            if (!mBluetoothAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                Toast.makeText(getApplicationContext(), "You are connected to Bluetooth", Toast.LENGTH_LONG).show();
+                String name = mBluetoothAdapter.getName();
+                if(name == null) {
+                    System.out.println("Name is null!");
+                }else{
+                    name = mBluetoothAdapter.getAddress();
+                    System.out.println(name);
+                }
+            }
+        }
     }
 
     @Override
@@ -232,11 +259,11 @@ public class AccelerometerPlayActivity extends Activity {
                 final long t = timestamp;
                 if (mLastT != 0) {
                     final float dT = (float) (t - mLastT) / 1000.f /** (1.0f / 1000000000.0f)*/;
-                        final int count = mBalls.length;
-                        for (int i = 0; i < count; i++) {
-                            Particle ball = mBalls[i];
-                            ball.computePhysics(sx, sy, dT);
-                        }
+                    final int count = mBalls.length;
+                    for (int i = 0; i < count; i++) {
+                        Particle ball = mBalls[i];
+                        ball.computePhysics(sx, sy, dT);
+                    }
                 }
                 mLastT = t;
             }

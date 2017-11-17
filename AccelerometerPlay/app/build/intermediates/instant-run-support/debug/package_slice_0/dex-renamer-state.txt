@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 #Fri Nov 17 00:31:27 EST 2017
 base.0=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/1
 renamed.0=classes.dex
 file.0=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/1/classes.dex
+=======
+#Fri Nov 17 02:24:09 EST 2017
+base.0=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\1
+renamed.0=classes.dex
+file.0=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\1\\classes.dex
+>>>>>>> 5aa1f0b276fa9f42eda0a9ecabbafd00c29fc7a3

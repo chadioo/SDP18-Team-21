@@ -1,7 +1,13 @@
 #Internal package file, do not edit.
+<<<<<<< HEAD
 #Fri Nov 17 00:31:25 EST 2017
 2.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
 5.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/mipmap-hdpi-v4/ic_launcher.png
+=======
+#Fri Nov 17 02:29:35 EST 2017
+2.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
+5.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\mipmap-hdpi-v4\\ic_launcher.png
+>>>>>>> 5aa1f0b276fa9f42eda0a9ecabbafd00c29fc7a3
 5.set=ANDROID_RESOURCE
 3.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
 6.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/AndroidManifest.xml
@@ -14,8 +20,13 @@ count=10
 5.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
 8.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/resources.arsc
 4.set=ANDROID_RESOURCE
+<<<<<<< HEAD
 6.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
 1.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/layout/main.xml
+=======
+6.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
+1.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\drawable-hdpi-v4\\grass.jpg
+>>>>>>> 5aa1f0b276fa9f42eda0a9ecabbafd00c29fc7a3
 9.set=ANDROID_RESOURCE
 9.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/drawable-hdpi-v4/ball.png
 1.set=ANDROID_RESOURCE

@@ -31,9 +31,14 @@
     </application>
 
 
-<uses-sdk android:minSdkVersion="5"></uses-sdk>
-<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
+    <uses-sdk android:minSdkVersion="5"></uses-sdk>
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 
-<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+
+    // added to use bluetooth https://developer.android.com/guide/topics/connectivity/bluetooth.html
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 </manifest>
