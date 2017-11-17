@@ -1,4 +1,4 @@
-#Thu Nov 16 23:26:24 EST 2017
-base.0=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\2
+#Fri Nov 17 02:24:09 EST 2017
+base.0=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\3
 renamed.0=classes.dex
-file.0=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\2\\classes.dex
+file.0=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\3\\classes.dex

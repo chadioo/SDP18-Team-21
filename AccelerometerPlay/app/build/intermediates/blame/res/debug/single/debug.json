@@ -4,12 +4,12 @@
         "source": "C:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_wood.jpg.flat",
-        "source": "C:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\src\\main\\res\\drawable-hdpi\\wood.jpg"
-    },
-    {
         "merged": "C:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
         "source": "C:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_grass.jpg.flat",
+        "source": "C:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\src\\main\\res\\drawable-hdpi\\grass.jpg"
     },
     {
         "merged": "C:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",

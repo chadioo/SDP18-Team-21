@@ -10,7 +10,7 @@ package com.example.android.accelerometerplay;
 public final class R {
   public static final class drawable {
     public static final int ball=0x7f010000;
-    public static final int wood=0x7f010001;
+    public static final int grass=0x7f010001;
   }
   public static final class layout {
     public static final int main=0x7f020000;
