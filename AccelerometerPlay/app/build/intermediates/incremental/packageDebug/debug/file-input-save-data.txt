@@ -1,6 +1,5 @@
 #Internal package file, do not edit.
-<<<<<<< HEAD
-#Fri Nov 17 00:31:27 EST 2017
+#Fri Nov 17 12:16:34 EST 2017
 8.set=ANDROID_RESOURCE
 1.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
 1.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/layout/main.xml
@@ -11,60 +10,35 @@
 5.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/16
 5.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/16/classes.dex
 7.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
-7.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/mipmap-xxxhdpi-v4/ic_launcher.png
-11.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/drawable-hdpi-v4/wood.jpg
-11.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
+7.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/drawable-hdpi-v4/grass.jpg
+11.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/13/classes.dex
+11.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/13
 9.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
-9.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/mipmap-hdpi-v4/ic_launcher.png
+9.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/mipmap-mdpi-v4/ic_launcher.png
 13.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/resources.arsc
 13.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
-11.set=ANDROID_RESOURCE
+11.set=DEX
 0.set=DEX
 15.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/14/classes.dex
 15.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/14
-=======
-#Fri Nov 17 02:29:36 EST 2017
-8.set=ANDROID_RESOURCE
-1.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\17
-1.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\17\\classes.dex
-3.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\mipmap-xxhdpi-v4\\ic_launcher.png
-3.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-15.set=DEX
-4.set=ANDROID_RESOURCE
-5.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-5.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\AndroidManifest.xml
-7.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-7.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\resources.arsc
-11.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\layout\\main.xml
-11.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-9.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-9.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\drawable-hdpi-v4\\grass.jpg
-13.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\14\\classes.dex
-13.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\14
-11.set=ANDROID_RESOURCE
-0.set=ANDROID_RESOURCE
-15.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\13\\classes.dex
-15.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\13
->>>>>>> 5aa1f0b276fa9f42eda0a9ecabbafd00c29fc7a3
 7.set=ANDROID_RESOURCE
 14.set=ANDROID_RESOURCE
 3.set=ANDROID_RESOURCE
-10.set=DEX
+10.set=ANDROID_RESOURCE
 0.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/15
 0.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/15/classes.dex
 6.set=ANDROID_RESOURCE
-<<<<<<< HEAD
 2.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/17/classes.dex
 2.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/17
 4.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/mipmap-xxhdpi-v4/ic_launcher.png
 4.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
 6.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
 6.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/AndroidManifest.xml
-10.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/13
-10.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/13/classes.dex
+10.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
+10.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/mipmap-hdpi-v4/ic_launcher.png
 13.set=ANDROID_RESOURCE
 8.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_
-8.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/mipmap-mdpi-v4/ic_launcher.png
+8.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/res/debug/resources-debug.ap_/res/mipmap-xxxhdpi-v4/ic_launcher.png
 2.set=DEX
 12.file=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/12/classes.dex
 12.base=/Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/build/intermediates/transforms/dexMerger/debug/12
@@ -75,26 +49,3 @@ count=16
 5.set=DEX
 12.set=DEX
 1.set=ANDROID_RESOURCE
-=======
-2.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\16\\classes.dex
-2.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\16
-4.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\mipmap-xxxhdpi-v4\\ic_launcher.png
-4.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-6.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-6.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\mipmap-hdpi-v4\\ic_launcher.png
-10.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\12
-10.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\12\\classes.dex
-13.set=DEX
-8.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-8.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\mipmap-mdpi-v4\\ic_launcher.png
-2.set=DEX
-12.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\15\\classes.dex
-12.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\15
-14.file=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\mipmap-xhdpi-v4\\ic_launcher.png
-14.base=C\:\\Users\\Jackie\\Documents\\git\\SDP18-Team-7\\AccelerometerPlay\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_
-9.set=ANDROID_RESOURCE
-count=16
-5.set=ANDROID_RESOURCE
-12.set=DEX
-1.set=DEX
->>>>>>> 5aa1f0b276fa9f42eda0a9ecabbafd00c29fc7a3

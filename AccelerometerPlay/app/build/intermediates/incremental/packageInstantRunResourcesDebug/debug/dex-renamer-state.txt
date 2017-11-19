@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-#Fri Nov 17 00:31:25 EST 2017
-=======
-#Fri Nov 17 02:29:35 EST 2017
->>>>>>> 5aa1f0b276fa9f42eda0a9ecabbafd00c29fc7a3
+#Fri Nov 17 12:16:32 EST 2017

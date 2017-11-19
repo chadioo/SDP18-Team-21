@@ -1,22 +1,12 @@
 -- Merging decision tree log ---
 manifest
-<<<<<<< HEAD
-ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-39:12
-INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-39:12
-INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-39:12
-INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-39:12
-INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-39:12
-INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-39:12
-INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-39:12
-=======
-ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:17:1-44:12
-INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:17:1-44:12
-INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:17:1-44:12
-INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:17:1-44:12
-INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:17:1-44:12
-INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:17:1-44:12
-INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:17:1-44:12
->>>>>>> 5aa1f0b276fa9f42eda0a9ecabbafd00c29fc7a3
+ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-44:12
+INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-44:12
+INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-44:12
+INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-44:12
+INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-44:12
+INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-44:12
+INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:17:1-44:12
 	package
 		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:19:33-80
 		INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml
@@ -58,60 +48,36 @@ ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPl
 	android:name
 		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:27:27-74
 uses-sdk
-<<<<<<< HEAD
-ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:1-48
-INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:1-48
-INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:1-48
-INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:1-48
-INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:1-48
+ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:5-52
+INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:5-52
+INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:5-52
+INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:5-52
+INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:5-52
 	android:targetSdkVersion
 		INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml
-		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:1-48
+		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:5-52
 		INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:11-36
+		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:34:15-40
 		INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml
 uses-permission#android.permission.VIBRATE
-ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:35:1-78
+ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:35:5-82
 	android:name
-		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:35:18-59
+		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:35:22-63
 uses-permission#android.permission.WAKE_LOCK
-ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:37:1-80
+ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:37:5-84
 	android:name
-		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:37:18-61
-=======
-ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:34:5-52
-INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:34:5-52
-INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:34:5-52
-INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:34:5-52
-INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:34:5-52
-	android:targetSdkVersion
-		INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:34:5-52
-		INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml
-	android:minSdkVersion
-		ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:34:15-40
-		INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml
-uses-permission#android.permission.VIBRATE
-ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:35:5-82
-	android:name
-		ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:35:22-63
-uses-permission#android.permission.WAKE_LOCK
-ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:37:5-84
-	android:name
-		ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:37:22-65
+		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:37:22-65
 uses-permission#android.permission.BLUETOOTH
-ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:40:5-68
+ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:40:5-68
 	android:name
-		ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:40:22-65
+		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:40:22-65
 uses-permission#android.permission.BLUETOOTH_ADMIN
-ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:41:5-74
+ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:41:5-74
 	android:name
-		ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:41:22-71
+		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:41:22-71
 uses-permission#android.permission.ACCESS_COARSE_LOCATION
-ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:42:5-81
+ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:42:5-81
 	android:name
-		ADDED from C:\Users\Jackie\Documents\git\SDP18-Team-7\AccelerometerPlay\app\src\main\AndroidManifest.xml:42:22-78
->>>>>>> 5aa1f0b276fa9f42eda0a9ecabbafd00c29fc7a3
+		ADDED from /Users/Chad/Documents/School/Senior/SDP/SDP18-Team-21/AccelerometerPlay/app/src/main/AndroidManifest.xml:42:22-78
