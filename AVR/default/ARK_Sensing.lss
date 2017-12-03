@@ -1,0 +1,183 @@
+
+ARK_Sensing.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000be  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .debug_aranges 00000020  00000000  00000000  00000112  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  2 .debug_pubnames 0000001b  00000000  00000000  00000132  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_info   00000090  00000000  00000000  0000014d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_abbrev 00000057  00000000  00000000  000001dd  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_line   000000e2  00000000  00000000  00000234  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_frame  00000020  00000000  00000000  00000318  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    0000008c  00000000  00000000  00000338  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 36 00 	call	0x6c	; 0x6c <main>
+  64:	0c 94 5d 00 	jmp	0xba	; 0xba <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <main>:
+#include "i2c.h"
+
+int main(void) {
+
+	/* Initialize clock settings */
+	TWSR=0x00; // set presca1er bits to 1 (0x00=1, 0x01=4, 0x02=16, 0x03=64)
+  6c:	11 b8       	out	0x01, r1	; 1
+    TWBR=0x2A; // SCL frequency
+  6e:	8a e2       	ldi	r24, 0x2A	; 42
+  70:	80 b9       	out	0x00, r24	; 0
+	TWCR = TWI Control Register
+	TWINT = TWI interrupt flag ( bit 7 on TWCR )
+	TWSTA = START condition bit ( bit 5 on TWCR )
+	TWEN = TWI enable bit ( bit 2 on TWCR )
+	*/
+	TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN);
+  72:	84 ea       	ldi	r24, 0xA4	; 164
+  74:	86 bf       	out	0x36, r24	; 54
+
+	/* Wait until START condition has been transmitted 
+	Wait until the TWINT flag is set */
+	while (!(TWCR & (1<<TWINT)))
+  76:	06 b6       	in	r0, 0x36	; 54
+  78:	07 fe       	sbrs	r0, 7
+  7a:	fd cf       	rjmp	.-6      	; 0x76 <main+0xa>
+	*/
+
+	/* Load SLA+W into TWDR Register 
+	This is the Slave Address + R/W bit*/
+	int SLA_W = (0x68<<1) | 0;
+	TWDR = SLA_W;
+  7c:	80 ed       	ldi	r24, 0xD0	; 208
+  7e:	83 b9       	out	0x03, r24	; 3
+
+	/* Clear TWINT bit in TWCR to start transmission of address */
+	TWCR = (1<<TWINT) | (1<<TWEN);
+  80:	84 e8       	ldi	r24, 0x84	; 132
+  82:	86 bf       	out	0x36, r24	; 54
+
+	/* Wait for TWINT Flag set
+	This indicates that the SLA+W has been transmitted
+	and ACK/NACK has been received. */
+	while (!(TWCR & (1<<TWINT)))
+  84:	06 b6       	in	r0, 0x36	; 54
+  86:	07 fe       	sbrs	r0, 7
+  88:	fd cf       	rjmp	.-6      	; 0x84 <main+0x18>
+	
+	*/
+
+	/* Load DATA into TWDR Register. */
+	int DATA = 0x0C;
+	TWDR = DATA;
+  8a:	8c e0       	ldi	r24, 0x0C	; 12
+  8c:	83 b9       	out	0x03, r24	; 3
+
+	/* Clear TWINT bit in TWCR to start transmission of data */
+	TWCR = (1<<TWINT) | (1<<TWEN);
+  8e:	84 e8       	ldi	r24, 0x84	; 132
+  90:	86 bf       	out	0x36, r24	; 54
+
+	/* Wait until START condition has been transmitted 
+	Wait until the TWINT flag is set */
+	while (!(TWCR & (1<<TWINT)))
+  92:	06 b6       	in	r0, 0x36	; 54
+  94:	07 fe       	sbrs	r0, 7
+  96:	fd cf       	rjmp	.-6      	; 0x92 <main+0x26>
+	TWCR = TWI Control Register
+	TWINT = TWI interrupt flag ( bit 7 on TWCR )
+	TWSTA = START condition bit ( bit 5 on TWCR )
+	TWEN = TWI enable bit ( bit 2 on TWCR )
+	*/
+	TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN);
+  98:	84 ea       	ldi	r24, 0xA4	; 164
+  9a:	86 bf       	out	0x36, r24	; 54
+
+	/* Wait until START condition has been transmitted 
+	Wait until the TWINT flag is set */
+	while (!(TWCR & (1<<TWINT)))
+  9c:	06 b6       	in	r0, 0x36	; 54
+  9e:	07 fe       	sbrs	r0, 7
+  a0:	fd cf       	rjmp	.-6      	; 0x9c <main+0x30>
+		;
+
+	/* Load SLA+W into TWDR Register 
+	This is the Slave Address + R/W bit*/
+	SLA_W = (0x68<<1) | 1;
+	TWDR = SLA_W;
+  a2:	81 ed       	ldi	r24, 0xD1	; 209
+  a4:	83 b9       	out	0x03, r24	; 3
+
+	/* Clear TWINT bit in TWCR to start transmission of address */
+	TWCR = (1<<TWINT) | (1<<TWEN);
+  a6:	84 e8       	ldi	r24, 0x84	; 132
+  a8:	86 bf       	out	0x36, r24	; 54
+
+	/* Wait for TWINT Flag set
+	This indicates that the SLA+W has been transmitted
+	and ACK/NACK has been received. */
+	while (!(TWCR & (1<<TWINT)))
+  aa:	06 b6       	in	r0, 0x36	; 54
+  ac:	07 fe       	sbrs	r0, 7
+  ae:	fd cf       	rjmp	.-6      	; 0xaa <main+0x3e>
+
+
+	// End program
+
+	/* Transmit STOP condition */
+	TWCR = (1<<TWINT)|(1<<TWEN)|
+  b0:	84 e9       	ldi	r24, 0x94	; 148
+  b2:	86 bf       	out	0x36, r24	; 54
+	(1<<TWSTO);
+
+}
+  b4:	80 e0       	ldi	r24, 0x00	; 0
+  b6:	90 e0       	ldi	r25, 0x00	; 0
+  b8:	08 95       	ret
+
+000000ba <_exit>:
+  ba:	f8 94       	cli
+
+000000bc <__stop_program>:
+  bc:	ff cf       	rjmp	.-2      	; 0xbc <__stop_program>

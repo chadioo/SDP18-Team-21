@@ -1,0 +1,113 @@
+
+blink.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000a6  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .debug_aranges 00000020  00000000  00000000  000000fa  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  2 .debug_pubnames 0000002a  00000000  00000000  0000011a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_info   0000008a  00000000  00000000  00000144  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_abbrev 00000056  00000000  00000000  000001ce  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_line   0000009c  00000000  00000000  00000224  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_frame  00000030  00000000  00000000  000002c0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    00000086  00000000  00000000  000002f0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 36 00 	jmp	0x6c	; 0x6c <__vector_9>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 45 00 	call	0x8a	; 0x8a <main>
+  64:	0c 94 51 00 	jmp	0xa2	; 0xa2 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <__vector_9>:
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+ISR(TIMER1_OVF_vect)
+{
+  6c:	1f 92       	push	r1
+  6e:	0f 92       	push	r0
+  70:	0f b6       	in	r0, 0x3f	; 63
+  72:	0f 92       	push	r0
+  74:	11 24       	eor	r1, r1
+  76:	8f 93       	push	r24
+    PORTB ^= 0xFF;           //toggle PORTB values 
+  78:	88 b3       	in	r24, 0x18	; 24
+  7a:	80 95       	com	r24
+  7c:	88 bb       	out	0x18, r24	; 24
+}
+  7e:	8f 91       	pop	r24
+  80:	0f 90       	pop	r0
+  82:	0f be       	out	0x3f, r0	; 63
+  84:	0f 90       	pop	r0
+  86:	1f 90       	pop	r1
+  88:	18 95       	reti
+
+0000008a <main>:
+
+int main(void)
+{
+    DDRB = 0xFF;	     //Set PORTB as output
+  8a:	8f ef       	ldi	r24, 0xFF	; 255
+  8c:	87 bb       	out	0x17, r24	; 23
+    PORTB = 0;		     //Clear PORTB bits (turn the LEDs off)
+  8e:	18 ba       	out	0x18, r1	; 24
+    
+    TCCR1B |= (1 << CS11);   //Timer1 prescaler = 8
+  90:	8e b5       	in	r24, 0x2e	; 46
+  92:	82 60       	ori	r24, 0x02	; 2
+  94:	8e bd       	out	0x2e, r24	; 46
+    TCNT1 = 0;		     //Clear the timer counter
+  96:	1d bc       	out	0x2d, r1	; 45
+  98:	1c bc       	out	0x2c, r1	; 44
+    TIMSK = (1 << TOIE1);    //Enable timer1 overflow interrupt(TOIE1)
+  9a:	84 e0       	ldi	r24, 0x04	; 4
+  9c:	89 bf       	out	0x39, r24	; 57
+    sei();		     //Enable global interrupts
+  9e:	78 94       	sei
+  a0:	ff cf       	rjmp	.-2      	; 0xa0 <main+0x16>
+
+000000a2 <_exit>:
+  a2:	f8 94       	cli
+
+000000a4 <__stop_program>:
+  a4:	ff cf       	rjmp	.-2      	; 0xa4 <__stop_program>
