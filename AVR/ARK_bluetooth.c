@@ -1,4 +1,3 @@
-#include <io.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>
 #include <string.h>
@@ -105,12 +104,14 @@ int main(void)
 		char DATA_IN = USART_Receive();
 		
 		if(DATA_IN == '1') {
-			PORTB |= (1<<PB2);
+			//PORTB |= (1<<PB2);
+			PORTB |= 0xFF; // all the LEDs
 			USART_SendString( "LED is on.\n" );
 		}
 
 		else if(DATA_IN == '0') {
-			PORTB &= ~(1<<PB2);
+			//PORTB &= ~(1<<PB2);
+			PORTB &= ~0xFF; // all the LEDs
 			USART_SendString( "LED is off.\n" );
 		}
 		
