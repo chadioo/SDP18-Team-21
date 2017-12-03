@@ -3,25 +3,25 @@ ARK_bluetooth.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000150  00000000  00000000  00000074  2**1
+  0 .text         00000158  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         0000004c  00800060  00000150  000001c4  2**0
+  1 .data         0000004c  00800060  00000158  000001cc  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .debug_aranges 00000020  00000000  00000000  00000210  2**0
+  2 .debug_aranges 00000020  00000000  00000000  00000218  2**0
                   CONTENTS, READONLY, DEBUGGING
-  3 .debug_pubnames 000000ac  00000000  00000000  00000230  2**0
+  3 .debug_pubnames 000000ac  00000000  00000000  00000238  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   000001fd  00000000  00000000  000002dc  2**0
+  4 .debug_info   000001fd  00000000  00000000  000002e4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 00000185  00000000  00000000  000004d9  2**0
+  5 .debug_abbrev 00000185  00000000  00000000  000004e1  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   00000211  00000000  00000000  0000065e  2**0
+  6 .debug_line   00000219  00000000  00000000  00000666  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  000000a0  00000000  00000000  00000870  2**2
+  7 .debug_frame  000000a0  00000000  00000000  00000880  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    0000010c  00000000  00000000  00000910  2**0
+  8 .debug_str    00000111  00000000  00000000  00000920  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    00000059  00000000  00000000  00000a1c  2**0
+  9 .debug_loc    00000059  00000000  00000000  00000a31  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -61,7 +61,7 @@ Disassembly of section .text:
   60:	10 e0       	ldi	r17, 0x00	; 0
   62:	a0 e6       	ldi	r26, 0x60	; 96
   64:	b0 e0       	ldi	r27, 0x00	; 0
-  66:	e0 e5       	ldi	r30, 0x50	; 80
+  66:	e8 e5       	ldi	r30, 0x58	; 88
   68:	f1 e0       	ldi	r31, 0x01	; 1
   6a:	02 c0       	rjmp	.+4      	; 0x70 <.do_copy_data_start>
 
@@ -74,7 +74,7 @@ Disassembly of section .text:
   72:	b1 07       	cpc	r27, r17
   74:	d9 f7       	brne	.-10     	; 0x6c <.do_copy_data_loop>
   76:	0e 94 87 00 	call	0x10e	; 0x10e <main>
-  7a:	0c 94 a6 00 	jmp	0x14c	; 0x14c <_exit>
+  7a:	0c 94 aa 00 	jmp	0x154	; 0x154 <_exit>
 
 0000007e <__bad_interrupt>:
   7e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -279,74 +279,86 @@ void USART_Start_Timer()
 // Main Method
 int main(void)
 {
+ 10e:	1f 93       	push	r17
 
 	Bluetooth_Init();
- 10e:	0e 94 6f 00 	call	0xde	; 0xde <Bluetooth_Init>
+ 110:	0e 94 6f 00 	call	0xde	; 0xde <Bluetooth_Init>
 
 	//USART_Init(9600);		// Initialize baud rate
     
 	// LED Light is Port B
 	DDRB = 0xFF;			// Set PORTB as output
- 112:	8f ef       	ldi	r24, 0xFF	; 255
- 114:	87 bb       	out	0x17, r24	; 23
+ 114:	8f ef       	ldi	r24, 0xFF	; 255
+ 116:	87 bb       	out	0x17, r24	; 23
 	PORTB = 0;				// Clear PORTB bits (turn the LEDs off)
- 116:	18 ba       	out	0x18, r1	; 24
+ 118:	18 ba       	out	0x18, r1	; 24
     
 	// Bluetooth is Port D
 	DDRD = 0x01; 			// PD0 is RX so processor reads it, PD1 is TX so processor writes it
- 118:	81 e0       	ldi	r24, 0x01	; 1
- 11a:	81 bb       	out	0x11, r24	; 17
+ 11a:	81 e0       	ldi	r24, 0x01	; 1
+ 11c:	81 bb       	out	0x11, r24	; 17
+	
+		char DATA_IN = USART_Receive();
+		
+		if(DATA_IN == '1') {
+			//PORTB |= (1<<PB2);
+			PORTB |= 0xFF;
+ 11e:	1f ef       	ldi	r17, 0xFF	; 255
 
 // Data from Bluetooth TX given to USART RX
 unsigned char USART_Receive( void )
 {
 	/* Wait for data to be received */
 	while ( !(UCSRA & (1<<RXC)) ) {  }
- 11c:	5f 9b       	sbis	0x0b, 7	; 11
- 11e:	fe cf       	rjmp	.-4      	; 0x11c <main+0xe>
+ 120:	5f 9b       	sbis	0x0b, 7	; 11
+ 122:	fe cf       	rjmp	.-4      	; 0x120 <main+0x12>
 	/* Get and return received data from buffer */
 	return UDR;
- 120:	8c b1       	in	r24, 0x0c	; 12
+ 124:	8c b1       	in	r24, 0x0c	; 12
 
 	while(1){
 	
 		char DATA_IN = USART_Receive();
 		
 		if(DATA_IN == '1') {
- 122:	81 33       	cpi	r24, 0x31	; 49
- 124:	21 f4       	brne	.+8      	; 0x12e <main+0x20>
-			PORTB |= (1<<PB2);
- 126:	c2 9a       	sbi	0x18, 2	; 24
+ 126:	81 33       	cpi	r24, 0x31	; 49
+ 128:	29 f4       	brne	.+10     	; 0x134 <main+0x26>
+			//PORTB |= (1<<PB2);
+			PORTB |= 0xFF;
+ 12a:	88 b3       	in	r24, 0x18	; 24
+ 12c:	18 bb       	out	0x18, r17	; 24
 			USART_SendString( "LED is on.\n" );
- 128:	83 e7       	ldi	r24, 0x73	; 115
- 12a:	90 e0       	ldi	r25, 0x00	; 0
- 12c:	0c c0       	rjmp	.+24     	; 0x146 <main+0x38>
+ 12e:	83 e7       	ldi	r24, 0x73	; 115
+ 130:	90 e0       	ldi	r25, 0x00	; 0
+ 132:	0d c0       	rjmp	.+26     	; 0x14e <main+0x40>
 		}
 
 		else if(DATA_IN == '0') {
- 12e:	80 33       	cpi	r24, 0x30	; 48
- 130:	21 f4       	brne	.+8      	; 0x13a <main+0x2c>
-			PORTB &= ~(1<<PB2);
- 132:	c2 98       	cbi	0x18, 2	; 24
+ 134:	80 33       	cpi	r24, 0x30	; 48
+ 136:	29 f4       	brne	.+10     	; 0x142 <main+0x34>
+			//PORTB &= ~(1<<PB2);
+			PORTB &= ~0xFF;
+ 138:	88 b3       	in	r24, 0x18	; 24
+ 13a:	18 ba       	out	0x18, r1	; 24
 			USART_SendString( "LED is off.\n" );
- 134:	8f e7       	ldi	r24, 0x7F	; 127
- 136:	90 e0       	ldi	r25, 0x00	; 0
- 138:	06 c0       	rjmp	.+12     	; 0x146 <main+0x38>
+ 13c:	8f e7       	ldi	r24, 0x7F	; 127
+ 13e:	90 e0       	ldi	r25, 0x00	; 0
+ 140:	06 c0       	rjmp	.+12     	; 0x14e <main+0x40>
 		}
 		
 		else if(DATA_IN == '\n' || DATA_IN == '\r');
- 13a:	8a 30       	cpi	r24, 0x0A	; 10
- 13c:	79 f3       	breq	.-34     	; 0x11c <main+0xe>
- 13e:	8d 30       	cpi	r24, 0x0D	; 13
- 140:	69 f3       	breq	.-38     	; 0x11c <main+0xe>
+ 142:	8a 30       	cpi	r24, 0x0A	; 10
+ 144:	69 f3       	breq	.-38     	; 0x120 <main+0x12>
+ 146:	8d 30       	cpi	r24, 0x0D	; 13
+ 148:	59 f3       	breq	.-42     	; 0x120 <main+0x12>
 		else USART_SendString( "Please select a proper option.\n" );
- 142:	8c e8       	ldi	r24, 0x8C	; 140
- 144:	90 e0       	ldi	r25, 0x00	; 0
- 146:	0e 94 58 00 	call	0xb0	; 0xb0 <USART_SendString>
- 14a:	e8 cf       	rjmp	.-48     	; 0x11c <main+0xe>
+ 14a:	8c e8       	ldi	r24, 0x8C	; 140
+ 14c:	90 e0       	ldi	r25, 0x00	; 0
+ 14e:	0e 94 58 00 	call	0xb0	; 0xb0 <USART_SendString>
+ 152:	e6 cf       	rjmp	.-52     	; 0x120 <main+0x12>
 
-0000014c <_exit>:
- 14c:	f8 94       	cli
+00000154 <_exit>:
+ 154:	f8 94       	cli
 
-0000014e <__stop_program>:
- 14e:	ff cf       	rjmp	.-2      	; 0x14e <__stop_program>
+00000156 <__stop_program>:
+ 156:	ff cf       	rjmp	.-2      	; 0x156 <__stop_program>

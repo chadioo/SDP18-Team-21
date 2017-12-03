@@ -37,7 +37,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Include Directories
-INCLUDES = -I"C:\Users\SDP\Documents\AVR_Studio_4\..\..\..\..\WinAVR-20100110\avr\include\avr" 
+INCLUDES = -I"C:\Users\SDP\Documents\SDP18-Team-21\AVR\..\..\..\..\WinAVR-20100110\avr\include\avr" 
 
 ## Objects that must be built in order to link
 OBJECTS = ARK_bluetooth.o 
