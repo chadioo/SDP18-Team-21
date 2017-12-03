@@ -131,7 +131,7 @@ public class ledControl extends AppCompatActivity {
         {
             try
             {
-                btSocket.getOutputStream().write("TF".toString().getBytes());
+                btSocket.getOutputStream().write("0".toString().getBytes());
             }
             catch (IOException e)
             {
@@ -146,7 +146,7 @@ public class ledControl extends AppCompatActivity {
         {
             try
             {
-                btSocket.getOutputStream().write("TO".toString().getBytes());
+                btSocket.getOutputStream().write("1".toString().getBytes());
             }
             catch (IOException e)
             {
@@ -164,7 +164,7 @@ public class ledControl extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_led_control, menu);
+        /*getMenuInflater().inflate(R.menu.menu_led_control, menu);*/
         return true;
     }
 
@@ -176,9 +176,9 @@ public class ledControl extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -190,7 +190,7 @@ public class ledControl extends AppCompatActivity {
         @Override
         protected void onPreExecute()
         {
-            progress = ProgressDialog.show(ledControl.this, "Connecting...", "Please wait!!!");  //show a progress dialog
+            progress = ProgressDialog.show(ledControl.this, "Connecting...", "Please wait!");  //show a progress dialog
         }
 
         @Override
