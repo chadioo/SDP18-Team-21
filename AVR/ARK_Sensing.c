@@ -13,7 +13,8 @@
 #include <avr/interrupt.h>	// Interrupt code (used in Bluetooth oferflow)
 
 #include "bmi160.h"			// BMI160 Methods
-
+#include "bmi160.c"			// BMI160 Methods
+#include "bmi160_defs.h"	// BMI160 Methods
 
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -38,8 +39,7 @@ void init_clock(){
 
 	/* Initialize clock settings */
 	TWSR=0x00; // set presca1er bits to 1 (0x00=1, 0x01=4, 0x02=16, 0x03=64)
-    TWBR=0x2A; // SCL frequency
-	TWCR=0x04;
+    TWBR=0x0D; // SCL frequency
 
 }
 
@@ -202,18 +202,90 @@ void USART_Start_Timer(){
 
 int main(void) {
 
+
+
+	// please double check my work for pointer errors
+
+	/*
+	Specify parameters for user_i2c_read
+	*/
+	uint8_t read_dev_addr = 0;
+	uint8_t read_reg_addr = 0;
+	uint8_t *read_data;
+	read_data = 0;
+	uint16_t read_len = 0;
+	bmi160_com_fptr_t *user_i2c_read;
+	// may need to swap || with &&
+	user_i2c_read = (read_dev_addr || read_reg_addr || *read_data || read_len);
+
+	/*
+	Specify parameters for user_i2c_write
+	*/
+	uint8_t write_dev_addr = 0;
+	uint8_t write_reg_addr = 0;
+	uint8_t *write_data;
+	write_data = 0;
+	uint16_t write_len = 0;
+	bmi160_com_fptr_t *user_i2c_write;
+	// may need to swap || with &&
+	user_i2c_write = (write_dev_addr || write_reg_addr || *write_data || write_len);
+
+	/*
+	Specify parameters for user_delay_ms
+	*/
+	bmi160_delay_fptr_t *user_delay_ms;
+	user_delay_ms = 0x0;
+
+	/*
+	Sample Init Code for I2C
+	*/
+	struct bmi160_dev sensor;
+	sensor.id = BMI160_I2C_ADDR;
+	sensor.interface = BMI160_I2C_INTF;
+	sensor.read = *user_i2c_read;
+	sensor.write = *user_i2c_write;
+	sensor.delay_ms = *user_delay_ms;
+
+	int8_t rslt = BMI160_OK;
+	rslt = bmi160_init(&sensor);
+
+	/* After the above function call, accel and gyro parameters in the device structure 
+	are set with default values, found in the datasheet of the sensor */
+
+
+
+	/* Select the Output data rate, range of Gyroscope sensor */
+	sensor.gyro_cfg.odr = BMI160_GYRO_ODR_3200HZ;
+	sensor.gyro_cfg.range = BMI160_GYRO_RANGE_2000_DPS;
+	sensor.gyro_cfg.bw = BMI160_GYRO_BW_NORMAL_MODE;
+
+	/* Select the power mode of Gyroscope sensor */
+	sensor.gyro_cfg.power = BMI160_GYRO_NORMAL_MODE; 
+
+	/* Set the sensor configuration */
+	rslt = bmi160_set_sens_conf(&sensor);
+
+	struct bmi160_sensor_data gyro;
+
+	/* To read only Gyro data */
+	rslt = bmi160_get_sensor_data(BMI160_GYRO_SEL, NULL, &gyro, &sensor);
+
+
+
+
+
 	init_clock();
 
 	send_start_signal();
 
 	// check_status_register(START); 
 
-	int slave_address = 0x68;
+	int slave_address = 0x68;				// default I2C address of BMI160
 	read_write_data(slave_address,0);		// write slave_address
 
 	// check_status_register(MT_SLA_ACK);
 
-	int register_address = 0x0C;
+	int register_address = 0x0C;			// 0x0C is 1st byte of Gyro X axis register
 	read_write_data(register_address,0);	// write register_address
 
 	// check_status_register(MT_DATA_ACK);
