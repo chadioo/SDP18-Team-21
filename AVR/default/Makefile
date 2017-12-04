@@ -1,11 +1,11 @@
 ###############################################################################
-# Makefile for the project ARK_bluetooth
+# Makefile for the project ARK_Sensing
 ###############################################################################
 
 ## General Flags
-PROJECT = ARK_bluetooth
+PROJECT = ARK_Sensing
 MCU = atmega32
-TARGET = ARK_bluetooth.elf
+TARGET = ARK_Sensing.elf
 CC = avr-gcc
 
 CPP = avr-g++
@@ -15,7 +15,7 @@ COMMON = -mmcu=$(MCU)
 
 ## Compile options common for all C compilation units.
 CFLAGS = $(COMMON)
-CFLAGS += -Wall -gdwarf-2 -std=gnu99                                      -DF_CPU=1000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CFLAGS += -Wall -gdwarf-2 -Os -std=gnu99 -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
 
 ## Assembly specific flags
@@ -25,7 +25,7 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 
 ## Linker flags
 LDFLAGS = $(COMMON)
-LDFLAGS +=  -Wl,-Map=ARK_bluetooth.map
+LDFLAGS +=  -Wl,-Map=ARK_Sensing.map
 
 
 ## Intel Hex file production flags
@@ -36,20 +36,17 @@ HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
 HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
-## Include Directories
-INCLUDES = -I"C:\Users\SDP\Documents\SDP18-Team-21\AVR\..\..\..\..\WinAVR-20100110\avr\include\avr" 
-
 ## Objects that must be built in order to link
-OBJECTS = ARK_bluetooth.o 
+OBJECTS = ARK_Sensing.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
 
 ## Build
-all: $(TARGET) ARK_bluetooth.hex ARK_bluetooth.eep ARK_bluetooth.lss size
+all: $(TARGET) ARK_Sensing.hex ARK_Sensing.eep ARK_Sensing.lss size
 
 ## Compile
-ARK_bluetooth.o: ../ARK_bluetooth.c
+ARK_Sensing.o: ../ARK_Sensing.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link
@@ -72,7 +69,7 @@ size: ${TARGET}
 ## Clean target
 .PHONY: clean
 clean:
-	-rm -rf $(OBJECTS) ARK_bluetooth.elf dep/* ARK_bluetooth.hex ARK_bluetooth.eep ARK_bluetooth.lss ARK_bluetooth.map
+	-rm -rf $(OBJECTS) ARK_Sensing.elf dep/* ARK_Sensing.hex ARK_Sensing.eep ARK_Sensing.lss ARK_Sensing.map
 
 
 ## Other dependencies

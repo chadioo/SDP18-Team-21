@@ -2,6 +2,8 @@ Archive member included because of file (symbol)
 
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o (exit)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+                              ARK_Sensing.o (__do_copy_data)
 
 Memory Configuration
 
@@ -112,7 +114,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000       0xbe
+.text           0x00000000      0x19e
  *(.vectors)
  .vectors       0x00000000       0x54 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
                 0x00000000                __vectors
@@ -150,6 +152,8 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  *(.init3)
  *(.init3)
  *(.init4)
+ .init4         0x00000060       0x16 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+                0x00000060                __do_copy_data
  *(.init4)
  *(.init5)
  *(.init5)
@@ -160,42 +164,57 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x00000060        0x8 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
+ .init9         0x00000076        0x8 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
  *(.init9)
  *(.text)
- .text          0x00000068        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
-                0x00000068                __vector_1
-                0x00000068                __vector_12
-                0x00000068                __bad_interrupt
-                0x00000068                __vector_6
-                0x00000068                __vector_3
-                0x00000068                __vector_11
-                0x00000068                __vector_13
-                0x00000068                __vector_17
-                0x00000068                __vector_19
-                0x00000068                __vector_7
-                0x00000068                __vector_5
-                0x00000068                __vector_4
-                0x00000068                __vector_9
-                0x00000068                __vector_2
-                0x00000068                __vector_15
-                0x00000068                __vector_8
-                0x00000068                __vector_14
-                0x00000068                __vector_10
-                0x00000068                __vector_16
-                0x00000068                __vector_18
-                0x00000068                __vector_20
- .text          0x0000006c       0x4e ARK_Sensing.o
-                0x0000006c                main
- .text          0x000000ba        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
-                0x000000ba                . = ALIGN (0x2)
+ .text          0x0000007e        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
+                0x0000007e                __vector_1
+                0x0000007e                __vector_12
+                0x0000007e                __bad_interrupt
+                0x0000007e                __vector_6
+                0x0000007e                __vector_3
+                0x0000007e                __vector_11
+                0x0000007e                __vector_13
+                0x0000007e                __vector_17
+                0x0000007e                __vector_19
+                0x0000007e                __vector_7
+                0x0000007e                __vector_5
+                0x0000007e                __vector_4
+                0x0000007e                __vector_2
+                0x0000007e                __vector_15
+                0x0000007e                __vector_8
+                0x0000007e                __vector_14
+                0x0000007e                __vector_10
+                0x0000007e                __vector_16
+                0x0000007e                __vector_18
+                0x0000007e                __vector_20
+ .text          0x00000082      0x118 ARK_Sensing.o
+                0x000000b8                check_status_register
+                0x0000009a                send_end_signal
+                0x00000082                init_clock
+                0x000000ea                USART_SendString
+                0x000000a0                read_write_data
+                0x00000136                USART_Start_Timer
+                0x00000108                USART_Init
+                0x000000e2                USART_Transmit
+                0x00000118                Bluetooth_Init
+                0x00000148                main
+                0x000000bc                __vector_9
+                0x0000008e                send_start_signal
+                0x000000da                USART_Receive
+                0x000000b6                print_trace
+                0x000000fe                USART_Flush
+ .text          0x0000019a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text          0x0000019a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+                0x0000019a                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x000000ba        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
-                0x000000ba                . = ALIGN (0x2)
+ .text.libgcc   0x0000019a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x0000019a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+                0x0000019a                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000000ba        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
-                0x000000ba                exit
-                0x000000ba                _exit
+ .fini9         0x0000019a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                0x0000019a                exit
+                0x0000019a                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -214,42 +233,45 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000000ba        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .fini0         0x0000019a        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000000be                _etext = .
+                0x0000019e                _etext = .
 
-.data           0x00800060        0x0 load address 0x000000be
+.data           0x00800060       0x14 load address 0x0000019e
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
- .data          0x00800060        0x0 ARK_Sensing.o
- .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .data          0x00800060       0x13 ARK_Sensing.o
+ .data          0x00800073        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .data          0x00800073        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
  *(.data*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x00800060                . = ALIGN (0x2)
-                0x00800060                _edata = .
-                0x00800060                PROVIDE (__data_end, .)
+                0x00800074                . = ALIGN (0x2)
+ *fill*         0x00800073        0x1 00
+                0x00800074                _edata = .
+                0x00800074                PROVIDE (__data_end, .)
 
-.bss            0x00800060        0x0
-                0x00800060                PROVIDE (__bss_start, .)
+.bss            0x00800074        0x0
+                0x00800074                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
- .bss           0x00800060        0x0 ARK_Sensing.o
- .bss           0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .bss           0x00800074        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
+ .bss           0x00800074        0x0 ARK_Sensing.o
+ .bss           0x00800074        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .bss           0x00800074        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
  *(.bss*)
  *(COMMON)
-                0x00800060                PROVIDE (__bss_end, .)
-                0x000000be                __data_load_start = LOADADDR (.data)
-                0x000000be                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800074                PROVIDE (__bss_end, .)
+                0x0000019e                __data_load_start = LOADADDR (.data)
+                0x000001b2                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800060        0x0
-                0x00800060                PROVIDE (__noinit_start, .)
+.noinit         0x00800074        0x0
+                0x00800074                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800060                PROVIDE (__noinit_end, .)
-                0x00800060                _end = .
-                0x00800060                PROVIDE (__heap_start, .)
+                0x00800074                PROVIDE (__noinit_end, .)
+                0x00800074                _end = .
+                0x00800074                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -306,35 +328,36 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x00000000       0x20 ARK_Sensing.o
 
 .debug_pubnames
-                0x00000000       0x1b
+                0x00000000      0x123
  *(.debug_pubnames)
  .debug_pubnames
-                0x00000000       0x1b ARK_Sensing.o
+                0x00000000      0x123 ARK_Sensing.o
 
-.debug_info     0x00000000       0x90
+.debug_info     0x00000000      0x355
  *(.debug_info)
- .debug_info    0x00000000       0x90 ARK_Sensing.o
+ .debug_info    0x00000000      0x355 ARK_Sensing.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000       0x57
+.debug_abbrev   0x00000000      0x1b4
  *(.debug_abbrev)
- .debug_abbrev  0x00000000       0x57 ARK_Sensing.o
+ .debug_abbrev  0x00000000      0x1b4 ARK_Sensing.o
 
-.debug_line     0x00000000       0xe2
+.debug_line     0x00000000      0x2eb
  *(.debug_line)
- .debug_line    0x00000000       0xe2 ARK_Sensing.o
+ .debug_line    0x00000000      0x2eb ARK_Sensing.o
 
-.debug_frame    0x00000000       0x20
+.debug_frame    0x00000000      0x100
  *(.debug_frame)
- .debug_frame   0x00000000       0x20 ARK_Sensing.o
+ .debug_frame   0x00000000      0x100 ARK_Sensing.o
 
-.debug_str      0x00000000       0x8c
+.debug_str      0x00000000      0x18e
  *(.debug_str)
- .debug_str     0x00000000       0x8c ARK_Sensing.o
-                                 0xc0 (size before relaxing)
+ .debug_str     0x00000000      0x18e ARK_Sensing.o
+                                0x1cc (size before relaxing)
 
-.debug_loc
+.debug_loc      0x00000000       0x60
  *(.debug_loc)
+ .debug_loc     0x00000000       0x60 ARK_Sensing.o
 
 .debug_macinfo
  *(.debug_macinfo)
