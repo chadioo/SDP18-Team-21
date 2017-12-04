@@ -1,7 +1,9 @@
 package com.team21.sdp18.umass.ece.led;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,21 +19,25 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.AsyncTask;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 
 public class ledControl extends AppCompatActivity {
 
-    Button btnOn, btnOff, btnDis;
+    Button btnOn, btnOff, btnBad, btnDis;
     SeekBar brightness;
     TextView lumn;
     String address = null;
+    String message;
     private ProgressDialog progress;
     BluetoothAdapter myBluetooth = null;
     BluetoothSocket btSocket = null;
     private boolean isBtConnected = false;
-    //SPP UUID. Look for it
+    Toast LEDinfo;
+    // Generic SPP UUID for connecting to a BT serial board
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     @Override
@@ -40,27 +46,28 @@ public class ledControl extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Intent newint = getIntent();
-        address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); //receive the address of the bluetooth device
+        address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); // Receive the address of the Bluetooth device
 
-        //view of the ledControl
+        // View of the ledControl
         setContentView(R.layout.activity_led_control);
 
-        //call the widgtes
+        // Call the widgets
         btnOn = (Button)findViewById(R.id.button2);
         btnOff = (Button)findViewById(R.id.button3);
+        btnBad = (Button)findViewById(R.id.button1);
         btnDis = (Button)findViewById(R.id.button4);
         brightness = (SeekBar)findViewById(R.id.seekBar);
         lumn = (TextView)findViewById(R.id.lumn);
 
-        new ConnectBT().execute(); //Call the class to connect
+        new ConnectBT().execute(); // Call the class to connect
 
-        //commands to be sent to bluetooth
+        // Commands to be sent to Bluetooth
         btnOn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                turnOnLed();      //method to turn on
+                turnOnLed();     // Method to turn on
             }
         });
 
@@ -68,7 +75,15 @@ public class ledControl extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                turnOffLed();   //method to turn off
+                turnOffLed();   // Method to turn off
+            }
+        });
+
+        btnBad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                rejectMessage();   // Pick a different option
             }
         });
 
@@ -77,7 +92,7 @@ public class ledControl extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Disconnect(); //close connection
+                Disconnect();   // Close connection
             }
         });
 
@@ -112,16 +127,16 @@ public class ledControl extends AppCompatActivity {
 
     private void Disconnect()
     {
-        if (btSocket!=null) //If the btSocket is busy
+        if (btSocket!=null) // If the btSocket is busy
         {
             try
             {
-                btSocket.close(); //close connection
+                btSocket.close(); // Close connection
             }
             catch (IOException e)
             { msg("Error");}
         }
-        finish(); //return to the first layout
+        finish(); // Return to the first layout
 
     }
 
@@ -132,6 +147,7 @@ public class ledControl extends AppCompatActivity {
             try
             {
                 btSocket.getOutputStream().write("0".toString().getBytes());
+                ledStatus();
             }
             catch (IOException e)
             {
@@ -147,6 +163,23 @@ public class ledControl extends AppCompatActivity {
             try
             {
                 btSocket.getOutputStream().write("1".toString().getBytes());
+                ledStatus();
+            }
+            catch (IOException e)
+            {
+                msg("Error");
+            }
+        }
+    }
+
+    private void rejectMessage()
+    {
+        if (btSocket!=null)
+        {
+            try
+            {
+                btSocket.getOutputStream().write("f".toString().getBytes());
+                ledStatus();
             }
             catch (IOException e)
             {
@@ -159,6 +192,11 @@ public class ledControl extends AppCompatActivity {
     private void msg(String s)
     {
         Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
+    }
+
+    private void ledStatus() throws IOException {
+        InputStream socketInputStream =  btSocket.getInputStream();
+        
     }
 
     @Override
@@ -175,7 +213,7 @@ public class ledControl extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        // noinspection SimplifiableIfStatement
         /*if (id == R.id.action_settings) {
             return true;
         }*/
@@ -185,36 +223,36 @@ public class ledControl extends AppCompatActivity {
 
     private class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
     {
-        private boolean ConnectSuccess = true; //if it's here, it's almost connected
+        private boolean ConnectSuccess = true; // If it's here, it's almost connected
 
         @Override
         protected void onPreExecute()
         {
-            progress = ProgressDialog.show(ledControl.this, "Connecting...", "Please wait!");  //show a progress dialog
+            progress = ProgressDialog.show(ledControl.this, "Connecting...", "Please wait!");  // Show a progress dialog
         }
 
         @Override
-        protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
+        protected Void doInBackground(Void... devices) // While the progress dialog is shown, the connection is done in background
         {
             try
             {
                 if (btSocket == null || !isBtConnected)
                 {
-                    myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);//connects to the device's address and checks if it's available
-                    btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
+                    myBluetooth = BluetoothAdapter.getDefaultAdapter(); // Get the mobile Bluetooth device
+                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address); // Connects to the device's address and checks if it's available
+                    btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID); // Create a RFCOMM (SPP) connection
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                    btSocket.connect();//start connection
+                    btSocket.connect(); // Start connection
                 }
             }
             catch (IOException e)
             {
-                ConnectSuccess = false;//if the try failed, you can check the exception here
+                ConnectSuccess = false; // If the try failed, check the exception here
             }
             return null;
         }
         @Override
-        protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
+        protected void onPostExecute(Void result) // After the doInBackground, checks if everything went fine
         {
             super.onPostExecute(result);
 
