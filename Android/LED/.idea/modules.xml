@@ -3,8 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/LED.iml" filepath="$PROJECT_DIR$/LED.iml" />
-      <module fileurl="file://C:\Users\Jackie\Documents\git\Jackie_App_Dev\Android\LED\LED.iml" filepath="C:\Users\Jackie\Documents\git\Jackie_App_Dev\Android\LED\LED.iml" />
-      <module fileurl="file://C:\Users\Jackie\Documents\git\Jackie_App_Dev\Android\LED\app\app.iml" filepath="C:\Users\Jackie\Documents\git\Jackie_App_Dev\Android\LED\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
 </project>

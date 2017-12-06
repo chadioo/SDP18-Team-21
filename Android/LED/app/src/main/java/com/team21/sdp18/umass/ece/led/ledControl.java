@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,18 +19,25 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.AsyncTask;
+import android.widget.ToggleButton;
+
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 
 public class ledControl extends AppCompatActivity {
 
-    Button btnOn, btnOff, btnBad, btnDis;
-    SeekBar brightness;
-    TextView lumn;
+    ToggleButton toggle;
     String address = null;
     String message;
     private ProgressDialog progress;
@@ -39,6 +47,8 @@ public class ledControl extends AppCompatActivity {
     Toast LEDinfo;
     // Generic SPP UUID for connecting to a BT serial board
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    LineGraphSeries<DataPoint> series;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,81 +58,28 @@ public class ledControl extends AppCompatActivity {
         Intent newint = getIntent();
         address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); // Receive the address of the Bluetooth device
 
-        // View of the ledControl
-        setContentView(R.layout.activity_led_control);
-
-        // Call the widgets
-        btnOn = (Button)findViewById(R.id.button2);
-        btnOff = (Button)findViewById(R.id.button3);
-        btnBad = (Button)findViewById(R.id.button1);
-        btnDis = (Button)findViewById(R.id.button4);
-        brightness = (SeekBar)findViewById(R.id.seekBar);
-        lumn = (TextView)findViewById(R.id.lumn);
-
         new ConnectBT().execute(); // Call the class to connect
 
-        // Commands to be sent to Bluetooth
-        btnOn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                turnOnLed();     // Method to turn on
-            }
-        });
+        // Call code to connect with graphs here
+        setContentView(R.layout.activity_graphs);
 
-        btnOff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                turnOffLed();   // Method to turn off
-            }
-        });
+        // Call the widgets
+        toggle = (ToggleButton) findViewById(R.id.toggleButton);
 
-        btnBad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                rejectMessage();   // Pick a different option
-            }
-        });
+        //new ConnectBT().execute(); // Call the class to connect
 
-        btnDis.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Disconnect();   // Close connection
-            }
-        });
-
-        brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser==true)
-                {
-                    lumn.setText(String.valueOf(progress));
-                    try
-                    {
-                        btSocket.getOutputStream().write(String.valueOf(progress).getBytes());
-                    }
-                    catch (IOException e)
-                    {
-
-                    }
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                    turnOnToggle();
+                } else {
+                    // The toggle is disabled
+                    turnOffToggle();
                 }
             }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
         });
+
     }
 
     private void Disconnect()
@@ -140,36 +97,19 @@ public class ledControl extends AppCompatActivity {
 
     }
 
-    private void turnOffLed()
+    private void turnOffToggle()
     {
-        if (btSocket!=null)
-        {
-            try
-            {
-                btSocket.getOutputStream().write("0".toString().getBytes());
-                ledStatus();
-            }
-            catch (IOException e)
-            {
-                msg("Error");
-            }
-        }
+        //
+
+
     }
 
-    private void turnOnLed()
+    private void turnOnToggle()
     {
-        if (btSocket!=null)
-        {
-            try
-            {
-                btSocket.getOutputStream().write("1".toString().getBytes());
-                ledStatus();
-            }
-            catch (IOException e)
-            {
-                msg("Error");
-            }
-        }
+        //
+
+
+
     }
 
     private void rejectMessage()

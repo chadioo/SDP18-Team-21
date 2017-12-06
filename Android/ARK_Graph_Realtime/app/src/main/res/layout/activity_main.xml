@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jackielagasse.ark_graph.MainActivity">
+    tools:context="com.example.jackielagasse.ark_graph_realtime.MainActivity">
 
     <EditText
         android:id="@+id/editTextX"
