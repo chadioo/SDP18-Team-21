@@ -6,6 +6,36 @@
 #include <util/atomic.h>
 #include <util/delay.h>
 
+void initADC(){
+	ADMUX = (1<<REFS0);	// set mux
+	ADCSRA = (1<<ADEN)|(1<<ADPS1)|(1<<ADPS0);	// divided by prescale of 8
+}
+
+unsigned int read_adc(int axis){
+
+	/*if(axis==0){		// z axis is PA0
+		ADMUX = 0b10100000;
+	}
+	else if(axis==1){	// y axis is PA1
+		ADMUX = 0b10100001;
+	}
+	else if(axis==2){	// x axis is PA2
+		ADMUX = 0b10100010;
+	}
+	else{
+		return 0;
+	}*/
+	axis=axis&0b00000111;
+	ADMUX|=axis;
+	
+	ADCSRA|= (1<<ADSC);	// clear ADSC by writing one to it
+	while(!(ADCSRA&(1<<ADSC)))	// wait for conversion to complete
+		;
+	return(ADC);		// retuens 10 bit unsigned number
+}
+
+
+
 // Method triggered by overflow
 ISR(TIMER1_OVF_vect)
 {
@@ -83,12 +113,10 @@ void USART_Start_Timer()
 }
 
 // Main Method
-int main(void)
-{
+int main(void){
 
 	Bluetooth_Init();
-
-	//USART_Init(9600);		// Initialize baud rate
+	initADC();
     
 	// LED Light is Port B
 	DDRB = 0xFF;			// Set PORTB as output
@@ -96,21 +124,50 @@ int main(void)
     
 	// Bluetooth is Port D
 	DDRD = 0x01; 			// PD0 is RX so processor reads it, PD1 is TX so processor writes it
-//	PIND0 = 0;
-//	PORTD1 = 0;
 
 	while(1){
 	
+
+		char DATA_IN = USART_Receive();
+		
+		if(DATA_IN == '0') {
+			PORTB = read_adc(0);
+			_delay_ms(100);
+			USART_SendString( "Read Z Axis Acceleration.\n" );
+			USART_SendString( read_adc(0) );
+			USART_SendString( "\n" );
+		}
+
+		else if(DATA_IN == '1') {
+			PORTB = read_adc(1);
+			_delay_ms(100);
+			USART_SendString( "Read Y Axis Acceleration.\n" );
+			USART_SendString( read_adc(1) );
+			USART_SendString( "\n" );
+		}
+		else if(DATA_IN == '2') {
+			PORTB = read_adc(2);
+			_delay_ms(100);
+			USART_SendString( "Read X Axis Acceleration.\n" );
+			USART_SendString( read_adc(2) );
+			USART_SendString( "\n" );
+
+		}
+		else if(DATA_IN == '\n' || DATA_IN == '\r');
+		else USART_SendString( "Please select a proper option.\n" );
+
+
+
+
+/*
 		char DATA_IN = USART_Receive();
 		
 		if(DATA_IN == '1') {
-			//PORTB |= (1<<PB2);
 			PORTB |= 0xFF; // all the LEDs
 			USART_SendString( "LED is on.\n" );
 		}
 
 		else if(DATA_IN == '0') {
-			//PORTB &= ~(1<<PB2);
 			PORTB &= ~0xFF; // all the LEDs
 			USART_SendString( "LED is off.\n" );
 		}
@@ -118,8 +175,7 @@ int main(void)
 		else if(DATA_IN == '\n' || DATA_IN == '\r');
 		else USART_SendString( "Please select a proper option.\n" );
 
-		// USART_Transmit( DATA_IN );
-
+*/
 		
 	}
 

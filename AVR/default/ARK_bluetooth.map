@@ -3,7 +3,7 @@ Archive member included because of file (symbol)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o (exit)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
-                              ARK_Sensing.o (__do_copy_data)
+                              ARK_bluetooth.o (__do_copy_data)
 
 Memory Configuration
 
@@ -19,7 +19,7 @@ signature        0x00840000         0x00000400         rw !x
 Linker script and memory map
 
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
-LOAD ARK_Sensing.o
+LOAD ARK_bluetooth.o
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
@@ -114,7 +114,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x1b6
+.text           0x00000000      0x1e0
  *(.vectors)
  .vectors       0x00000000       0x54 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
                 0x00000000                __vectors
@@ -188,34 +188,29 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
                 0x0000007e                __vector_16
                 0x0000007e                __vector_18
                 0x0000007e                __vector_20
- .text          0x00000082      0x130 ARK_Sensing.o
-                0x00000082                read_adc
-                0x000000ec                check_status_register
-                0x000000ce                send_end_signal
-                0x000000ba                init_clock
-                0x0000011e                USART_SendString
-                0x000000d4                read_write_data
-                0x0000016a                USART_Start_Timer
-                0x0000013c                USART_Init
-                0x00000116                USART_Transmit
-                0x0000014c                Bluetooth_Init
-                0x0000017c                main
-                0x000000f0                __vector_9
-                0x000000c2                send_start_signal
-                0x0000010e                USART_Receive
-                0x000000ea                print_trace
-                0x00000132                USART_Flush
- .text          0x000001b2        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .text          0x000001b2        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
-                0x000001b2                . = ALIGN (0x2)
+ .text          0x00000082      0x15a ARK_bluetooth.o
+                0x0000008c                read_adc
+                0x000000d2                USART_SendString
+                0x00000082                initADC
+                0x0000011e                USART_Start_Timer
+                0x000000f0                USART_Init
+                0x000000ca                USART_Transmit
+                0x00000100                Bluetooth_Init
+                0x00000130                main
+                0x000000a4                __vector_9
+                0x000000c2                USART_Receive
+                0x000000e6                USART_Flush
+ .text          0x000001dc        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text          0x000001dc        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+                0x000001dc                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x000001b2        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .text.libgcc   0x000001b2        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
-                0x000001b2                . = ALIGN (0x2)
+ .text.libgcc   0x000001dc        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x000001dc        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+                0x000001dc                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000001b2        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
-                0x000001b2                exit
-                0x000001b2                _exit
+ .fini9         0x000001dc        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                0x000001dc                exit
+                0x000001dc                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -234,45 +229,44 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000001b2        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .fini0         0x000001dc        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000001b6                _etext = .
+                0x000001e0                _etext = .
 
-.data           0x00800060       0x14 load address 0x000001b6
+.data           0x00800060       0x86 load address 0x000001e0
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
- .data          0x00800060       0x13 ARK_Sensing.o
- .data          0x00800073        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .data          0x00800073        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .data          0x00800060       0x86 ARK_bluetooth.o
+ .data          0x008000e6        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .data          0x008000e6        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
  *(.data*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x00800074                . = ALIGN (0x2)
- *fill*         0x00800073        0x1 00
-                0x00800074                _edata = .
-                0x00800074                PROVIDE (__data_end, .)
+                0x008000e6                . = ALIGN (0x2)
+                0x008000e6                _edata = .
+                0x008000e6                PROVIDE (__data_end, .)
 
-.bss            0x00800074        0x0
-                0x00800074                PROVIDE (__bss_start, .)
+.bss            0x008000e6        0x0
+                0x008000e6                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x00800074        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
- .bss           0x00800074        0x0 ARK_Sensing.o
- .bss           0x00800074        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .bss           0x00800074        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+ .bss           0x008000e6        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
+ .bss           0x008000e6        0x0 ARK_bluetooth.o
+ .bss           0x008000e6        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .bss           0x008000e6        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
  *(.bss*)
  *(COMMON)
-                0x00800074                PROVIDE (__bss_end, .)
-                0x000001b6                __data_load_start = LOADADDR (.data)
-                0x000001ca                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x008000e6                PROVIDE (__bss_end, .)
+                0x000001e0                __data_load_start = LOADADDR (.data)
+                0x00000266                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800074        0x0
-                0x00800074                PROVIDE (__noinit_start, .)
+.noinit         0x008000e6        0x0
+                0x008000e6                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800074                PROVIDE (__noinit_end, .)
-                0x00800074                _end = .
-                0x00800074                PROVIDE (__heap_start, .)
+                0x008000e6                PROVIDE (__noinit_end, .)
+                0x008000e6                _end = .
+                0x008000e6                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -326,41 +320,44 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
 .debug_aranges  0x00000000       0x20
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x20 ARK_Sensing.o
+                0x00000000       0x20 ARK_bluetooth.o
 
 .debug_pubnames
-                0x00000000      0x130
+                0x00000000       0xc5
  *(.debug_pubnames)
  .debug_pubnames
-                0x00000000      0x130 ARK_Sensing.o
+                0x00000000       0xc5 ARK_bluetooth.o
 
-.debug_info     0x00000000      0x355
+.debug_info     0x00000000      0x342
  *(.debug_info)
- .debug_info    0x00000000      0x355 ARK_Sensing.o
+ .debug_info    0x00000000      0x342 ARK_bluetooth.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x1dc
+.debug_abbrev   0x00000000      0x21a
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x1dc ARK_Sensing.o
+ .debug_abbrev  0x00000000      0x21a ARK_bluetooth.o
 
-.debug_line     0x00000000      0x319
+.debug_line     0x00000000      0x374
  *(.debug_line)
- .debug_line    0x00000000      0x319 ARK_Sensing.o
+ .debug_line    0x00000000      0x374 ARK_bluetooth.o
 
-.debug_frame    0x00000000      0x110
+.debug_frame    0x00000000       0xc0
  *(.debug_frame)
- .debug_frame   0x00000000      0x110 ARK_Sensing.o
+ .debug_frame   0x00000000       0xc0 ARK_bluetooth.o
 
-.debug_str      0x00000000      0x19c
+.debug_str      0x00000000      0x16a
  *(.debug_str)
- .debug_str     0x00000000      0x19c ARK_Sensing.o
-                                0x1da (size before relaxing)
+ .debug_str     0x00000000      0x16a ARK_bluetooth.o
+                                0x1a3 (size before relaxing)
 
-.debug_loc      0x00000000       0xa8
+.debug_loc      0x00000000       0xc4
  *(.debug_loc)
- .debug_loc     0x00000000       0xa8 ARK_Sensing.o
+ .debug_loc     0x00000000       0xc4 ARK_bluetooth.o
 
 .debug_macinfo
  *(.debug_macinfo)
-OUTPUT(ARK_Sensing.elf elf32-avr)
+OUTPUT(ARK_bluetooth.elf elf32-avr)
 LOAD linker stubs
+
+.debug_ranges   0x00000000       0x48
+ .debug_ranges  0x00000000       0x48 ARK_bluetooth.o
