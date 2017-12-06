@@ -21,10 +21,10 @@ import java.util.Set;
 
 public class DeviceList extends AppCompatActivity
 {
-    //widgets
+    // Widgets
     Button btnPaired;
     ListView devicelist;
-    //Bluetooth
+    // Bluetooth
     private BluetoothAdapter myBluetooth = null;
     private Set<BluetoothDevice> pairedDevices;
     public static String EXTRA_ADDRESS = "device_address";
@@ -35,24 +35,24 @@ public class DeviceList extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list);
 
-        //Calling widgets
+        // Calling widgets
         btnPaired = (Button)findViewById(R.id.button);
         devicelist = (ListView)findViewById(R.id.listView);
 
-        //if the device has bluetooth
+        // If the device has Bluetooth
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
 
         if(myBluetooth == null)
         {
-            //Show a mensag. that the device has no bluetooth adapter
+            // Show a message that the device has no Bluetooth adapter
             Toast.makeText(getApplicationContext(), "Bluetooth Device Not Available", Toast.LENGTH_LONG).show();
 
-            //finish apk
+            // Finish apk
             finish();
         }
         else if(!myBluetooth.isEnabled())
         {
-            //Ask to the user turn the bluetooth on
+            // Ask to the user turn Bluetooth on
             Intent turnBTon = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(turnBTon,1);
         }
@@ -76,17 +76,17 @@ public class DeviceList extends AppCompatActivity
         {
             for(BluetoothDevice bt : pairedDevices)
             {
-                list.add(bt.getName() + "\n" + bt.getAddress()); //Get the device's name and the address
+                list.add(bt.getName() + "\n" + bt.getAddress()); // Get the device's name and address
             }
         }
         else
         {
-            Toast.makeText(getApplicationContext(), "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "No paired Bluetooth devices found.", Toast.LENGTH_LONG).show();
         }
 
         final ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, list);
         devicelist.setAdapter(adapter);
-        devicelist.setOnItemClickListener(myListClickListener); //Method called when the device from the list is clicked
+        devicelist.setOnItemClickListener(myListClickListener); // Method called when the device from the list is clicked
 
     }
 
@@ -98,11 +98,11 @@ public class DeviceList extends AppCompatActivity
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
 
-            // Make an intent to start next activity.
+            // Make an intent to start next activity
             Intent i = new Intent(DeviceList.this, ledControl.class);
 
-            //Change the activity.
-            i.putExtra(EXTRA_ADDRESS, address); //this will be received at ledControl (class) Activity
+            // Change the activity
+            i.putExtra(EXTRA_ADDRESS, address); // This will be received at ledControl (class) Activity
             startActivity(i);
         }
     };
