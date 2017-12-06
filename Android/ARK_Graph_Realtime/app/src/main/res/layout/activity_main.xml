@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.jackielagasse.ark_graph.MainActivity">
+
+    <EditText
+        android:id="@+id/editTextX"
+        android:layout_width="98dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:selectAllOnFocus="false"
+        android:singleLine="true"
+        android:text="X Axis"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/graphx"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graphx"
+        android:layout_width="300dip"
+        android:layout_height="100dip"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15" />
+
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graphy"
+        android:layout_width="300dip"
+        android:layout_height="100dip"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.55" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graphz"
+        android:layout_width="300dip"
+        android:layout_height="100dip"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".95" />
+
+    <EditText
+        android:id="@+id/editTextY"
+        android:layout_width="102dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Y Axis"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/graphy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/graphx" />
+
+    <EditText
+        android:id="@+id/editTextZ"
+        android:layout_width="112dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Z Axis"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/graphz"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/graphy" />
+
+
+</android.support.constraint.ConstraintLayout>
