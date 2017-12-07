@@ -196,7 +196,7 @@ public class ledControl extends AppCompatActivity {
 
     private void ledStatus() throws IOException {
         InputStream socketInputStream =  btSocket.getInputStream();
-        
+
     }
 
     @Override
