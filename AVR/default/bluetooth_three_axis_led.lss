@@ -1,0 +1,711 @@
+
+bluetooth_three_axis_led.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000027e  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000046  00800060  0000027e  000002f2  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .debug_aranges 00000020  00000000  00000000  00000338  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_pubnames 000000e1  00000000  00000000  00000358  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   00000504  00000000  00000000  00000439  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 0000021d  00000000  00000000  0000093d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   000004da  00000000  00000000  00000b5a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  000000e0  00000000  00000000  00001034  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    00000197  00000000  00000000  00001114  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_loc    00000279  00000000  00000000  000012ab  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 00000108  00000000  00000000  00001524  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   8:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+   c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  10:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  14:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  18:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  1c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  20:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  24:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__vector_9>
+  28:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  2c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  30:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  34:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  38:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  3c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  40:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  44:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  48:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  4c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+  50:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+  60:	10 e0       	ldi	r17, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	ee e7       	ldi	r30, 0x7E	; 126
+  68:	f2 e0       	ldi	r31, 0x02	; 2
+  6a:	02 c0       	rjmp	.+4      	; 0x70 <.do_copy_data_start>
+
+0000006c <.do_copy_data_loop>:
+  6c:	05 90       	lpm	r0, Z+
+  6e:	0d 92       	st	X+, r0
+
+00000070 <.do_copy_data_start>:
+  70:	a6 3a       	cpi	r26, 0xA6	; 166
+  72:	b1 07       	cpc	r27, r17
+  74:	d9 f7       	brne	.-10     	; 0x6c <.do_copy_data_loop>
+  76:	0e 94 2a 01 	call	0x254	; 0x254 <main>
+  7a:	0c 94 3d 01 	jmp	0x27a	; 0x27a <_exit>
+
+0000007e <__bad_interrupt>:
+  7e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000082 <ADC_Init>:
+
+
+/* Initialize ADC conversion from accelerometer */
+void ADC_Init()
+{
+	ADMUX = (1<<REFS0)|(1<<ADLAR);							// set mux
+  82:	80 e6       	ldi	r24, 0x60	; 96
+  84:	87 b9       	out	0x07, r24	; 7
+	ADCSRA = (1<<ADEN)|(1<<ADPS2)|(0<<ADPS1)|(0<<ADPS0);	// divided by prescale of 16
+  86:	84 e8       	ldi	r24, 0x84	; 132
+  88:	86 b9       	out	0x06, r24	; 6
+}
+  8a:	08 95       	ret
+
+0000008c <read_adc>:
+
+
+/* Read in analog XYZ data and perform ADC */
+uint16_t read_adc(uint8_t axis)
+{
+  8c:	98 2f       	mov	r25, r24
+	/* Jackie's original code, preserved for testing */
+	if(axis==0){		// z axis is PA0
+  8e:	88 23       	and	r24, r24
+  90:	39 f0       	breq	.+14     	; 0xa0 <read_adc+0x14>
+		axis = 0b00000000;
+	}
+	else if(axis==1){	// y axis is PA1
+  92:	81 30       	cpi	r24, 0x01	; 1
+  94:	29 f0       	breq	.+10     	; 0xa0 <read_adc+0x14>
+		axis = 0b00000001;
+	}
+	else if(axis==2){	// x axis is PA2
+  96:	82 30       	cpi	r24, 0x02	; 2
+  98:	19 f0       	breq	.+6      	; 0xa0 <read_adc+0x14>
+  9a:	20 e0       	ldi	r18, 0x00	; 0
+  9c:	30 e0       	ldi	r19, 0x00	; 0
+  9e:	09 c0       	rjmp	.+18     	; 0xb2 <read_adc+0x26>
+	}
+	else{
+		return 0;
+	}
+	//axis=axis&0b00000111;		// Choose ADC port
+	ADMUX|=axis;
+  a0:	87 b1       	in	r24, 0x07	; 7
+  a2:	89 2b       	or	r24, r25
+  a4:	87 b9       	out	0x07, r24	; 7
+	
+	ADCSRA|= (1<<ADSC);			// Clear ADSC by writing one to it
+  a6:	36 9a       	sbi	0x06, 6	; 6
+	while(!(ADCSRA&(1<<ADSC)))	// Wait for conversion to complete
+  a8:	36 9b       	sbis	0x06, 6	; 6
+  aa:	fe cf       	rjmp	.-4      	; 0xa8 <read_adc+0x1c>
+		;
+	return(ADCH);				// Returns 10 bit unsigned number
+  ac:	85 b1       	in	r24, 0x05	; 5
+  ae:	28 2f       	mov	r18, r24
+  b0:	30 e0       	ldi	r19, 0x00	; 0
+}
+  b2:	c9 01       	movw	r24, r18
+  b4:	08 95       	ret
+
+000000b6 <__vector_9>:
+
+
+/* Method triggered by overflow */
+ISR(TIMER1_OVF_vect)
+{
+  b6:	1f 92       	push	r1
+  b8:	0f 92       	push	r0
+  ba:	0f b6       	in	r0, 0x3f	; 63
+  bc:	0f 92       	push	r0
+  be:	11 24       	eor	r1, r1
+  c0:	8f 93       	push	r24
+    PORTB ^= 0xFF;				// toggle PORTB values
+  c2:	88 b3       	in	r24, 0x18	; 24
+  c4:	80 95       	com	r24
+  c6:	88 bb       	out	0x18, r24	; 24
+}
+  c8:	8f 91       	pop	r24
+  ca:	0f 90       	pop	r0
+  cc:	0f be       	out	0x3f, r0	; 63
+  ce:	0f 90       	pop	r0
+  d0:	1f 90       	pop	r1
+  d2:	18 95       	reti
+
+000000d4 <USART_Receive>:
+
+
+/* Data from Bluetooth TX given to USART RX */
+unsigned char USART_Receive( void )
+{
+	while ( !(UCSRA & (1<<RXC)) ) {  }		// Wait for data to be received
+  d4:	5f 9b       	sbis	0x0b, 7	; 11
+  d6:	fe cf       	rjmp	.-4      	; 0xd4 <USART_Receive>
+	return UDR;								// Get and return received data from buffer
+  d8:	8c b1       	in	r24, 0x0c	; 12
+}
+  da:	08 95       	ret
+
+000000dc <USART_Transmit>:
+
+
+/* Data from USART TX given to Bluetooth RX */
+void USART_Transmit( unsigned char data )
+{
+	while ( !( UCSRA & (1<<UDRE)) ) {  }	// Wait for empty transmit buffer
+  dc:	5d 9b       	sbis	0x0b, 5	; 11
+  de:	fe cf       	rjmp	.-4      	; 0xdc <USART_Transmit>
+	UDR = data;								// Put data into buffer, sends the data
+  e0:	8c b9       	out	0x0c, r24	; 12
+}
+  e2:	08 95       	ret
+
+000000e4 <USART_SendString>:
+
+
+/* Send string of USART data function */
+void USART_SendString(char *str)
+{
+  e4:	fc 01       	movw	r30, r24
+  e6:	04 c0       	rjmp	.+8      	; 0xf0 <USART_SendString+0xc>
+
+
+/* Data from USART TX given to Bluetooth RX */
+void USART_Transmit( unsigned char data )
+{
+	while ( !( UCSRA & (1<<UDRE)) ) {  }	// Wait for empty transmit buffer
+  e8:	5d 9b       	sbis	0x0b, 5	; 11
+  ea:	fe cf       	rjmp	.-4      	; 0xe8 <USART_SendString+0x4>
+	UDR = data;								// Put data into buffer, sends the data
+  ec:	8c b9       	out	0x0c, r24	; 12
+  ee:	31 96       	adiw	r30, 0x01	; 1
+
+/* Send string of USART data function */
+void USART_SendString(char *str)
+{
+	int i=0;																	
+	while (str[i]!=0)
+  f0:	80 81       	ld	r24, Z
+  f2:	88 23       	and	r24, r24
+  f4:	c9 f7       	brne	.-14     	; 0xe8 <USART_SendString+0x4>
+	{
+		USART_Transmit( str[i] );	// Send each char of string till the NULL
+		i++;
+	}
+}
+  f6:	08 95       	ret
+
+000000f8 <USART_Flush>:
+
+
+/* Flush USART */
+void USART_Flush( void )
+{
+  f8:	01 c0       	rjmp	.+2      	; 0xfc <USART_Flush+0x4>
+	unsigned char dummy;
+	while ( UCSRA & (1<<RXC) ) dummy = UDR;
+  fa:	8c b1       	in	r24, 0x0c	; 12
+  fc:	5f 99       	sbic	0x0b, 7	; 11
+  fe:	fd cf       	rjmp	.-6      	; 0xfa <USART_Flush+0x2>
+}
+ 100:	08 95       	ret
+
+00000102 <USART_Init>:
+
+/* Initialize USART */
+void USART_Init( unsigned int baud )
+{
+	/* Set baud rate */
+	UBRRH = (unsigned char)(baud>>8);
+ 102:	90 bd       	out	0x20, r25	; 32
+	UBRRL = (unsigned char)baud;
+ 104:	89 b9       	out	0x09, r24	; 9
+	UCSRA |= (1<<U2X);
+ 106:	59 9a       	sbi	0x0b, 1	; 11
+
+	/* Enable receiver and transmitter */
+	UCSRB = (1<<RXEN)|(1<<TXEN);
+ 108:	88 e1       	ldi	r24, 0x18	; 24
+ 10a:	8a b9       	out	0x0a, r24	; 10
+
+	/* Set frame format: 8data, 2stop bit */
+	UCSRC = (1<<URSEL)|(1<<USBS)|(3<<UCSZ0);
+ 10c:	8e e8       	ldi	r24, 0x8E	; 142
+ 10e:	80 bd       	out	0x20, r24	; 32
+}
+ 110:	08 95       	ret
+
+00000112 <Bluetooth_Init>:
+
+
+/* Initialize the BT module */
+void Bluetooth_Init()
+{
+	USART_Init(12); 	// ~UBRR value for 9600 baud
+ 112:	8c e0       	ldi	r24, 0x0C	; 12
+ 114:	90 e0       	ldi	r25, 0x00	; 0
+ 116:	0e 94 81 00 	call	0x102	; 0x102 <USART_Init>
+ 11a:	e0 e6       	ldi	r30, 0x60	; 96
+ 11c:	f0 e0       	ldi	r31, 0x00	; 0
+ 11e:	04 c0       	rjmp	.+8      	; 0x128 <Bluetooth_Init+0x16>
+
+
+/* Data from USART TX given to Bluetooth RX */
+void USART_Transmit( unsigned char data )
+{
+	while ( !( UCSRA & (1<<UDRE)) ) {  }	// Wait for empty transmit buffer
+ 120:	5d 9b       	sbis	0x0b, 5	; 11
+ 122:	fe cf       	rjmp	.-4      	; 0x120 <Bluetooth_Init+0xe>
+	UDR = data;								// Put data into buffer, sends the data
+ 124:	8c b9       	out	0x0c, r24	; 12
+	USART_Init(12); 	// ~UBRR value for 9600 baud
+	char *cmd = "Bluetooth Init: AT+UART=9600,2,0\r\n";
+	while (*cmd != '\0')
+	{
+		USART_Transmit( *cmd );
+		++cmd;
+ 126:	31 96       	adiw	r30, 0x01	; 1
+/* Initialize the BT module */
+void Bluetooth_Init()
+{
+	USART_Init(12); 	// ~UBRR value for 9600 baud
+	char *cmd = "Bluetooth Init: AT+UART=9600,2,0\r\n";
+	while (*cmd != '\0')
+ 128:	80 81       	ld	r24, Z
+ 12a:	88 23       	and	r24, r24
+ 12c:	c9 f7       	brne	.-14     	; 0x120 <Bluetooth_Init+0xe>
+	{
+		USART_Transmit( *cmd );
+		++cmd;
+	}
+}
+ 12e:	08 95       	ret
+
+00000130 <USART_Start_Timer>:
+
+
+/* USART timer, not used for now */
+void USART_Start_Timer()
+{
+	TCCR1B |= (1 << CS11);	// Timer1 prescaler = 8
+ 130:	8e b5       	in	r24, 0x2e	; 46
+ 132:	82 60       	ori	r24, 0x02	; 2
+ 134:	8e bd       	out	0x2e, r24	; 46
+	TCNT1 = 0;				// Clear the timer counter
+ 136:	1d bc       	out	0x2d, r1	; 45
+ 138:	1c bc       	out	0x2c, r1	; 44
+	TIMSK = (1 << TOIE1);	// Enable timer1 overflow interrupt(TOIE1)
+ 13a:	84 e0       	ldi	r24, 0x04	; 4
+ 13c:	89 bf       	out	0x39, r24	; 57
+	sei();					// Enable global interrupts
+ 13e:	78 94       	sei
+}
+ 140:	08 95       	ret
+
+00000142 <Send_ADC>:
+}
+
+
+/* Actually sends the ADC */
+void Send_ADC(char ch)
+{
+ 142:	1f 93       	push	r17
+ 144:	cf 93       	push	r28
+ 146:	df 93       	push	r29
+ 148:	18 2f       	mov	r17, r24
+	char analogData = 0;
+	if(ch == '0')
+ 14a:	80 33       	cpi	r24, 0x30	; 48
+ 14c:	09 f5       	brne	.+66     	; 0x190 <Send_ADC+0x4e>
+ 14e:	19 c0       	rjmp	.+50     	; 0x182 <Send_ADC+0x40>
+
+/* Flush USART */
+void USART_Flush( void )
+{
+	unsigned char dummy;
+	while ( UCSRA & (1<<RXC) ) dummy = UDR;
+ 150:	8c b1       	in	r24, 0x0c	; 12
+ 152:	5f 99       	sbic	0x0b, 7	; 11
+ 154:	fd cf       	rjmp	.-6      	; 0x150 <Send_ADC+0xe>
+	if(ch == '0')
+	{
+		while(ch != '1' && ch != '2')
+		{
+			USART_Flush();
+			analogData = read_adc(0);
+ 156:	80 e0       	ldi	r24, 0x00	; 0
+ 158:	0e 94 46 00 	call	0x8c	; 0x8c <read_adc>
+			PORTB = analogData;
+ 15c:	88 bb       	out	0x18, r24	; 24
+//			USART_SendString( "Read X Axis Acceleration.\n" );
+			while((ADCSRA&(1<<ADSC)));
+ 15e:	36 99       	sbic	0x06, 6	; 6
+ 160:	fe cf       	rjmp	.-4      	; 0x15e <Send_ADC+0x1c>
+
+
+/* Data from USART TX given to Bluetooth RX */
+void USART_Transmit( unsigned char data )
+{
+	while ( !( UCSRA & (1<<UDRE)) ) {  }	// Wait for empty transmit buffer
+ 162:	5d 9b       	sbis	0x0b, 5	; 11
+ 164:	fe cf       	rjmp	.-4      	; 0x162 <Send_ADC+0x20>
+	UDR = data;								// Put data into buffer, sends the data
+ 166:	8c b9       	out	0x0c, r24	; 12
+			analogData = read_adc(0);
+			PORTB = analogData;
+//			USART_SendString( "Read X Axis Acceleration.\n" );
+			while((ADCSRA&(1<<ADSC)));
+			USART_Transmit( analogData );
+			USART_SendString( "\n" );
+ 168:	83 e8       	ldi	r24, 0x83	; 131
+ 16a:	90 e0       	ldi	r25, 0x00	; 0
+ 16c:	0e 94 72 00 	call	0xe4	; 0xe4 <USART_SendString>
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+ 170:	ce 01       	movw	r24, r28
+ 172:	01 97       	sbiw	r24, 0x01	; 1
+ 174:	f1 f7       	brne	.-4      	; 0x172 <Send_ADC+0x30>
+			_delay_ms(100);					// This can go down to 2ms, leaving up though for testing
+			if( UCSRA & (1<<UDRE) )
+ 176:	5d 99       	sbic	0x0b, 5	; 11
+			{
+				ch = UDR;
+ 178:	1c b1       	in	r17, 0x0c	; 12
+ 17a:	ce 01       	movw	r24, r28
+ 17c:	01 97       	sbiw	r24, 0x01	; 1
+ 17e:	f1 f7       	brne	.-4      	; 0x17c <Send_ADC+0x3a>
+ 180:	02 c0       	rjmp	.+4      	; 0x186 <Send_ADC+0x44>
+ 182:	c8 ea       	ldi	r28, 0xA8	; 168
+ 184:	d1 e6       	ldi	r29, 0x61	; 97
+void Send_ADC(char ch)
+{
+	char analogData = 0;
+	if(ch == '0')
+	{
+		while(ch != '1' && ch != '2')
+ 186:	81 2f       	mov	r24, r17
+ 188:	81 53       	subi	r24, 0x31	; 49
+ 18a:	82 30       	cpi	r24, 0x02	; 2
+ 18c:	10 f7       	brcc	.-60     	; 0x152 <Send_ADC+0x10>
+ 18e:	45 c0       	rjmp	.+138    	; 0x21a <Send_ADC+0xd8>
+			_delay_ms(100);
+		}
+		Start_ADC(ch);
+	}
+
+	else if(ch == '1')
+ 190:	81 33       	cpi	r24, 0x31	; 49
+ 192:	09 f5       	brne	.+66     	; 0x1d6 <Send_ADC+0x94>
+ 194:	02 c0       	rjmp	.+4      	; 0x19a <Send_ADC+0x58>
+
+/* Flush USART */
+void USART_Flush( void )
+{
+	unsigned char dummy;
+	while ( UCSRA & (1<<RXC) ) dummy = UDR;
+ 196:	8c b1       	in	r24, 0x0c	; 12
+ 198:	02 c0       	rjmp	.+4      	; 0x19e <Send_ADC+0x5c>
+ 19a:	c8 ea       	ldi	r28, 0xA8	; 168
+ 19c:	d1 e6       	ldi	r29, 0x61	; 97
+ 19e:	5f 99       	sbic	0x0b, 7	; 11
+ 1a0:	fa cf       	rjmp	.-12     	; 0x196 <Send_ADC+0x54>
+	else if(ch == '1')
+	{
+		while(ch != '0' && ch != '2')
+		{
+			USART_Flush();
+			analogData = read_adc(1);
+ 1a2:	81 e0       	ldi	r24, 0x01	; 1
+ 1a4:	0e 94 46 00 	call	0x8c	; 0x8c <read_adc>
+			PORTB = analogData;
+ 1a8:	88 bb       	out	0x18, r24	; 24
+//			USART_SendString( "Read Y Axis Acceleration.\n" );
+			while((ADCSRA&(1<<ADSC)));
+ 1aa:	36 99       	sbic	0x06, 6	; 6
+ 1ac:	fe cf       	rjmp	.-4      	; 0x1aa <Send_ADC+0x68>
+
+
+/* Data from USART TX given to Bluetooth RX */
+void USART_Transmit( unsigned char data )
+{
+	while ( !( UCSRA & (1<<UDRE)) ) {  }	// Wait for empty transmit buffer
+ 1ae:	5d 9b       	sbis	0x0b, 5	; 11
+ 1b0:	fe cf       	rjmp	.-4      	; 0x1ae <Send_ADC+0x6c>
+	UDR = data;								// Put data into buffer, sends the data
+ 1b2:	8c b9       	out	0x0c, r24	; 12
+			analogData = read_adc(1);
+			PORTB = analogData;
+//			USART_SendString( "Read Y Axis Acceleration.\n" );
+			while((ADCSRA&(1<<ADSC)));
+			USART_Transmit( analogData );
+			USART_SendString( "\n" );
+ 1b4:	83 e8       	ldi	r24, 0x83	; 131
+ 1b6:	90 e0       	ldi	r25, 0x00	; 0
+ 1b8:	0e 94 72 00 	call	0xe4	; 0xe4 <USART_SendString>
+ 1bc:	ce 01       	movw	r24, r28
+ 1be:	01 97       	sbiw	r24, 0x01	; 1
+ 1c0:	f1 f7       	brne	.-4      	; 0x1be <Send_ADC+0x7c>
+			_delay_ms(100);					// This can go down to 2ms, leaving up though for testing
+			if( UCSRA & (1<<UDRE) )
+ 1c2:	5d 99       	sbic	0x0b, 5	; 11
+			{
+				ch = UDR;
+ 1c4:	1c b1       	in	r17, 0x0c	; 12
+ 1c6:	ce 01       	movw	r24, r28
+ 1c8:	01 97       	sbiw	r24, 0x01	; 1
+ 1ca:	f1 f7       	brne	.-4      	; 0x1c8 <Send_ADC+0x86>
+		Start_ADC(ch);
+	}
+
+	else if(ch == '1')
+	{
+		while(ch != '0' && ch != '2')
+ 1cc:	10 33       	cpi	r17, 0x30	; 48
+ 1ce:	29 f1       	breq	.+74     	; 0x21a <Send_ADC+0xd8>
+ 1d0:	12 33       	cpi	r17, 0x32	; 50
+ 1d2:	29 f7       	brne	.-54     	; 0x19e <Send_ADC+0x5c>
+ 1d4:	22 c0       	rjmp	.+68     	; 0x21a <Send_ADC+0xd8>
+			_delay_ms(100);
+		}
+		Start_ADC(ch);
+	}
+
+	else if(ch == '2')
+ 1d6:	82 33       	cpi	r24, 0x32	; 50
+ 1d8:	19 f5       	brne	.+70     	; 0x220 <Send_ADC+0xde>
+ 1da:	19 c0       	rjmp	.+50     	; 0x20e <Send_ADC+0xcc>
+
+/* Flush USART */
+void USART_Flush( void )
+{
+	unsigned char dummy;
+	while ( UCSRA & (1<<RXC) ) dummy = UDR;
+ 1dc:	8c b1       	in	r24, 0x0c	; 12
+ 1de:	5f 99       	sbic	0x0b, 7	; 11
+ 1e0:	fd cf       	rjmp	.-6      	; 0x1dc <Send_ADC+0x9a>
+	else if(ch == '2')
+	{
+		while(ch != '0' && ch != '1')
+		{
+			USART_Flush();
+			analogData = read_adc(2);
+ 1e2:	82 e0       	ldi	r24, 0x02	; 2
+ 1e4:	0e 94 46 00 	call	0x8c	; 0x8c <read_adc>
+			PORTB = analogData;
+ 1e8:	88 bb       	out	0x18, r24	; 24
+//			USART_SendString( "Read Z Axis Acceleration.\n" );
+			while((ADCSRA&(1<<ADSC)));
+ 1ea:	36 99       	sbic	0x06, 6	; 6
+ 1ec:	fe cf       	rjmp	.-4      	; 0x1ea <Send_ADC+0xa8>
+
+
+/* Data from USART TX given to Bluetooth RX */
+void USART_Transmit( unsigned char data )
+{
+	while ( !( UCSRA & (1<<UDRE)) ) {  }	// Wait for empty transmit buffer
+ 1ee:	5d 9b       	sbis	0x0b, 5	; 11
+ 1f0:	fe cf       	rjmp	.-4      	; 0x1ee <Send_ADC+0xac>
+	UDR = data;								// Put data into buffer, sends the data
+ 1f2:	8c b9       	out	0x0c, r24	; 12
+			analogData = read_adc(2);
+			PORTB = analogData;
+//			USART_SendString( "Read Z Axis Acceleration.\n" );
+			while((ADCSRA&(1<<ADSC)));
+			USART_Transmit( analogData );
+			USART_SendString( "\n" );
+ 1f4:	83 e8       	ldi	r24, 0x83	; 131
+ 1f6:	90 e0       	ldi	r25, 0x00	; 0
+ 1f8:	0e 94 72 00 	call	0xe4	; 0xe4 <USART_SendString>
+ 1fc:	ce 01       	movw	r24, r28
+ 1fe:	01 97       	sbiw	r24, 0x01	; 1
+ 200:	f1 f7       	brne	.-4      	; 0x1fe <Send_ADC+0xbc>
+			_delay_ms(100);					// This can go down to 2ms, leaving up though for testing
+			if( UCSRA & (1<<UDRE) )
+ 202:	5d 99       	sbic	0x0b, 5	; 11
+			{
+				ch = UDR;
+ 204:	1c b1       	in	r17, 0x0c	; 12
+ 206:	ce 01       	movw	r24, r28
+ 208:	01 97       	sbiw	r24, 0x01	; 1
+ 20a:	f1 f7       	brne	.-4      	; 0x208 <Send_ADC+0xc6>
+ 20c:	02 c0       	rjmp	.+4      	; 0x212 <Send_ADC+0xd0>
+ 20e:	c8 ea       	ldi	r28, 0xA8	; 168
+ 210:	d1 e6       	ldi	r29, 0x61	; 97
+		Start_ADC(ch);
+	}
+
+	else if(ch == '2')
+	{
+		while(ch != '0' && ch != '1')
+ 212:	81 2f       	mov	r24, r17
+ 214:	80 53       	subi	r24, 0x30	; 48
+ 216:	82 30       	cpi	r24, 0x02	; 2
+ 218:	10 f7       	brcc	.-60     	; 0x1de <Send_ADC+0x9c>
+			{
+				ch = UDR;
+			}
+			_delay_ms(100);
+		}
+		Start_ADC(ch);
+ 21a:	81 2f       	mov	r24, r17
+ 21c:	0e 94 14 01 	call	0x228	; 0x228 <Start_ADC>
+	}
+}
+ 220:	df 91       	pop	r29
+ 222:	cf 91       	pop	r28
+ 224:	1f 91       	pop	r17
+ 226:	08 95       	ret
+
+00000228 <Start_ADC>:
+}
+
+
+/* Recursive method for sending ADC */
+void Start_ADC(char ch)
+{
+ 228:	98 2f       	mov	r25, r24
+	if(ch == '0' || ch == '1' || ch == '2')
+ 22a:	89 2f       	mov	r24, r25
+ 22c:	80 53       	subi	r24, 0x30	; 48
+ 22e:	83 30       	cpi	r24, 0x03	; 3
+ 230:	28 f4       	brcc	.+10     	; 0x23c <Start_ADC+0x14>
+	{
+		Send_ADC(ch);
+ 232:	89 2f       	mov	r24, r25
+ 234:	90 e0       	ldi	r25, 0x00	; 0
+ 236:	0e 94 a1 00 	call	0x142	; 0x142 <Send_ADC>
+		if(ch == '\n' || ch == '\r');
+		else USART_SendString( "Please select a proper option.\n" );
+		ch = USART_Receive();
+		Start_ADC(ch);
+	}
+}
+ 23a:	08 95       	ret
+	{
+		Send_ADC(ch);
+	}
+	else
+	{
+		if(ch == '\n' || ch == '\r');
+ 23c:	9a 30       	cpi	r25, 0x0A	; 10
+ 23e:	31 f0       	breq	.+12     	; 0x24c <Start_ADC+0x24>
+ 240:	9d 30       	cpi	r25, 0x0D	; 13
+ 242:	21 f0       	breq	.+8      	; 0x24c <Start_ADC+0x24>
+		else USART_SendString( "Please select a proper option.\n" );
+ 244:	85 e8       	ldi	r24, 0x85	; 133
+ 246:	90 e0       	ldi	r25, 0x00	; 0
+ 248:	0e 94 72 00 	call	0xe4	; 0xe4 <USART_SendString>
+
+
+/* Data from Bluetooth TX given to USART RX */
+unsigned char USART_Receive( void )
+{
+	while ( !(UCSRA & (1<<RXC)) ) {  }		// Wait for data to be received
+ 24c:	5f 9b       	sbis	0x0b, 7	; 11
+ 24e:	fe cf       	rjmp	.-4      	; 0x24c <Start_ADC+0x24>
+	return UDR;								// Get and return received data from buffer
+ 250:	9c b1       	in	r25, 0x0c	; 12
+ 252:	eb cf       	rjmp	.-42     	; 0x22a <Start_ADC+0x2>
+
+00000254 <main>:
+
+
+/* Main Method */
+int main(void)
+{
+	Bluetooth_Init();
+ 254:	0e 94 89 00 	call	0x112	; 0x112 <Bluetooth_Init>
+
+
+/* Initialize ADC conversion from accelerometer */
+void ADC_Init()
+{
+	ADMUX = (1<<REFS0)|(1<<ADLAR);							// set mux
+ 258:	80 e6       	ldi	r24, 0x60	; 96
+ 25a:	87 b9       	out	0x07, r24	; 7
+	ADCSRA = (1<<ADEN)|(1<<ADPS2)|(0<<ADPS1)|(0<<ADPS0);	// divided by prescale of 16
+ 25c:	84 e8       	ldi	r24, 0x84	; 132
+ 25e:	86 b9       	out	0x06, r24	; 6
+
+
+/* Data from Bluetooth TX given to USART RX */
+unsigned char USART_Receive( void )
+{
+	while ( !(UCSRA & (1<<RXC)) ) {  }		// Wait for data to be received
+ 260:	5f 9b       	sbis	0x0b, 7	; 11
+ 262:	fe cf       	rjmp	.-4      	; 0x260 <main+0xc>
+	return UDR;								// Get and return received data from buffer
+ 264:	8c b1       	in	r24, 0x0c	; 12
+	ADC_Init();
+
+	char DATA_IN = USART_Receive();
+    
+	/* LED Light is Port B, right now for testing purposes */
+	DDRB = 0xFF;			// Set PORTB as output
+ 266:	9f ef       	ldi	r25, 0xFF	; 255
+ 268:	97 bb       	out	0x17, r25	; 23
+	PORTB = 0;				// Clear PORTB bits (turn the LEDs off)
+ 26a:	18 ba       	out	0x18, r1	; 24
+    
+	/* Bluetooth is Port D */
+	DDRD = 0x01; 			// PD0 is RX so processor reads it, PD1 is TX so processor writes it
+ 26c:	91 e0       	ldi	r25, 0x01	; 1
+ 26e:	91 bb       	out	0x11, r25	; 17
+
+	Start_ADC(DATA_IN);		// Recursive ADC function
+ 270:	0e 94 14 01 	call	0x228	; 0x228 <Start_ADC>
+
+//		else if(DATA_IN == '\n' || DATA_IN == '\r');
+//		else USART_SendString( "Please select a proper option.\n" );
+	}
+*/
+}
+ 274:	80 e0       	ldi	r24, 0x00	; 0
+ 276:	90 e0       	ldi	r25, 0x00	; 0
+ 278:	08 95       	ret
+
+0000027a <_exit>:
+ 27a:	f8 94       	cli
+
+0000027c <__stop_program>:
+ 27c:	ff cf       	rjmp	.-2      	; 0x27c <__stop_program>
