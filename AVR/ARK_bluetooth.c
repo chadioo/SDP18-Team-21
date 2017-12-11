@@ -133,18 +133,15 @@ int main(void){
 		USART_Flush();
 		
 		if(DATA_IN == '0') {
-			while(!(UCSRA & (1<<RXC))){
-				analogData = read_adc(0);
-				PORTB = analogData;
-				//_delay_ms(100);
-				USART_SendString( "Read Z Axis Acceleration.\n" );
-				//analogData = read_adc(0);
-				while((ADCSRA&(1<<ADSC)));
-				USART_Transmit( analogData );
-				//_delay_ms(100);
-				USART_SendString( "\n" );
-				//if(UCSRA & (1<<RXC)) break;
-			}
+			analogData = read_adc(0);
+			PORTB = analogData;
+			//_delay_ms(100);
+			USART_SendString( "Read Z Axis Acceleration.\n" );
+			//analogData = read_adc(0);
+			while((ADCSRA&(1<<ADSC)));
+			USART_Transmit( analogData );
+			//_delay_ms(100);
+			USART_SendString( "\n" );
 		}
 
 		else if(DATA_IN == '1') {
