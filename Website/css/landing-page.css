@@ -126,6 +126,20 @@ h6 {
     background-size: cover;
 }
 
+.banner4 {
+    padding: 100px 0;
+    color: #f8f8f8;
+    background: url(../img/ethan-building.jpg) no-repeat center center;
+    background-size: cover;
+}
+
+.banner5 {
+    padding: 100px 0;
+    color: #f8f8f8;
+    background: url(../img/jackie-building.jpg) no-repeat center center;
+    background-size: cover;
+}
+
 .banner h2 {
     margin: 0;
     text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
