@@ -7,11 +7,11 @@
 #include <util/delay.h>
 
 void initADC(){
-	ADMUX = (1<<REFS0)|(1<<ADLAR);	// set mux
-	ADCSRA = (1<<ADEN)|(1<<ADPS2);//|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);	// divided by prescale of 16
+	ADMUX = (1<<REFS0);	// set mux
+	ADCSRA = (1<<ADEN)|(1<<ADPS1)|(1<<ADPS0);	// divided by prescale of 8
 }
 
-uint16_t read_adc(uint8_t axis){
+unsigned int read_adc(int axis){
 
 	/*if(axis==0){		// z axis is PA0
 		ADMUX = 0b10100000;
@@ -28,10 +28,10 @@ uint16_t read_adc(uint8_t axis){
 	axis=axis&0b00000111;
 	ADMUX|=axis;
 	
-	ADCSRA|= (1<<ADSC);			// clear ADSC by writing one to it
+	ADCSRA|= (1<<ADSC);	// clear ADSC by writing one to it
 	while(!(ADCSRA&(1<<ADSC)))	// wait for conversion to complete
 		;
-	return(ADCH);				// retuens 10 bit unsigned number
+	return(ADC);		// retuens 10 bit unsigned number
 }
 
 
@@ -114,7 +114,6 @@ void USART_Start_Timer()
 
 // Main Method
 int main(void){
-	char analogData = 0;
 
 	Bluetooth_Init();
 	initADC();
@@ -130,40 +129,27 @@ int main(void){
 	
 
 		char DATA_IN = USART_Receive();
-		USART_Flush();
 		
 		if(DATA_IN == '0') {
-			analogData = read_adc(0);
-			PORTB = analogData;
-			//_delay_ms(100);
+			PORTB = read_adc(0);
+			_delay_ms(100);
 			USART_SendString( "Read Z Axis Acceleration.\n" );
-			//analogData = read_adc(0);
-			while((ADCSRA&(1<<ADSC)));
-			USART_Transmit( analogData );
-			//_delay_ms(100);
+			USART_SendString( read_adc(0) );
 			USART_SendString( "\n" );
 		}
 
 		else if(DATA_IN == '1') {
-			analogData = read_adc(1);
-			PORTB = analogData;
-			//_delay_ms(100);
+			PORTB = read_adc(1);
+			_delay_ms(100);
 			USART_SendString( "Read Y Axis Acceleration.\n" );
-			//analogData = read_adc(0);
-			while((ADCSRA&(1<<ADSC)));
-			USART_Transmit( analogData );
-			//_delay_ms(100);
+			USART_SendString( read_adc(1) );
 			USART_SendString( "\n" );
 		}
 		else if(DATA_IN == '2') {
-			analogData = read_adc(2);
-			PORTB = analogData;
-			//_delay_ms(100);
+			PORTB = read_adc(2);
+			_delay_ms(100);
 			USART_SendString( "Read X Axis Acceleration.\n" );
-			//analogData = read_adc(0);
-			while((ADCSRA&(1<<ADSC)));
-			USART_Transmit( analogData );
-			//_delay_ms(100);
+			USART_SendString( read_adc(2) );
 			USART_SendString( "\n" );
 
 		}

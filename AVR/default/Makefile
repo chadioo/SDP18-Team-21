@@ -1,11 +1,11 @@
 ###############################################################################
-# Makefile for the project ARK_bluetooth
+# Makefile for the project ARK_I2C
 ###############################################################################
 
 ## General Flags
-PROJECT = ARK_bluetooth
+PROJECT = ARK_I2C
 MCU = atmega32
-TARGET = ARK_bluetooth.elf
+TARGET = ARK_I2C.elf
 CC = avr-gcc
 
 CPP = avr-g++
@@ -15,7 +15,7 @@ COMMON = -mmcu=$(MCU)
 
 ## Compile options common for all C compilation units.
 CFLAGS = $(COMMON)
-CFLAGS += -Wall -gdwarf-2 -std=gnu99                                      -DF_CPU=1000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CFLAGS += -Wall -gdwarf-2 -std=gnu99   -DF_CPU=1000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
 
 ## Assembly specific flags
@@ -25,7 +25,7 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 
 ## Linker flags
 LDFLAGS = $(COMMON)
-LDFLAGS +=  -Wl,-Map=ARK_bluetooth.map
+LDFLAGS +=  -Wl,-Map=ARK_I2C.map
 
 
 ## Intel Hex file production flags
@@ -37,19 +37,22 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Include Directories
-INCLUDES = -I"C:\Users\SDP\Documents\SDP18-Team-21\AVR\..\..\..\..\WinAVR-20100110\avr\include\avr" 
+INCLUDES = -I"C:\Users\SDP\Documents\Jackie_App_Dev branch\SDP18-Team-21\AVR\..\..\..\..\WinAVR-20100110\avr\include\avr" -I"C:\Users\SDP\Documents\Jackie_App_Dev branch\SDP18-Team-21\AVR\BMI160_driver-master" 
+
+## Libraries
+LIBS = -lc 
 
 ## Objects that must be built in order to link
-OBJECTS = ARK_bluetooth.o 
+OBJECTS = ARK_I2C.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
 
 ## Build
-all: $(TARGET) ARK_bluetooth.hex ARK_bluetooth.eep ARK_bluetooth.lss size
+all: $(TARGET) ARK_I2C.hex ARK_I2C.eep ARK_I2C.lss size
 
 ## Compile
-ARK_bluetooth.o: ../ARK_bluetooth.c
+ARK_I2C.o: ../ARK_I2C.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link
@@ -72,7 +75,7 @@ size: ${TARGET}
 ## Clean target
 .PHONY: clean
 clean:
-	-rm -rf $(OBJECTS) ARK_bluetooth.elf dep/* ARK_bluetooth.hex ARK_bluetooth.eep ARK_bluetooth.lss ARK_bluetooth.map
+	-rm -rf $(OBJECTS) ARK_I2C.elf dep/* ARK_I2C.hex ARK_I2C.eep ARK_I2C.lss ARK_I2C.map
 
 
 ## Other dependencies
