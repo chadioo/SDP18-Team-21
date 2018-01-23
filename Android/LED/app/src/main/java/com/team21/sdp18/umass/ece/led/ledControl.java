@@ -207,8 +207,17 @@ public class ledControl extends AppCompatActivity {
     }
 
     private void ledStatus() throws IOException {
-        InputStream socketInputStream =  btSocket.getInputStream();
-
+        while (true) {
+            try {
+                byte[] buffer = new byte[256];
+                ByteArrayInputStream input = new ByteArrayInputStream(buffer);
+                InputStream inputStream = btSocket.getInputStream();
+                inputStream.read(buffer);
+                Log.i("logging", Integer.toString(input.read()));
+            } catch (IOException e) {
+                break;
+            }
+        }
     }
 
     @Override
