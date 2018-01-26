@@ -7,10 +7,10 @@
 
 ### Code Milestone Log
 
-Date | Update | Notes
------|---------|------
-2017/08/01 | Started website template | Using Bootstrap template
-2017/09/10 | Began using Unity for demo game | Game is called Little World
+Date | Update
+-----|---------
+2017/08/01 | Started website using Bootstrap template
+2017/09/10 | Began using Unity for demo game (game called Little World)
 2017/12/06 | Reading in XYZ data from analog accelerometer into graphs
 2018/01/19 | Receiving Gyro/Accel data from I2C sensor and sending to phone
 2018/01/23 | Foot tracker is wired on smaller board and running on battery power
