@@ -1,37 +1,19 @@
- <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:tools="http://schemas.android.com/tools"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".BuildGraphs"
-     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-     <EditText
-         android:id="@+id/editTextX"
-         android:layout_width="98dp"
-         android:layout_height="wrap_content"
-         android:layout_alignParentTop="true"
-         android:layout_centerHorizontal="true"
-         android:layout_marginTop="18dp"
-         android:ems="10"
-         android:inputType="textPersonName"
-         android:selectAllOnFocus="false"
-         android:singleLine="true"
-         android:text="X Axis"
-         android:textAlignment="center"
-         app:layout_constraintBottom_toTopOf="@+id/graphx"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintHorizontal_bias="0.5"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="parent" />
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
      <com.jjoe64.graphview.GraphView
          android:id="@+id/graphx"
          android:layout_width="400dip"
          android:layout_height="100dip"
-         android:layout_below="@+id/editTextX"
-         android:layout_centerHorizontal="true"
-         android:layout_marginTop="8dp"
+         android:layout_above="@+id/graphy"
+         android:layout_alignStart="@+id/graphy"
+         android:layout_marginBottom="91dp"
          app:layout_constraintBottom_toBottomOf="parent"
          app:layout_constraintEnd_toEndOf="parent"
          app:layout_constraintStart_toStartOf="parent"
@@ -43,9 +25,9 @@
          android:id="@+id/graphy"
          android:layout_width="400dip"
          android:layout_height="100dip"
-         android:layout_alignStart="@+id/graphx"
-         android:layout_below="@+id/editTextY"
-         android:layout_marginTop="7dp"
+         android:layout_above="@+id/graphz"
+         android:layout_centerHorizontal="true"
+         android:layout_marginBottom="98dp"
          app:layout_constraintBottom_toBottomOf="parent"
          app:layout_constraintEnd_toEndOf="parent"
          app:layout_constraintStart_toStartOf="parent"
@@ -56,56 +38,37 @@
          android:id="@+id/graphz"
          android:layout_width="400dip"
          android:layout_height="100dip"
+         android:layout_alignParentBottom="true"
          android:layout_alignStart="@+id/graphy"
-         android:layout_below="@+id/editTextZ"
-         android:layout_marginTop="6dp"
+         android:layout_marginBottom="41dp"
          app:layout_constraintBottom_toBottomOf="parent"
          app:layout_constraintEnd_toEndOf="parent"
          app:layout_constraintStart_toStartOf="parent"
          app:layout_constraintTop_toTopOf="parent"
          app:layout_constraintVertical_bias=".95" />
 
-     <EditText
-         android:id="@+id/editTextY"
-         android:layout_width="102dp"
-         android:layout_height="wrap_content"
-         android:layout_alignStart="@+id/editTextZ"
-         android:layout_below="@+id/graphx"
-         android:layout_marginTop="7dp"
-         android:ems="10"
-         android:inputType="textPersonName"
-         android:text="Y Axis"
-         android:textAlignment="center"
-         app:layout_constraintBottom_toTopOf="@+id/graphy"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintHorizontal_bias="0.5"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toBottomOf="@+id/graphx" />
-
-     <EditText
-         android:id="@+id/editTextZ"
-         android:layout_width="112dp"
-         android:layout_height="wrap_content"
-         android:layout_below="@+id/graphy"
-         android:layout_centerHorizontal="true"
-         android:layout_marginTop="6dp"
-         android:ems="10"
-         android:inputType="textPersonName"
-         android:text="Z Axis"
-         android:textAlignment="center"
-         app:layout_constraintBottom_toTopOf="@+id/graphz"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintHorizontal_bias="0.5"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toBottomOf="@+id/graphy" />
-
-     <ToggleButton
-         android:id="@+id/toggleButton"
+     <Button
+         android:id="@+id/buttonx"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_below="@+id/graphz"
-         android:layout_centerHorizontal="true"
-         android:layout_marginTop="13dp"
-         android:text="ToggleButton" />
+         android:layout_above="@+id/graphx"
+         android:layout_alignStart="@+id/buttonz"
+         android:text="X Axis" />
 
- </RelativeLayout>
+     <Button
+         android:id="@+id/buttony"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_above="@+id/graphy"
+         android:layout_centerHorizontal="true"
+         android:text="Y Axis" />
+
+     <Button
+         android:id="@+id/buttonz"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_above="@+id/graphz"
+         android:layout_alignStart="@+id/buttony"
+         android:text="Z Axis" />
+
+</RelativeLayout>

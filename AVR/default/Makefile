@@ -37,7 +37,7 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Include Directories
-INCLUDES = -I"C:\Users\SDP\Documents\Jackie_App_Dev branch\SDP18-Team-21\AVR\..\..\..\..\WinAVR-20100110\avr\include\avr" -I"C:\Users\SDP\Documents\Jackie_App_Dev branch\SDP18-Team-21\AVR\BMI160_driver-master" 
+INCLUDES = -I"C:\Users\Jackie\Documents\git\SDP18-Team-21\AVR\..\..\..\..\WinAVR-20100110\avr\include\avr" -I"C:\Users\Jackie\Documents\git\SDP18-Team-21\AVR\BMI160_driver-master" 
 
 ## Libraries
 LIBS = -lc 

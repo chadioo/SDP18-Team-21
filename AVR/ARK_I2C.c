@@ -499,8 +499,6 @@ int main(void) {
 			Yg = Gyro_y/16.4;
 			Zg = Gyro_z/16.4;
 
-			t = (Temperature/340.00)+36.53;			
-
 			dtostrf( Xa, 3, 2, float_ );				
 			sprintf(buffer," Ax = %s g\t",float_);
 			USART_SendString(buffer);
@@ -511,10 +509,6 @@ int main(void) {
 		
 			dtostrf( Za, 3, 2, float_ );
 			sprintf(buffer," Az = %s g\t",float_);
-			USART_SendString(buffer);
-
-			dtostrf( t, 3, 2, float_ );
-			sprintf(buffer," T = %s%cC\t",float_,0xF8);        
 			USART_SendString(buffer);
 
 			dtostrf( Xg, 3, 2, float_ );
