@@ -18,38 +18,12 @@
 #include <math.h>
 #include <inttypes.h>			/* Include integer type header file */
 #include "MPU6050_res_define.h"	/* Include MPU6050 register define file */
-#include "I2C_Master_H_file.h"	/* Include I2C Master header file */
 
 #define F_CPU 8000000UL		/* Define CPU */
 #define SCL_CLK 100000L		/* Define SCL clock frequency */
 
 #define SLAVE_WRITE_ADDRESS 0xD0
 #define SLAVE_READ_ADDRESS 0xD1
-
-#define SMPLRT_DIV 0x19
-#define CONFIG 0x1A
-#define GYRO_CONFIG 0x1B
-#define ACCEL_CONFIG 0x1C
-#define INT_PIN_CFG 0x37
-#define INT_ENABLE 0x38
-#define DMP_INT_STATUS 0x39
-#define INT_STATUS 0x3A
-#define ACCEL_XOUT_H 0x3B
-#define ACCEL_XOUT_L 0x3C
-#define ACCEL_YOUT_H 0x3D
-#define ACCEL_YOUT_L 0x3E
-#define ACCEL_ZOUT_H 0x3F
-#define ACCEL_ZOUT_L 0x40
-#define TEMP_OUT_H 0x41
-#define TEMP_OUT_L 0x42
-#define GYRO_XOUT_H 0x43
-#define GYRO_XOUT_L 0x44
-#define GYRO_YOUT_H 0x45
-#define GYRO_YOUT_L 0x46
-#define GYRO_ZOUT_H 0x47
-#define GYRO_ZOUT_L 0x48
-#define PWR_MGMT_1 0x6B
-#define PWR_MGMT_2 0x6C
 
 float Acc_x,Acc_y,Acc_z,Temperature,Gyro_x,Gyro_y,Gyro_z;
 
@@ -58,6 +32,7 @@ float Acc_x,Acc_y,Acc_z,Temperature,Gyro_x,Gyro_y,Gyro_z;
 ////////////////////////////////////////////////////////////////////////////
 // 																		  //
 // Analog Commands												          //
+// Used in previous hardware design that implemented analog sensor.       //
 // 																		  //
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -89,20 +64,13 @@ unsigned int read_adc(int axis){
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 // 																		  //
-// MPU6050 Commands												  		  //
-// 																		  //
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
-
-
-
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
-// 																		  //
 // ATMega32 I2C Commands												  //
+// Code from Electronic Wings											  //
 // 																		  //
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
+
+// Source: http://www.electronicwings.com/avr-atmega/mpu6050-gyroscope-accelerometer-temperature-interface-with-atmega16
 
 
 void init_clock(){
@@ -112,85 +80,6 @@ void init_clock(){
     TWBR = ((F_CPU/SCL_CLK)-16)/(2*pow(4,(TWSR&((1<<TWPS0)|(1<<TWPS1))))); // SCL frequency
 
 }
-
-void send_start_signal(){
-
-	/* Send START condition 
-	TWCR = TWI Control Register
-	TWINT = TWI interrupt flag ( bit 7 on TWCR )
-	TWSTA = START condition bit ( bit 5 on TWCR )
-	TWEN = TWI enable bit ( bit 2 on TWCR )
-	*/
-	TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN);
-
-	/* Wait until START condition has been transmitted 
-	Wait until the TWINT flag is set */
-	while (!(TWCR & (1<<TWINT)))
-		;
-}
-
-void send_stop_signal(){
-
-	/* Transmit STOP condition */
-	TWCR = (1<<TWINT)|(1<<TWEN)|
-	(1<<TWSTO);
-
-}
-
-char read_write_data(int DATA, int RW){
-
-	DATA = DATA >> 1;
-
-	/* Load DATA+RW into TWDR Register 
-	This is the DATA + R/W bit 
-	RW=0 is write, RW=1 is read */
-	DATA = (DATA<<1) | RW;
-	TWDR = DATA;
-
-	/* Clear TWINT bit in TWCR to start transmission of address */
-	TWCR = (1<<TWINT) | (1<<TWEN);
-
-	/* Wait for TWINT Flag set
-	This indicates that the SLA+W has been transmitted
-	and ACK/NACK has been received. */
-	while (!(TWCR & (1<<TWINT)))
-		;
-	return (char) TWDR;
-}
-
-void print_trace(){
-
-	/* Develop method to print stack trace or throw some other error */
-
-}
-
-void check_status_register(int REGISTER){
-
-	/* Check value of TWI status register, mask prescaler bits
-	If status is different from REGISTER, go to print_trace 
-	TWSR =  TWI Status Register
-	TWI Status is set on bits 7:3 of TWSR, = 0x78
-	*/
-	if ((TWSR & 0xF8) != REGISTER)
-		print_trace(); // define how you want to handle this error somewhere
-
-}
-
-char read_ack(){											/* I2C read ack function */
-
-	TWCR=(1<<TWEN)|(1<<TWINT)|(1<<TWEA);					/* Enable TWI, generation of ack and clear interrupt flag */
-	while (!(TWCR & (1<<TWINT)));							/* Wait until TWI finish its current job (read operation) */
-	return TWDR;											/* Return received data */
-}	
-
-char read_nack(){											/* I2C read nack function */
-
-	TWCR=(1<<TWEN)|(1<<TWINT);								/* Enable TWI and clear interrupt flag */
-	while (!(TWCR & (1<<TWINT)));							/* Wait until TWI finish its current job (read operation) */
-	return TWDR;											/* Return received data */
-}	
-
-////////////////////////////////////////////////////////////
 
 uint8_t I2C_Start(char slave_write_address)						/* I2C start function */
 {
@@ -290,8 +179,6 @@ char I2C_Read_Nack()										/* I2C read nack function */
 	return TWDR;											/* Return received data */
 }	
 
-////////////////////////////////////////////////////////////
-
 void MPU6050_Init()										/* Gyro initialization function */
 {
 	_delay_ms(150);										/* Power up time >100ms */
@@ -341,20 +228,16 @@ void Read_RawValue()
 	I2C_Stop();
 }
 
+
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 // 																		  //
 // ATMega32 USART Commands												  //
+// Code from ATMega32 Datashet											  //
 // 																		  //
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
-
-// Method triggered by overflow
-ISR(TIMER1_OVF_vect){
-
-    PORTB ^= 0xFF;			//toggle PORTB values
-}
 
 // Data from Bluetooth TX given to USART RX
 unsigned char USART_Receive( void ){
@@ -407,11 +290,11 @@ void USART_Init( unsigned int baud ){
 	UCSRC = (1<<URSEL)|(1<<USBS)|(3<<UCSZ0);
 }
 
-
+// Initialize Bluetooth connection through USART
 void Bluetooth_Init(){
 
 	USART_Init(12); // UBRR value for 9600
-	char *cmd = "AT+UART=9600,2,0\r\n";
+	char *cmd = "AT+UART=9600,2,0\r\n"; // is supposed to program HC05 to desired specs, may be useless
 	while (*cmd != '\0'){
 		USART_Transmit( *cmd );
 		++cmd;
@@ -426,6 +309,7 @@ void USART_Start_Timer(){
 	sei();					// Enable global interrupts
 }
 
+
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 // 																		  //
@@ -437,52 +321,16 @@ void USART_Start_Timer(){
 
 int main(void) {
 
-
-	// STEP 1: Establish Bluetooth / USART Connection
-
 	Bluetooth_Init();
-	//USART_SendString( "step 1" ); 
-
-	// STEP 2: Initialize Variables
 
 	char buffer[20], float_[10];
-	float Xa,Ya,Za,t;
+	float Xa,Ya,Za;
 	float Xg=0,Yg=0,Zg=0;
-	//USART_SendString( "step 2" );
-
-	// STEP 3: Establish I2C Connection
 
 	init_clock();
-	//USART_SendString( "step 3" );
-
-	// STEP 4: Configure MPU6050+
-
-	/*
-	CHAD: note to self, this function call is the issue.
-	Things break here. Look into the parts of this function.
-	*/
 
 	MPU6050_Init();
-	//USART_SendString( "step 4" );  
 
-/*
-	send_start_signal();
-	read_write_data(SLAVE_WRITE_ADDRESS,0);
-	read_write_data(SMPLRT_DIV,0);	
-	read_write_data(0x07,0);
-	send_stop_signal();
-*/
-  
-/*	// LED Light is Port B
-	DDRB = 0xFF;			// Set PORTB as output
-	PORTB = 0;				// Clear PORTB bits (turn the LEDs off)
-    
-	// Bluetooth is Port D
-	DDRD = 0x01; 			// PD0 is RX so processor reads it, PD1 is TX so processor writes it
-*/
-
-	// STEP 5: Send Data To Phone Over Bluetooth
-///*
 	while(1){
 	
 		//char DATA_IN = USART_Receive();
@@ -532,11 +380,6 @@ int main(void) {
 		//}		
 
 	}
-//*/
-
-	// STEP 6: Terminate I2C Connection	
-
-	//send_stop_signal();
 
 
 }

@@ -18,7 +18,7 @@ ARK_I2C.o: ../ARK_I2C.c \
   c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/math.h \
-  ../MPU6050_res_define.h ../I2C_Master_H_file.h
+  ../MPU6050_res_define.h
 
 c:/winavr-20100110/lib/gcc/../../avr/include/avr/io.h:
 
@@ -59,5 +59,3 @@ c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h:
 c:/winavr-20100110/lib/gcc/../../avr/include/math.h:
 
 ../MPU6050_res_define.h:
-
-../I2C_Master_H_file.h:
