@@ -3,7 +3,7 @@
 // 																		  //
 // SDP Team 21 - ARK												      //
 // Matteo Bolognese, Jackie Lagasse, Chad Klinefleter, Ethan Miller		  //
-// Last Updated: December 30, 2017										  //
+// Last Updated: January 31, 2018										  //
 // 																		  //
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -294,11 +294,13 @@ void USART_Init( unsigned int baud ){
 void Bluetooth_Init(){
 
 	USART_Init(12); // UBRR value for 9600
+	/*
 	char *cmd = "AT+UART=9600,2,0\r\n"; // is supposed to program HC05 to desired specs, may be useless
 	while (*cmd != '\0'){
 		USART_Transmit( *cmd );
 		++cmd;
 	}
+	*/
 }
 
 void USART_Start_Timer(){
@@ -321,65 +323,62 @@ void USART_Start_Timer(){
 
 int main(void) {
 
-	Bluetooth_Init();
-
+	// global variables
 	char buffer[20], float_[10];
 	float Xa,Ya,Za;
 	float Xg=0,Yg=0,Zg=0;
 
+	// initialize bluetooth, USART, mpu6050
+	Bluetooth_Init();
 	init_clock();
-
 	MPU6050_Init();
 
-	while(1){
+	// read data input
+	char DATA_IN;
 	
-		//char DATA_IN = USART_Receive();
+	while(1){
+
+		DATA_IN = USART_Receive(); // check input
+
+		// if 1, then start reading data continuously
+		if(DATA_IN == '1') {
+	
+				Read_RawValue();
+
+				Xa = Acc_x/16384.0;								
+				Ya = Acc_y/16384.0;
+				Za = Acc_z/16384.0;
 		
-		//if(DATA_IN == '1') {
+				Xg = Gyro_x/16.4;
+				Yg = Gyro_y/16.4;
+				Zg = Gyro_z/16.4;
 
-			Read_RawValue();
+				dtostrf( Xa, 3, 2, float_ );				
+				sprintf(buffer," Ax%s\n",float_);
+				USART_SendString(buffer);
 
-			Xa = Acc_x/16384.0;								
-			Ya = Acc_y/16384.0;
-			Za = Acc_z/16384.0;
-		
-			Xg = Gyro_x/16.4;
-			Yg = Gyro_y/16.4;
-			Zg = Gyro_z/16.4;
+				dtostrf( Ya, 3, 2, float_ );
+				sprintf(buffer," Ay%s\n",float_);
+				USART_SendString(buffer);
 
-			dtostrf( Xa, 3, 2, float_ );				
-			sprintf(buffer," Ax = %s g\t",float_);
-			USART_SendString(buffer);
+				dtostrf( Za, 3, 2, float_ );
+				sprintf(buffer," Az%s\n",float_);
+				USART_SendString(buffer);
 
-			dtostrf( Ya, 3, 2, float_ );
-			sprintf(buffer," Ay = %s g\t",float_);
-			USART_SendString(buffer);
-		
-			dtostrf( Za, 3, 2, float_ );
-			sprintf(buffer," Az = %s g\t",float_);
-			USART_SendString(buffer);
+				dtostrf( Xg, 3, 2, float_ );
+				sprintf(buffer," Gx%s\n",float_);
+				USART_SendString(buffer);
 
-			dtostrf( Xg, 3, 2, float_ );
-			sprintf(buffer," Gx = %s%c/s\t",float_,0xF8);
-			USART_SendString(buffer);
+				dtostrf( Yg, 3, 2, float_ );
+				sprintf(buffer," Gy%s\n",float_);
+				USART_SendString(buffer);
 
-			dtostrf( Yg, 3, 2, float_ );
-			sprintf(buffer," Gy = %s%c/s\t",float_,0xF8);
-			USART_SendString(buffer);
-		
-			dtostrf( Zg, 3, 2, float_ );
-			sprintf(buffer," Gz = %s%c/s\r\n",float_,0xF8);
-			USART_SendString(buffer);
+				dtostrf( Zg, 3, 2, float_ );
+				sprintf(buffer," Gz%s\n",float_);
+				USART_SendString(buffer);
+	
+		} // end if statment
 
-		//}
+	} // end while loop
 
-		//else if(DATA_IN == '0') {
-
-			//PORTB &= ~0xFF; // all the LEDs
-			//USART_SendString( "LED is off.\n" );
-		//}		
-
-	}
-
-
-}
+} // end main

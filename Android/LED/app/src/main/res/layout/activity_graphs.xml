@@ -1,74 +1,58 @@
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".BuildGraphs"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:id="@+id/relativeLayout">
 
      <com.jjoe64.graphview.GraphView
-         android:id="@+id/graphx"
+         android:id="@+id/grapha"
          android:layout_width="400dip"
          android:layout_height="100dip"
-         android:layout_above="@+id/graphy"
-         android:layout_alignStart="@+id/graphy"
-         android:layout_marginBottom="91dp"
+         android:layout_marginBottom="44dp"
          app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintBottom_toTopOf="@+id/buttong"
          app:layout_constraintEnd_toEndOf="parent"
          app:layout_constraintStart_toStartOf="parent"
          app:layout_constraintTop_toTopOf="parent"
-         app:layout_constraintVertical_bias="0.15" />
+         app:layout_constraintVertical_bias="0.915" />
 
 
      <com.jjoe64.graphview.GraphView
-         android:id="@+id/graphy"
+         android:id="@+id/graphg"
          android:layout_width="400dip"
          android:layout_height="100dip"
-         android:layout_above="@+id/graphz"
-         android:layout_centerHorizontal="true"
-         android:layout_marginBottom="98dp"
+         android:layout_marginBottom="57dp"
          app:layout_constraintBottom_toBottomOf="parent"
          app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="0.225"
          app:layout_constraintStart_toStartOf="parent"
          app:layout_constraintTop_toTopOf="parent"
-         app:layout_constraintVertical_bias="0.55" />
-
-     <com.jjoe64.graphview.GraphView
-         android:id="@+id/graphz"
-         android:layout_width="400dip"
-         android:layout_height="100dip"
-         android:layout_alignParentBottom="true"
-         android:layout_alignStart="@+id/graphy"
-         android:layout_marginBottom="41dp"
-         app:layout_constraintBottom_toBottomOf="parent"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="parent"
-         app:layout_constraintVertical_bias=".95" />
+         app:layout_constraintVertical_bias="0.963" />
 
      <Button
-         android:id="@+id/buttonx"
+         android:id="@+id/buttona"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_above="@+id/graphx"
-         android:layout_alignStart="@+id/buttonz"
-         android:text="X Axis" />
+         android:layout_marginBottom="20dp"
+         android:text="Acceleration"
+         app:layout_constraintBottom_toTopOf="@+id/grapha"
+         app:layout_constraintHorizontal_bias="0.502"
+         app:layout_constraintLeft_toLeftOf="parent"
+         app:layout_constraintRight_toRightOf="parent" />
 
      <Button
-         android:id="@+id/buttony"
+         android:id="@+id/buttong"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_above="@+id/graphy"
-         android:layout_centerHorizontal="true"
-         android:text="Y Axis" />
+         android:layout_marginBottom="20dp"
+         android:text="Angular Velocity"
+         app:layout_constraintBottom_toTopOf="@+id/graphg"
+         app:layout_constraintHorizontal_bias="0.502"
+         app:layout_constraintLeft_toLeftOf="parent"
+         app:layout_constraintRight_toRightOf="parent" />
 
-     <Button
-         android:id="@+id/buttonz"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_above="@+id/graphz"
-         android:layout_alignStart="@+id/buttony"
-         android:text="Z Axis" />
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

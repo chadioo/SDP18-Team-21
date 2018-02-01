@@ -1,69 +1,56 @@
 
 package com.team21.sdp18.umass.ece.led;
 
-import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.AsyncTask;
-import android.widget.ToggleButton;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Random;
 import java.util.UUID;
-
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-
 
 public class ledControl extends AppCompatActivity {
 
     String address = null;
-    String message;
     private ProgressDialog progress;
     BluetoothAdapter myBluetooth = null;
     BluetoothSocket btSocket = null;
     private boolean isBtConnected = false;
-    Toast LEDinfo;
+
     // Generic SPP UUID for connecting to a BT serial board
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private static final Random RANDOM = new Random();
-    private LineGraphSeries<DataPoint> seriesx, seriesy, seriesz;
-    private int xlastX = 0;
-    private int ylastX = 0;
-    private int zlastX = 0;
+    private LineGraphSeries<DataPoint> seriesax, seriesay, seriesaz, seriesgx, seriesgy, seriesgz;
 
-    private Button xButton,yButton,zButton;
+    private int axlastX = 0;
+    private int aylastX = 0;
+    private int azlastX = 0;
+    private int gxlastX = 0;
+    private int gylastX = 0;
+    private int gzlastX = 0;
+
+    GraphView grapha;
+    GraphView graphg;
+
+    private double ax, ay, az, gx, gy, gz;
+
+    private Button aButton,gButton;
 
 
     @Override
@@ -78,49 +65,48 @@ public class ledControl extends AppCompatActivity {
 
         setContentView(R.layout.activity_graphs);
 
-        // X Graph
-        GraphView graphx = (GraphView) findViewById(R.id.graphx);
-        seriesx = new LineGraphSeries<DataPoint>();
-        graphx.addSeries(seriesx);
-        Viewport viewportx = graphx.getViewport();
+        // Accelerometer Graph
+        grapha = (GraphView) findViewById(R.id.grapha);
+        seriesax = new LineGraphSeries<DataPoint>();
+        seriesay = new LineGraphSeries<DataPoint>();
+        seriesaz = new LineGraphSeries<DataPoint>();
+        grapha.addSeries(seriesax);
+        grapha.addSeries(seriesay);
+        grapha.addSeries(seriesaz);
+        Viewport viewportx = grapha.getViewport();
         viewportx.setYAxisBoundsManual(true);
-        viewportx.setMinY(0);
-        viewportx.setMaxY(100);
+        viewportx.setMinY(-5);
+        viewportx.setMaxY(5);
         viewportx.setScrollable(true);
 
-        // X Graph
-        GraphView graphy = (GraphView) findViewById(R.id.graphy);
-        seriesy = new LineGraphSeries<DataPoint>();
-        graphy.addSeries(seriesy);
-        Viewport viewporty = graphy.getViewport();
+        // Gyroscope Graph
+        graphg = (GraphView) findViewById(R.id.graphg);
+        seriesgx = new LineGraphSeries<DataPoint>();
+        seriesgy = new LineGraphSeries<DataPoint>();
+        seriesgz = new LineGraphSeries<DataPoint>();
+        graphg.addSeries(seriesgx);
+        graphg.addSeries(seriesgy);
+        graphg.addSeries(seriesgz);
+        Viewport viewporty = graphg.getViewport();
         viewporty.setYAxisBoundsManual(true);
-        viewporty.setMinY(0);
-        viewporty.setMaxY(100);
+        viewporty.setMinY(-5);
+        viewporty.setMaxY(5);
         viewporty.setScrollable(true);
-
-        // X Graph
-        GraphView graphz = (GraphView) findViewById(R.id.graphz);
-        seriesz = new LineGraphSeries<DataPoint>();
-        graphz.addSeries(seriesz);
-        Viewport viewportz = graphz.getViewport();
-        viewportz.setYAxisBoundsManual(true);
-        viewportz.setMinY(0);
-        viewportz.setMaxY(100);
-        viewportz.setScrollable(true);
-
 
         // List all buttons and their functions
 
-        xButton = (Button)findViewById(R.id.buttonx);
+        aButton = findViewById(R.id.buttona);
 
-        xButton.setOnClickListener(new View.OnClickListener()
+        aButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
                 try {
-                    int data = getData('x');      //method to turn on
-                    System.out.println(data);
-                    printGraph('x',data);
+                    getData();      //method to turn on
+                    getData();      //method to turn on
+                    getData();      //method to turn on
+                    System.out.println("ax: "+ax+" ay: "+ay+" az: "+az);
+                    printGraph('a', ax, ay, az);
 
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -129,16 +115,16 @@ public class ledControl extends AppCompatActivity {
             }
         });
 
-        yButton = (Button)findViewById(R.id.buttony);
+        gButton = findViewById(R.id.buttong);
 
-        yButton.setOnClickListener(new View.OnClickListener()
+        gButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
                 try {
-                    int data = getData('y');      //method to turn on
-                    System.out.println(data);
-                    printGraph('y',data);
+                    getData();      //method to turn on
+                    System.out.println("gx: "+gx+" gy: "+gy+" gz: "+gz);
+                    printGraph('g',gx,gy,gz);
 
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -146,26 +132,6 @@ public class ledControl extends AppCompatActivity {
 
             }
         });
-
-        zButton = (Button)findViewById(R.id.buttonz);
-
-        zButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                try {
-                    int data = getData('z');      //method to turn on
-                    System.out.println(data);
-                    printGraph('z',data);
-
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-
-            }
-        });
-
-
 
     }
 
@@ -177,9 +143,11 @@ public class ledControl extends AppCompatActivity {
 
 
     // print value to graph
-    protected void printGraph(char axis, int data) {
+    protected void printGraph(char axis, double x, double y, double z) {
         final char Axis = axis;
-        final int Data = data;
+        final double X = x;
+        final double Y = y;
+        final double Z = z;
 
         // we're going to simulate real time with thread that append data to the graph
         new Thread(new Runnable() {
@@ -192,14 +160,25 @@ public class ledControl extends AppCompatActivity {
 
                     @Override
                     public void run() {
-                        if(Axis=='x'){
-                            seriesx.appendData(new DataPoint(xlastX++, Data), false, 20);
+                        if(Axis=='a'){
+                            seriesax.appendData(new DataPoint(axlastX++, X), false, 20);
+                            seriesay.appendData(new DataPoint(aylastX++, Y), false, 20);
+                            seriesaz.appendData(new DataPoint(azlastX++, Z), false, 20);
+                            /*
+                            graphg.addSeries(seriesax);
+                            graphg.addSeries(seriesay);
+                            graphg.addSeries(seriesaz);
+                            */
                         }
-                        else if(Axis=='y'){
-                            seriesy.appendData(new DataPoint(ylastX++, Data), false, 20);
-                        }
-                        else if(Axis=='z'){
-                            seriesz.appendData(new DataPoint(zlastX++, Data), false, 20);
+                        else if(Axis=='g'){
+                            seriesgx.appendData(new DataPoint(gxlastX++, X), false, 20);
+                            seriesgy.appendData(new DataPoint(gylastX++, Y), false, 20);
+                            seriesgz.appendData(new DataPoint(gzlastX++, Z), false, 20);
+                            /*
+                            graphg.addSeries(seriesgx);
+                            graphg.addSeries(seriesgx);
+                            graphg.addSeries(seriesgx);
+                            */
                         }
                     }
 
@@ -254,22 +233,14 @@ public class ledControl extends AppCompatActivity {
     }
 
     // use this to read a data point for graph
-    private int getData(char axis) throws IOException{
-        final char Axis = axis;
-        char getChar = ' ';
+    private void getData() throws IOException{
         if (btSocket!=null) {
-            if(Axis=='x'){
-                btSocket.getOutputStream().write("0".toString().getBytes());
-            }
-            else if(Axis=='y'){
-                btSocket.getOutputStream().write("1".toString().getBytes());
-            }
-            else if(Axis=='z'){
-                btSocket.getOutputStream().write("2".toString().getBytes());
-            }
-            btSocket.getOutputStream().write("0".toString().getBytes());
-            InputStream socketInputStream = btSocket.getInputStream();
 
+            // write 1 to sensor to tell sensor to send data
+            btSocket.getOutputStream().write("1".toString().getBytes());
+
+            // reads incoming data
+            InputStream socketInputStream = btSocket.getInputStream();
 
             byte[] byteArray = new byte[512];
             int length;
@@ -280,22 +251,41 @@ public class ledControl extends AppCompatActivity {
                     length = socketInputStream.read(byteArray);                     //read bytes from input buffer
                     System.out.println("Length: " + length);
                     String readMessage = new String(byteArray, 0, length);
-                    if(length>0) {
-                        getChar = readMessage.charAt(0);
+                    System.out.println("Line: "+readMessage);
+                    if(length>2) {
+                        System.out.println("Line Parsed: ID: "+readMessage.substring(0,2)+" Value: "+readMessage.substring(2,length));
+                        if(readMessage.substring(0,2).contentEquals("Ax")){
+                            ax = Double.parseDouble(readMessage.substring(2,8).replaceAll("[^\\d.]", ""));
+                        }
+                        if(readMessage.substring(0,2).contentEquals("Ay")){
+                            ay = Double.parseDouble(readMessage.substring(2,8).replaceAll("[^\\d.]", ""));
+                        }
+                        if(readMessage.substring(0,2).contentEquals("Az")){
+                            az = Double.parseDouble(readMessage.substring(2,8).replaceAll("[^\\d.]", ""));
+                        }
+                        if(readMessage.substring(0,2).contentEquals("Gx")){
+                            gx = Double.parseDouble(readMessage.substring(2,8).replaceAll("[^\\d.]", ""));
+                        }
+                        if(readMessage.substring(0,2).contentEquals("Gy")){
+                            gy = Double.parseDouble(readMessage.substring(2,8).replaceAll("[^\\d.]", ""));
+                        }
+                        if(readMessage.substring(0,2).contentEquals("Gz")){
+                            gz = Double.parseDouble(readMessage.substring(2,8).replaceAll("[^\\d.]", ""));
+                        }
                         break;
                     }
+
                 } catch (IOException e) {
                     break;
                 }
             }
-            Log.i("logging", getChar + "");
+
         }
-        return (int) getChar;
     }
 
 
     /////////////////////////////
-    // SHIT FROM INSTRUCTABLES //
+    // CODE FROM INSTRUCTABLES //
     /////////////////////////////
 
 
