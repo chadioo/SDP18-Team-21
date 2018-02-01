@@ -9,6 +9,8 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -47,7 +49,7 @@ public class ledControl extends AppCompatActivity {
     GraphView grapha;
     GraphView graphg;
 
-    private double ax, ay, az, gx, gy, gz;
+    private double ax=0, ay=0, az=0, gx=0, gy=0, gz=0;
 
     private Button aButton,gButton;
 
@@ -77,8 +79,8 @@ public class ledControl extends AppCompatActivity {
         grapha.addSeries(seriesaz);
         Viewport viewportx = grapha.getViewport();
         viewportx.setYAxisBoundsManual(true);
-        viewportx.setMinY(-5);
-        viewportx.setMaxY(5);
+        viewportx.setMinY(-10);
+        viewportx.setMaxY(10);
         viewportx.setScrollable(true);
 
         // Gyroscope Graph
@@ -94,51 +96,55 @@ public class ledControl extends AppCompatActivity {
         graphg.addSeries(seriesgz);
         Viewport viewporty = graphg.getViewport();
         viewporty.setYAxisBoundsManual(true);
-        viewporty.setMinY(-5);
-        viewporty.setMaxY(5);
+        viewporty.setMinY(-10);
+        viewporty.setMaxY(10);
         viewporty.setScrollable(true);
 
         // List all buttons and their functions
 
-        aButton = findViewById(R.id.buttona);
+        Switch switcha = (Switch) findViewById(R.id.switcha); // initiate Switch
 
-        aButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                try {
-                    getData("1");      //method to turn on
-                    getData("2");      //method to turn on
-                    getData("3");      //method to turn on
-                    System.out.println("ax: "+ax+" ay: "+ay+" az: "+az);
-                    printGraph('a', ax, ay, az);
+        switcha.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    for(int i=0; i<5; i++) {
+                        try {
+                            getData("1");      //method to turn on
+                            getData("2");      //method to turn on
+                            getData("3");      //method to turn on
+                            System.out.println("ax: " + ax + " ay: " + ay + " az: " + az);
+                            printGraph('a', ax, ay, az);
 
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
                 }
-
             }
         });
 
-        gButton = findViewById(R.id.buttong);
+        Switch switchg = (Switch) findViewById(R.id.switchg); // initiate Switch
 
-        gButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                try {
-                    getData("4");      //method to turn on
-                    getData("5");      //method to turn on
-                    getData("6");      //method to turn on
-                    System.out.println("gx: "+gx+" gy: "+gy+" gz: "+gz);
-                    printGraph('g',gx,gy,gz);
+        switchg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    for(int i=0; i<5; i++) {
+                        try {
+                            getData("4");      //method to turn on
+                            getData("5");      //method to turn on
+                            getData("6");      //method to turn on
+                            System.out.println("gx: " + gx + " gy: " + gy + " gz: " + gz);
+                            printGraph('g', gx, gy, gz);
 
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
                 }
-
             }
         });
+
+
 
     }
 
@@ -252,7 +258,7 @@ public class ledControl extends AppCompatActivity {
                     try
                     {
                         Double.parseDouble(readMessage);
-                        if(length>=0) {
+                        if(length>=4) {
                             if(input.contentEquals("1")){
                                 ax = Double.parseDouble(readMessage.replaceAll("[^\\d.]", ""));
                             }
@@ -271,6 +277,9 @@ public class ledControl extends AppCompatActivity {
                             if(input.contentEquals("6")){
                                 gz = Double.parseDouble(readMessage.replaceAll("[^\\d.]", ""));
                             }
+                            break;
+                        }
+                        else{
                             break;
                         }
                     }

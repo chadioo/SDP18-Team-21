@@ -1,58 +1,70 @@
-
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".BuildGraphs"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:id="@+id/relativeLayout">
+    tools:context=".ledControl">
 
-     <com.jjoe64.graphview.GraphView
-         android:id="@+id/grapha"
-         android:layout_width="400dip"
-         android:layout_height="100dip"
-         android:layout_marginBottom="44dp"
-         app:layout_constraintBottom_toBottomOf="parent"
-         app:layout_constraintBottom_toTopOf="@+id/buttong"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="parent"
-         app:layout_constraintVertical_bias="0.915" />
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/grapha"
+        android:layout_width="400dip"
+        android:layout_height="100dip"
+        android:layout_marginTop="168dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-     <com.jjoe64.graphview.GraphView
-         android:id="@+id/graphg"
-         android:layout_width="400dip"
-         android:layout_height="100dip"
-         android:layout_marginBottom="57dp"
-         app:layout_constraintBottom_toBottomOf="parent"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintHorizontal_bias="0.225"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="parent"
-         app:layout_constraintVertical_bias="0.963" />
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graphg"
+        android:layout_width="400dip"
+        android:layout_height="100dip"
+        android:layout_marginBottom="57dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchg"
+        app:layout_constraintVertical_bias="0.89" />
 
-     <Button
-         android:id="@+id/buttona"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_marginBottom="20dp"
-         android:text="Acceleration"
-         app:layout_constraintBottom_toTopOf="@+id/grapha"
-         app:layout_constraintHorizontal_bias="0.502"
-         app:layout_constraintLeft_toLeftOf="parent"
-         app:layout_constraintRight_toRightOf="parent" />
+    <TextView
+        android:id="@+id/legend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Legend: X=RED Y=BLUE Z=GREEN"
+        app:layout_constraintBottom_toTopOf="@+id/switcha"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-     <Button
-         android:id="@+id/buttong"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_marginBottom="20dp"
-         android:text="Angular Velocity"
-         app:layout_constraintBottom_toTopOf="@+id/graphg"
-         app:layout_constraintHorizontal_bias="0.502"
-         app:layout_constraintLeft_toLeftOf="parent"
-         app:layout_constraintRight_toRightOf="parent" />
+    <Switch
+        android:id="@+id/switcha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accelerometer"
+        android:textOff="Accelerometer Off"
+        android:textOn="Accelerometer On"
+        app:layout_constraintBottom_toTopOf="@+id/grapha"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/legend" />
+
+    <Switch
+        android:id="@+id/switchg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gyroscope"
+        android:textOff="Gyroscope Off"
+        android:textOn="Gyroscope On"
+        app:layout_constraintBottom_toTopOf="@+id/graphg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/grapha" />
 
 </android.support.constraint.ConstraintLayout>
