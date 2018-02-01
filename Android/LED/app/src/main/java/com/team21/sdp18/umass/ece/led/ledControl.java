@@ -25,6 +25,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class ledControl extends AppCompatActivity {
 
@@ -79,8 +80,8 @@ public class ledControl extends AppCompatActivity {
         grapha.addSeries(seriesaz);
         Viewport viewportx = grapha.getViewport();
         viewportx.setYAxisBoundsManual(true);
-        viewportx.setMinY(-10);
-        viewportx.setMaxY(10);
+        viewportx.setMinY(-5);
+        viewportx.setMaxY(5);
         viewportx.setScrollable(true);
 
         // Gyroscope Graph
@@ -96,8 +97,8 @@ public class ledControl extends AppCompatActivity {
         graphg.addSeries(seriesgz);
         Viewport viewporty = graphg.getViewport();
         viewporty.setYAxisBoundsManual(true);
-        viewporty.setMinY(-10);
-        viewporty.setMaxY(10);
+        viewporty.setMinY(-360);
+        viewporty.setMaxY(360);
         viewporty.setScrollable(true);
 
         // List all buttons and their functions
@@ -107,7 +108,7 @@ public class ledControl extends AppCompatActivity {
         switcha.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
-                    for(int i=0; i<5; i++) {
+                    for(int i=0; i<20; i++) {
                         try {
                             getData("1");      //method to turn on
                             getData("2");      //method to turn on
@@ -285,7 +286,7 @@ public class ledControl extends AppCompatActivity {
                     }
                     catch(NumberFormatException e)
                     {
-                        //not a double
+                        break;
                     }
 
                 } catch (IOException e) {

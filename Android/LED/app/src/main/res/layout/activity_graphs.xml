@@ -10,8 +10,8 @@
     <com.jjoe64.graphview.GraphView
         android:id="@+id/grapha"
         android:layout_width="400dip"
-        android:layout_height="100dip"
-        android:layout_marginTop="168dp"
+        android:layout_height="200dip"
+        android:layout_marginTop="104dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,11 +21,11 @@
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graphg"
         android:layout_width="400dip"
-        android:layout_height="100dip"
-        android:layout_marginBottom="57dp"
+        android:layout_height="200dip"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switchg"
         app:layout_constraintVertical_bias="0.89" />
@@ -50,7 +50,7 @@
         android:textOn="Accelerometer On"
         app:layout_constraintBottom_toTopOf="@+id/grapha"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/legend" />
 
@@ -66,5 +66,12 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/grapha" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
 
 </android.support.constraint.ConstraintLayout>
