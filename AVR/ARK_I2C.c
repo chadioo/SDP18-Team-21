@@ -339,20 +339,48 @@ int main(void) {
 	while(1){
 
 		DATA_IN = USART_Receive(); // check input
-
-		// if 1, then start reading data continuously
-		if(DATA_IN == '1') {
 	
-				Read_RawValue();
+		Read_RawValue();
 
-				Xa = Acc_x/16384.0;								
-				Ya = Acc_y/16384.0;
-				Za = Acc_z/16384.0;
+		Xa = Acc_x/16384.0;								
+		Ya = Acc_y/16384.0;
+		Za = Acc_z/16384.0;
 		
-				Xg = Gyro_x/16.4;
-				Yg = Gyro_y/16.4;
-				Zg = Gyro_z/16.4;
+		Xg = Gyro_x/16.4;
+		Yg = Gyro_y/16.4;
+		Zg = Gyro_z/16.4;
 
+		if(DATA_IN == '1') {	// print acceleration x
+				dtostrf( Xa, 3, 2, float_ );				
+				sprintf(buffer,"%s\n",float_);
+				USART_SendString(buffer);
+		}
+		if(DATA_IN == '2') {	// print acceleration x
+				dtostrf( Ya, 3, 2, float_ );
+				sprintf(buffer,"%s\n",float_);
+				USART_SendString(buffer);		
+		}
+		if(DATA_IN == '3') {	// print acceleration x
+				dtostrf( Za, 3, 2, float_ );
+				sprintf(buffer,"%s\n",float_);
+				USART_SendString(buffer);		
+		}
+		if(DATA_IN == '4') {	// print acceleration x
+				dtostrf( Xg, 3, 2, float_ );
+				sprintf(buffer,"%s\n",float_);
+				USART_SendString(buffer);		
+		}
+		if(DATA_IN == '5') {	// print acceleration x
+				dtostrf( Yg, 3, 2, float_ );
+				sprintf(buffer,"%s\n",float_);
+				USART_SendString(buffer);		
+		}
+		if(DATA_IN == '6') {	// print acceleration x
+				dtostrf( Zg, 3, 2, float_ );
+				sprintf(buffer,"%s\n",float_);
+				USART_SendString(buffer);		
+		}
+/*
 				dtostrf( Xa, 3, 2, float_ );				
 				sprintf(buffer," Ax%s\n",float_);
 				USART_SendString(buffer);
@@ -376,8 +404,10 @@ int main(void) {
 				dtostrf( Zg, 3, 2, float_ );
 				sprintf(buffer," Gz%s\n",float_);
 				USART_SendString(buffer);
-	
+
 		} // end if statment
+
+*/
 
 	} // end while loop
 

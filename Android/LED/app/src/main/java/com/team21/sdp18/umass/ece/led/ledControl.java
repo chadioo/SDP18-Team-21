@@ -1,6 +1,7 @@
 
 package com.team21.sdp18.umass.ece.led;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +22,6 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Random;
 import java.util.UUID;
 
 public class ledControl extends AppCompatActivity {
@@ -35,7 +35,6 @@ public class ledControl extends AppCompatActivity {
     // Generic SPP UUID for connecting to a BT serial board
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-    private static final Random RANDOM = new Random();
     private LineGraphSeries<DataPoint> seriesax, seriesay, seriesaz, seriesgx, seriesgy, seriesgz;
 
     private int axlastX = 0;
@@ -70,6 +69,9 @@ public class ledControl extends AppCompatActivity {
         seriesax = new LineGraphSeries<DataPoint>();
         seriesay = new LineGraphSeries<DataPoint>();
         seriesaz = new LineGraphSeries<DataPoint>();
+        seriesax.setColor(Color.RED);
+        seriesay.setColor(Color.BLUE);
+        seriesaz.setColor(Color.GREEN);
         grapha.addSeries(seriesax);
         grapha.addSeries(seriesay);
         grapha.addSeries(seriesaz);
@@ -84,6 +86,9 @@ public class ledControl extends AppCompatActivity {
         seriesgx = new LineGraphSeries<DataPoint>();
         seriesgy = new LineGraphSeries<DataPoint>();
         seriesgz = new LineGraphSeries<DataPoint>();
+        seriesgx.setColor(Color.RED);
+        seriesgy.setColor(Color.BLUE);
+        seriesgz.setColor(Color.GREEN);
         graphg.addSeries(seriesgx);
         graphg.addSeries(seriesgy);
         graphg.addSeries(seriesgz);
@@ -102,9 +107,9 @@ public class ledControl extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    getData();      //method to turn on
-                    getData();      //method to turn on
-                    getData();      //method to turn on
+                    getData("1");      //method to turn on
+                    getData("2");      //method to turn on
+                    getData("3");      //method to turn on
                     System.out.println("ax: "+ax+" ay: "+ay+" az: "+az);
                     printGraph('a', ax, ay, az);
 
@@ -122,7 +127,9 @@ public class ledControl extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    getData();      //method to turn on
+                    getData("4");      //method to turn on
+                    getData("5");      //method to turn on
+                    getData("6");      //method to turn on
                     System.out.println("gx: "+gx+" gy: "+gy+" gz: "+gz);
                     printGraph('g',gx,gy,gz);
 
@@ -164,21 +171,11 @@ public class ledControl extends AppCompatActivity {
                             seriesax.appendData(new DataPoint(axlastX++, X), false, 20);
                             seriesay.appendData(new DataPoint(aylastX++, Y), false, 20);
                             seriesaz.appendData(new DataPoint(azlastX++, Z), false, 20);
-                            /*
-                            graphg.addSeries(seriesax);
-                            graphg.addSeries(seriesay);
-                            graphg.addSeries(seriesaz);
-                            */
                         }
                         else if(Axis=='g'){
                             seriesgx.appendData(new DataPoint(gxlastX++, X), false, 20);
                             seriesgy.appendData(new DataPoint(gylastX++, Y), false, 20);
                             seriesgz.appendData(new DataPoint(gzlastX++, Z), false, 20);
-                            /*
-                            graphg.addSeries(seriesgx);
-                            graphg.addSeries(seriesgx);
-                            graphg.addSeries(seriesgx);
-                            */
                         }
                     }
 
@@ -233,11 +230,11 @@ public class ledControl extends AppCompatActivity {
     }
 
     // use this to read a data point for graph
-    private void getData() throws IOException{
+    private void getData(String input) throws IOException{
         if (btSocket!=null) {
 
             // write 1 to sensor to tell sensor to send data
-            btSocket.getOutputStream().write("1".toString().getBytes());
+            btSocket.getOutputStream().write(input.toString().getBytes());
 
             // reads incoming data
             InputStream socketInputStream = btSocket.getInputStream();
@@ -252,27 +249,34 @@ public class ledControl extends AppCompatActivity {
                     System.out.println("Length: " + length);
                     String readMessage = new String(byteArray, 0, length);
                     System.out.println("Line: "+readMessage);
-                    if(length>2) {
-                        System.out.println("Line Parsed: ID: "+readMessage.substring(0,2)+" Value: "+readMessage.substring(2,length));
-                        if(readMessage.substring(0,2).contentEquals("Ax")){
-                            ax = Double.parseDouble(readMessage.substring(2,8).replaceAll("[^\\d.]", ""));
+                    try
+                    {
+                        Double.parseDouble(readMessage);
+                        if(length>=0) {
+                            if(input.contentEquals("1")){
+                                ax = Double.parseDouble(readMessage.replaceAll("[^\\d.]", ""));
+                            }
+                            if(input.contentEquals("2")){
+                                ay = Double.parseDouble(readMessage.replaceAll("[^\\d.]", ""));
+                            }
+                            if(input.contentEquals("3")){
+                                az = Double.parseDouble(readMessage.replaceAll("[^\\d.]", ""));
+                            }
+                            if(input.contentEquals("4")){
+                                gx = Double.parseDouble(readMessage.replaceAll("[^\\d.]", ""));
+                            }
+                            if(input.contentEquals("5")){
+                                gy = Double.parseDouble(readMessage.replaceAll("[^\\d.]", ""));
+                            }
+                            if(input.contentEquals("6")){
+                                gz = Double.parseDouble(readMessage.replaceAll("[^\\d.]", ""));
+                            }
+                            break;
                         }
-                        if(readMessage.substring(0,2).contentEquals("Ay")){
-                            ay = Double.parseDouble(readMessage.substring(2,8).replaceAll("[^\\d.]", ""));
-                        }
-                        if(readMessage.substring(0,2).contentEquals("Az")){
-                            az = Double.parseDouble(readMessage.substring(2,8).replaceAll("[^\\d.]", ""));
-                        }
-                        if(readMessage.substring(0,2).contentEquals("Gx")){
-                            gx = Double.parseDouble(readMessage.substring(2,8).replaceAll("[^\\d.]", ""));
-                        }
-                        if(readMessage.substring(0,2).contentEquals("Gy")){
-                            gy = Double.parseDouble(readMessage.substring(2,8).replaceAll("[^\\d.]", ""));
-                        }
-                        if(readMessage.substring(0,2).contentEquals("Gz")){
-                            gz = Double.parseDouble(readMessage.substring(2,8).replaceAll("[^\\d.]", ""));
-                        }
-                        break;
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        //not a double
                     }
 
                 } catch (IOException e) {
