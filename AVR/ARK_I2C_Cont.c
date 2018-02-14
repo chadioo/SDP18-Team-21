@@ -19,13 +19,17 @@
 #include <inttypes.h>			/* Include integer type header file */
 #include "MPU6050_res_define.h"	/* Include MPU6050 register define file */
 
-#define F_CPU 8000000UL		/* Define CPU */
+#define F_CPU 1000000UL		/* Define CPU */
 #define SCL_CLK 100000L		/* Define SCL clock frequency */
 
 #define SLAVE_WRITE_ADDRESS 0xD0
 #define SLAVE_READ_ADDRESS 0xD1
 
 float Acc_x,Acc_y,Acc_z,Temperature,Gyro_x,Gyro_y,Gyro_z;
+// global variable to count the number of overflows
+// ENABLE FOR TIMER DEBUGGING
+//int tot_overflow;
+
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -311,6 +315,37 @@ void USART_Start_Timer(){
 	sei();					// Enable global interrupts
 }
 
+/* =======================ENABLE FOR TIME DEBUGGING=================================
+void timer0_init()
+{
+    // set up timer with prescaler = 0
+	// overflows every 256 us, incrementing "tot_overflow"
+    TCCR0 |= (0 << CS01)|(1 << CS00);
+  
+    // initialize counter
+    TCNT0 = 0;
+	//enable interrupts
+	SREG 	|= (0x80);
+	TIMSK 	|= (1 << TOIE0);
+	TIFR 	|= (1 << TOV0);
+}
+
+// TIMER0 overflow interrupt service routine
+// called whenever TCNT0 overflows
+ISR(TIMER0_OVF_vect)
+{
+    // keep a track of number of overflows
+    tot_overflow++;
+	TCNT0 = 0;
+}
+*/
+
+
+
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -327,6 +362,7 @@ int main(void) {
 	char buffer[20], float_[10];
 	float Xa,Ya,Za;
 	float Xg=0,Yg=0,Zg=0;
+//	tot_overflow = 0;
 
 	// initialize bluetooth, USART, mpu6050
 	Bluetooth_Init();
@@ -336,9 +372,15 @@ int main(void) {
 	// read data input
 	char DATA_IN;
 	
+	//start timer
+//	timer0_init();
+	
+	sprintf(buffer,"\nAx\tAy\tAz\tGx\tGy\tGz\n",float_);
+	USART_SendString(buffer);
+
 	while(1){
 
-		DATA_IN = USART_Receive(); // check input
+		//DATA_IN = USART_Receive(); // check input
 	
 		Read_RawValue();
 
@@ -350,34 +392,38 @@ int main(void) {
 		Yg = Gyro_y/16.4;
 		Zg = Gyro_z/16.4;
 
-		if(DATA_IN == '1') {	// print all continuously
+		//if(DATA_IN == '1') {	// print all continuously
+				
+//				sprintf(buffer," TIME %i ",tot_overflow);
+//				USART_SendString(buffer);				
 
 				dtostrf( Xa, 3, 2, float_ );				
-				sprintf(buffer," Ax%s\n",float_);
+				sprintf(buffer,"%s, ",float_);
 				USART_SendString(buffer);
 
 				dtostrf( Ya, 3, 2, float_ );
-				sprintf(buffer," Ay%s\n",float_);
+				sprintf(buffer," %s, ",float_);
 				USART_SendString(buffer);
 
 				dtostrf( Za, 3, 2, float_ );
-				sprintf(buffer," Az%s\n",float_);
+				sprintf(buffer," %s, ",float_);
 				USART_SendString(buffer);
 
 				dtostrf( Xg, 3, 2, float_ );
-				sprintf(buffer," Gx%s\n",float_);
+				sprintf(buffer," %s, ",float_);
 				USART_SendString(buffer);
 
 				dtostrf( Yg, 3, 2, float_ );
-				sprintf(buffer," Gy%s\n",float_);
+				sprintf(buffer," %s, ",float_);
 				USART_SendString(buffer);
 
 				dtostrf( Zg, 3, 2, float_ );
-				sprintf(buffer," Gz%s\n",float_);
+				sprintf(buffer," %s\n",float_);
 				USART_SendString(buffer);
 
-		} // end if statment
+		//} // end if statment
 
 	} // end while loop
 
 } // end main
+
