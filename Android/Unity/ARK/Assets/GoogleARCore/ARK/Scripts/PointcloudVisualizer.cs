@@ -29,7 +29,7 @@ namespace GoogleARCore.HelloAR
     /// </summary>
     public class PointcloudVisualizer : MonoBehaviour
     {
-        private const int k_MaxPointCount = 61440;
+        private const int k_MaxPointCount = 61440*2;
 
         private Mesh m_Mesh;
 
