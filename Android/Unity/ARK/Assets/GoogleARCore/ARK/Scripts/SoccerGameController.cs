@@ -25,6 +25,7 @@ namespace GoogleARCore.HelloAR
     using GoogleARCore;
     using UnityEngine;
     using UnityEngine.Rendering;
+    using TechTweaking.Bluetooth;
 
     /// <summary>
     /// Controls the HelloAR example.
@@ -68,12 +69,6 @@ namespace GoogleARCore.HelloAR
         private List<TrackedPlane> m_NewPlanes = new List<TrackedPlane>();
 
         /// <summary>
-        /// A list to hold all planes ARCore is tracking in the current frame. This object is used across
-        /// the application to avoid per-frame allocations.
-        /// </summary>
-        private List<TrackedPlane> m_AllPlanes = new List<TrackedPlane>();
-
-        /// <summary>
         /// True if the app is in the process of quitting due to an ARCore connection error, otherwise false.
         /// </summary>
         private bool m_IsQuitting = false;
@@ -87,6 +82,16 @@ namespace GoogleARCore.HelloAR
         /// True if the app spawned soccer goal and soccer ball, otherwise false.
         /// </summary>
         private bool SpawnObjects = false;
+
+        /// <summary>
+        /// True if threshold for kick was detected, otherwise false.
+        /// </summary>
+        private bool KickDetected = false;
+
+        /// <summary>
+        /// Amount of g (acceleration) needed to detect a kick.
+        /// </summary>
+        private float Threshold = 1.5f;
 
         /// <summary>
         /// PLane vector to use for anchoring objects.
@@ -103,9 +108,42 @@ namespace GoogleARCore.HelloAR
         /// </summary>
         private Rigidbody SoccerBallRigidbody;
 
+        /// <summary>
+        /// Bluetooth device is used to connect to bluetooth module.
+        /// </summary>
+        private BluetoothDevice device;
+
+        /// <summary>
+        /// Sensor data storage.
+        /// </summary>
+        private float[] SensorData;
+
+        /// <summary>
+        /// The Unity Start() method.
+        /// </summary>
         void Start()
         {
+            // Create rigidbody for soccer ball
             SoccerBallRigidbody = SoccerBallPrefab.GetComponent<Rigidbody>();
+
+            // Instantiate bluetooth device object
+            device = new BluetoothDevice();
+
+            SensorData = new float[6];
+
+            // Attempt to connect to bluetooth
+            if (BluetoothAdapter.isBluetoothEnabled()){
+                connect();
+            }
+
+            // Throw error
+            else {
+                _ShowAndroidToastMessage("Bluetooth is not enabled");
+                BluetoothAdapter.enableBluetooth();         //you can by this force enabling Bluetooth without asking the user
+                BluetoothAdapter.OnBluetoothStateChanged += HandleOnBluetoothStateChanged;
+                BluetoothAdapter.listenToBluetoothState();  // if you want to listen to the following two events  OnBluetoothOFF or OnBluetoothON
+                BluetoothAdapter.askEnableBluetooth();      //Ask user to enable Bluetooth
+            }
         }
 
         /// <summary>
@@ -162,7 +200,7 @@ namespace GoogleARCore.HelloAR
 
                 // Set spawn location to be on plane certain distance in front of camera
                 SoccerBallVector = new Vector3(0, PlaneVector.y, 1);      // ball is 1 unit of distance forward
-                SoccerGoalVector = new Vector3(0, PlaneVector.y, 10);     // goal is 10 units of distance forward
+                SoccerGoalVector = new Vector3(0, PlaneVector.y-2, 15);   // goal is 15 units of distance forward, lower height to rest on plane
 
                 // Spawn Objects
                 Instantiate(SoccerBallPrefab, SoccerBallVector, Quaternion.identity);
@@ -174,78 +212,150 @@ namespace GoogleARCore.HelloAR
             // If objects have been spawn, move soccer ball
             if (FoundPlane && SpawnObjects) {
 
-                // Determines ball movement
-                float moveHorizontal = Input.GetAxis("Horizontal");
-                float moveVertical = Input.GetAxis("Vertical");
+                //_ShowAndroidToastMessage("Do Stuff");
 
-                Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+                // Read data from Bluetooth file
+                //while (device.IsReading) {
+                    //if (device.IsDataAvailable) {
+                    //_ShowAndroidToastMessage("Getting Data");
 
-                // Applies force to rigidbody, makes movement
-                SoccerBallRigidbody.AddForce(movement * speed);
+                        //because we called setEndByte(10)..read will always return a packet excluding the last byte 10.
+                        byte[] msg = device.read();
+                        string content = "";
+                        string[] subStrings;
+
+                        // Read string
+                        if (msg != null && msg.Length > 0) {
+                            content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
+                            _ShowAndroidToastMessage("Content: "+content);
+
+                            // Split up by spaces
+                            content = content.Replace("," , "");
+                            subStrings = content.Split(' ');
+                            //_ShowAndroidToastMessage("Sensor Data Length: "+subStrings.Length);
+
+                            for (int i=0; i< subStrings.Length; i++) {
+
+                                double value = double.Parse(subStrings[i]);
+                                SensorData[i] = (float)value;
+                            }
+                            //_ShowAndroidToastMessage("Sensor Data: "+SensorData.Length+"Kick Detection: "+KickDetected);
+
+                            // If no kick has been detected and data exists, check if threshold has been reached
+                            if (!KickDetected) {
+                                //_ShowAndroidToastMessage("Acc: "+ SensorData[0] + " g");
+                                // If threshold has been reached, kick has been detected
+                                if (SensorData[0] >= Threshold) {
+
+                                    _ShowAndroidToastMessage("Kick Detected!");
+                                    KickDetected = true;
+                                }
+                            }
+                            /*
+                            // If kick has been detected and data exists, move ball
+                            if (KickDetected) {
+
+                                //_ShowAndroidToastMessage("Move");
+                                // Determines ball movement
+                                float moveHorizontal = SensorData[0];
+                                float moveVertical = SensorData[1];
+
+                                Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+
+                                // Applies force to rigidbody, makes movement
+                                SoccerBallRigidbody.AddForce(movement * speed);                
+                            }
+                            */
+
+
+                        }
+
+
+
+                        //break;
+                    //}
+                
             }
 
-/*
-            // Iterate over planes found in this frame and instantiate corresponding GameObjects to visualize them.
-            Frame.GetPlanes(m_NewPlanes, TrackableQueryFilter.New);
-            for (int i = 0; i < m_NewPlanes.Count; i++)
-            {
-                // Instantiate a plane visualization prefab and set it to track the new plane. The transform is set to
-                // the origin with an identity rotation since the mesh for our prefab is updated in Unity World
-                // coordinates.
-                GameObject planeObject = Instantiate(TrackedPlanePrefab, Vector3.zero, Quaternion.identity,
-                    transform);
-                planeObject.GetComponent<TrackedPlaneVisualizer>().Initialize(m_NewPlanes[i]);
-            }
-*/
-/*            
-            // Disable the snackbar UI when no planes are valid.
-            Frame.GetPlanes(m_AllPlanes);
-            bool showSearchingUI = true;
-            for (int i = 0; i < m_AllPlanes.Count; i++)
-            {
-                if (m_AllPlanes[i].TrackingState == TrackingState.Tracking)
-                {
-                    showSearchingUI = false;
-                    break;
-                }
-            }
-*/
-/*
-            SearchingForPlaneUI.SetActive(showSearchingUI);
-
-            // If the player has not touched the screen, we are done with this update.
-            Touch touch;
-            if (Input.touchCount < 1 || (touch = Input.GetTouch(0)).phase != TouchPhase.Began)
-            {
-                return;
-            }
-*/
-/*
-            // Raycast against the location the player touched to search for planes.
-            TrackableHit hit;
-            TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinBounds | TrackableHitFlags.PlaneWithinPolygon;
-
-            if (Session.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
-            {
-                var andyObject = Instantiate(AndyAndroidPrefab, hit.Pose.position, hit.Pose.rotation);
-
-                // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
-                // world evolves.
-                var anchor = hit.Trackable.CreateAnchor(hit.Pose);
-
-                // Andy should look at the camera but still be flush with the plane.
-                andyObject.transform.LookAt(FirstPersonCamera.transform);
-                andyObject.transform.rotation = Quaternion.Euler(0.0f,
-                    andyObject.transform.rotation.eulerAngles.y, andyObject.transform.rotation.z);
-
-                // Make Andy model a child of the anchor.
-                andyObject.transform.parent = anchor.transform;
-            }
-*/
         } // end of Update
 
+        // Method to connect to bluetooth
+        private void connect() {
 
+            /* The Property device.MacAdress doesn't require pairing. 
+                * Also Mac Adress in this library is Case sensitive,  all chars must be capital letters
+                */
+            device.MacAddress = "98:D3:35:71:0B:15";
 
+            /* device.Name = "HC-05 #1";
+            * 
+            * Trying to identefy a device by its name using the Property device.Name require the remote device to be paired
+            * but you can try to alter the parameter 'allowDiscovery' of the Connect(int attempts, int time, bool allowDiscovery) method.
+            * allowDiscovery will try to locate the unpaired device, but this is a heavy and undesirable feature, and connection will take a longer time
+            */
+
+            /*
+                * 10 equals the char '\n' which is a "new Line" in Ascci representation, 
+                * so the read() method will retun a packet that was ended by the byte 10. simply read() will read lines.
+                * If you don't use the setEndByte() method, device.read() will return any available data (line or not), then you can order them as you want.
+                */
+            device.setEndByte(10);
+
+            /*
+                * The ManageConnection Coroutine will start when the device is ready for reading.
+                */
+            //device.ReadingCoroutine = ManageConnection;
+
+            device.connect();
+            _ShowAndroidToastMessage("Bluetooth Connection Initiated");
+        }
+
+        void HandleOnBluetoothStateChanged(bool isBtEnabled)
+        {
+            if (isBtEnabled)
+            {
+                connect();
+                //We now don't need our recievers
+                BluetoothAdapter.OnBluetoothStateChanged -= HandleOnBluetoothStateChanged;
+                BluetoothAdapter.stopListenToBluetoothState();
+            }
+        }
+
+        //This would mean a failure in connection! the reason might be that your remote device is OFF
+        void HandleOnDeviceOff(BluetoothDevice dev)
+        {
+            if (!string.IsNullOrEmpty(dev.Name))
+            {
+                //statusText.text = "Status : can't connect to '" + dev.Name + "', device is OFF ";
+            }
+            else if (!string.IsNullOrEmpty(dev.MacAddress))
+            {
+                //statusText.text = "Status : can't connect to '" + dev.MacAddress + "', device is OFF ";
+            }
+        }
+
+        //Because connecting using the 'Name' property is just searching, the Plugin might not find it!.
+        void HandleOnDeviceNotFound(BluetoothDevice dev)
+        {
+            if (!string.IsNullOrEmpty(dev.Name))
+            {
+                //statusText.text = "Status : Can't find a device with the name '" + dev.Name + "', device might be OFF or not paird yet ";
+
+            }
+        }
+
+        public void disconnect()
+        {
+            if (device != null)
+                device.close();
+        }
+
+        void OnDestroy()
+        {
+            BluetoothAdapter.OnDeviceOFF -= HandleOnDeviceOff;
+            BluetoothAdapter.OnDeviceNotFound -= HandleOnDeviceNotFound;
+
+        }
 
         /// <summary>
         /// Quit the application if there was a connection error for the ARCore session.
