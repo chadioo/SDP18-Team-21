@@ -316,6 +316,8 @@
     <Compile Include="Assets\GoogleARCore\ARK\Scripts\HelloARController.cs" />
     <Compile Include="Assets\GoogleARCore\ARK\Scripts\PointcloudVisualizer.cs" />
     <Compile Include="Assets\GoogleARCore\ARK\Scripts\SoccerBallObjCon.cs" />
+    <Compile Include="Assets\GoogleARCore\ARK\Scripts\SoccerGameController.cs" />
+    <Compile Include="Assets\GoogleARCore\ARK\Scripts\TerminalController2.cs" />
     <Compile Include="Assets\GoogleARCore\ARK\Scripts\TrackedPlaneVisualizer.cs" />
     <Compile Include="Assets\GoogleARCore\SDK\Scripts\Anchor.cs" />
     <Compile Include="Assets\GoogleARCore\SDK\Scripts\AndroidPermissionsManager.cs" />

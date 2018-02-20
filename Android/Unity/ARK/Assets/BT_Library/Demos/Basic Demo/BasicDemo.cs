@@ -30,31 +30,31 @@ public class BasicDemo : MonoBehaviour {
 		 */
 
 
-		device.Name = "HC-05";
-		//device.MacAddress = "XX:XX:XX:XX:XX:XX";
+		//device.Name = "HC-05 #1";
+		device.MacAddress = "98:D3:35:71:0B:15";    // MAC Address of HC05 on breadboard
+        statusText.text = "MAC Address Set";
 
 
-
-		/*
+        /*
 		 * 10 equals the char '\n' which is a "new Line" in Ascci representation, 
 		 * so the read() method will retun a packet that was ended by the byte 10. simply read() will read lines.
 		 * If you don't use the setEndByte() method, device.read() will return any available data (line or not), then you can order them as you want.
 		 */
-		device.setEndByte (10);
+        device.setEndByte (10);
 
 
 		/*
 		 * The ManageConnection Coroutine will start when the device is ready for reading.
 		 */
 		device.ReadingCoroutine = ManageConnection;
+        statusText.text = "ManageConnection";
 
-
-		/*
+        /*
 		 *  Note: The library will fill the properties device.Name and device.MacAdress with the right data after succesfully connecting.
 		 * 
 		 *  Moreover, any BluetoothDevice instance returned by a method or event of this library will have both properties (Name & MacAdress) filled with the right data
 		 */
-	}
+    }
 	
 	public void connect() {
 		statusText.text = "Status : ...";
@@ -69,11 +69,12 @@ public class BasicDemo : MonoBehaviour {
 		 * normal_connect (bool isBrutal, bool isSecure)
 		 */
 		device.connect();
-
-	}
+        statusText.text = "Connect Finished";
+    }
 
 	public void disconnect() {
-		device.close();
+        statusText.text = "Status : Disconnected";
+        device.close();
 	}
 
 
