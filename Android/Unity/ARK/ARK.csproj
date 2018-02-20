@@ -294,6 +294,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="ARK.Plugins.csproj">
+      <Project>{333C75A1-64E5-AE44-F7AF-599F96EE287E}</Project>
+      <Name>ARK.Plugins</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\BT_Library\Demos\Android2Android\ServerClient.cs" />
+    <Compile Include="Assets\BT_Library\Demos\Automatic Connection\AutoConnect.cs" />
+    <Compile Include="Assets\BT_Library\Demos\Basic Demo\BasicDemo.cs" />
+    <Compile Include="Assets\BT_Library\Demos\Bluetooth Joystick Tutorial\JoystickHandler.cs" />
+    <Compile Include="Assets\BT_Library\Demos\Bluetooth Terminal\TerminalController.cs" />
+    <Compile Include="Assets\BT_Library\Demos\Devices Discovery\BtDiscovery.cs" />
+    <Compile Include="Assets\BT_Library\Demos\High Bit Rate Terminal\HighRateTerminal.cs" />
+    <Compile Include="Assets\BT_Library\Scripts\BluetoothAdapter.cs" />
+    <Compile Include="Assets\BT_Library\Scripts\BluetoothDevice.cs" />
+    <Compile Include="Assets\BT_Library\Scripts\CoreLibrary\BtBridge.cs" />
+    <Compile Include="Assets\BT_Library\Scripts\CoreLibrary\BtPackets.cs" />
+    <Compile Include="Assets\BT_Library\Scripts\ScrollTerminalUI.cs" />
+    <Compile Include="Assets\GoogleARCore\ARK\Scripts\ChangeScene.cs" />
     <Compile Include="Assets\GoogleARCore\ARK\Scripts\HelloARController.cs" />
     <Compile Include="Assets\GoogleARCore\ARK\Scripts\PointcloudVisualizer.cs" />
     <Compile Include="Assets\GoogleARCore\ARK\Scripts\SoccerBallObjCon.cs" />
@@ -362,11 +381,24 @@
     <Compile Include="Assets\GoogleARCore\SDK\Scripts\Utility\MarshalingHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\BT_Library\Arduino_Basic_Test\Read me.txt" />
+    <None Include="Assets\BT_Library\Combining Plugins.txt" />
+    <None Include="Assets\BT_Library\Demos\Android2Android\ReadMe.txt" />
+    <None Include="Assets\BT_Library\Demos\Automatic Connection\ReadMe.txt" />
+    <None Include="Assets\BT_Library\Demos\Basic Demo\ReadMe.txt" />
+    <None Include="Assets\BT_Library\Demos\Bluetooth Terminal\ReadMe.txt" />
+    <None Include="Assets\BT_Library\Demos\Devices Discovery\ReadME.txt" />
+    <None Include="Assets\BT_Library\Demos\High Bit Rate Terminal\ReadMe.txt" />
+    <None Include="Assets\BT_Library\Demos\ReadMe.txt" />
+    <None Include="Assets\BT_Library\NativeLibraries\Android\BT_Library_Bluetooth_Classic.jar.txt" />
+    <None Include="Assets\BT_Library\Old Version\Older Version.txt" />
+    <None Include="Assets\BT_Library\ReadMe.txt" />
     <None Include="Assets\GoogleARCore\ARK\Materials\Shaders\MobileDiffuseWithLightEstimation.shader" />
     <None Include="Assets\GoogleARCore\ARK\Materials\Shaders\MobileSpecularWithLightEstimation.shader" />
     <None Include="Assets\GoogleARCore\ARK\Materials\Shaders\PlaneGrid.shader" />
     <None Include="Assets\GoogleARCore\ARK\Materials\Shaders\PointCloud.shader" />
     <None Include="Assets\GoogleARCore\SDK\Materials\ARBackground.shader" />
+    <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

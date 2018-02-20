@@ -1,5 +1,7 @@
 Android
 SceneListBegin?
+Assets/GoogleARCore/ARK/Scenes/Menu.unity
+Assets/BT_Library/Demos/Basic Demo/BasicDemo.unity
 Assets/GoogleARCore/ARK/Scenes/HelloAR.unity
 SceneListEnd?
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
@@ -105,6 +107,7 @@ e9bdabf9265d758d56f01bb188916fa8 UnityEngine.Networking.dll:UnityEngine.Networki
 3f32f08a64daf40b09ed864d96fe3840 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransform
 73843688b51256aed059f049c540bca8 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformChild
 528ea1fd7c01796fc60c4e2f172ea229 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformVisualizer
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.ChangeScene
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:GoogleARCore.EnvironmentalLight
 322cb40e1e282f28af980cbef7922a90 UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsEventTracker
@@ -146,5 +149,15 @@ bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.Audi
 c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingCollider
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
-05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:GoogleARCore.HelloAR.TrackedPlaneVisualizer
 dd5481137759597d614818793c90a7fe Assembly-CSharp.dll:.SoccerBallObjCon
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:GoogleARCore.HelloAR.TrackedPlaneVisualizer
+980d2a691962420ab0c3f56425fc6d74 Assembly-CSharp-firstpass.dll:.Terminal
+05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TechTweaking.Bluetooth.BluetoothAdapter
+ffa3dcaeb2b3237dcf5daa17ee949962 Assembly-CSharp.dll:.HighRateTerminal
+c9e9b878e75f832e680e83c56a0607a4 Assembly-CSharp.dll:.ScrollTerminalUI
+8a8bbf8c923aa45b1565ce9733c32e8e Assembly-CSharp.dll:.BasicDemo
+ffa3dcaeb2b3237dcf5daa17ee949962 Assembly-CSharp.dll:.ServerClient
+2414a0ef2f6c8c31809e4895d552403f Assembly-CSharp.dll:.TerminalController
+d3c79bfafdf443aa93edf2422a7e171d Assembly-CSharp.dll:.BtDiscovery
+6bc9c3baa9a1baca231da4b8a9d14193 Assembly-CSharp.dll:.JoystickHandler
+8a8bbf8c923aa45b1565ce9733c32e8e Assembly-CSharp.dll:.AutoConnect
