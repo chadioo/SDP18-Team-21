@@ -123,21 +123,29 @@ namespace GoogleARCore.HelloAR
         /// </summary>
         void Start()
         {
+            //Debug.Log("ARK LOG ********** Running Start");
+
             // Create rigidbody for soccer ball
             SoccerBallRigidbody = SoccerBallPrefab.GetComponent<Rigidbody>();
+            //Debug.Log("ARK LOG ********** Instantiate SoccerBallRigidbody");
 
             // Instantiate bluetooth device object
             device = new BluetoothDevice();
+            //Debug.Log("ARK LOG ********** Instantiate BluetoothDevice");
 
             SensorData = new float[6];
+            //Debug.Log("ARK LOG ********** Instantiate SensorData Array to Length of 6");
 
+            //Debug.Log("ARK LOG ********** Attempt to connect to Bluetooth");
             // Attempt to connect to bluetooth
             if (BluetoothAdapter.isBluetoothEnabled()){
                 connect();
+                //Debug.Log("ARK LOG ********** Connect has been run.");
             }
 
             // Throw error
             else {
+                //Debug.Log("ARK LOG ********** Bluetooth is not enabled");
                 _ShowAndroidToastMessage("Bluetooth is not enabled");
                 BluetoothAdapter.enableBluetooth();         //you can by this force enabling Bluetooth without asking the user
                 BluetoothAdapter.OnBluetoothStateChanged += HandleOnBluetoothStateChanged;
@@ -151,11 +159,7 @@ namespace GoogleARCore.HelloAR
         /// </summary>
         public void Update()
         {
-            if (Input.GetKey(KeyCode.Escape))
-            {
-                Application.Quit();
-            }
-
+            //Debug.Log("ARK LOG ********** Running Update.");
             _QuitOnConnectionErrors();
 
             // Check that motion tracking is tracking.
@@ -170,16 +174,17 @@ namespace GoogleARCore.HelloAR
 
             // If you have not found plane, search for plane
             if (!FoundPlane) {
-
+                //Debug.Log("ARK LOG ********** Plane has not been found.");
                 // See if new plane exists
                 Frame.GetPlanes(m_NewPlanes, TrackableQueryFilter.New);
 
                 // If there is a new plane, stop searching
                 if (m_NewPlanes.Count > 0) {
+                    //Debug.Log("ARK LOG ********** Plane has been found.");
                     FoundPlane = true;
                 }
 
-                for (int i = 0; i < m_NewPlanes.Count; i++)
+               for (int i = 0; i < m_NewPlanes.Count; i++)
                 {
                     PlaneVector = m_NewPlanes[i].Position;
                     // Instantiate a plane visualization prefab and set it to track the new plane. The transform is set to
@@ -195,7 +200,9 @@ namespace GoogleARCore.HelloAR
             // If plane is found and objects have not been instantiated
             if (FoundPlane && !SpawnObjects) {
 
-                // Saple plane location
+                //Debug.Log("ARK LOG ********** Spawn objects onto plane.");
+
+                // Sample plane location
                 //Vector3 PlaneVector = m_NewPlanes[0].Position;
 
                 // Set spawn location to be on plane certain distance in front of camera
@@ -206,18 +213,23 @@ namespace GoogleARCore.HelloAR
                 Instantiate(SoccerBallPrefab, SoccerBallVector, Quaternion.identity);
                 Instantiate(SoccerGoalPrefab, SoccerGoalVector, Quaternion.identity);
 
+                //Debug.Log("ARK LOG ********** Objects have been spawn.");
+
                 SpawnObjects = true;
             }
 
             // If objects have been spawn, move soccer ball
             if (FoundPlane && SpawnObjects) {
 
-                //_ShowAndroidToastMessage("Do Stuff");
+                //Debug.Log("ARK LOG ********** Read data from device.");
 
                 // Read data from Bluetooth file
-                //while (device.IsReading) {
-                    //if (device.IsDataAvailable) {
-                    //_ShowAndroidToastMessage("Getting Data");
+                //Debug.Log("ARK LOG ********** Device is reading: " + device.IsReading);
+                //Debug.Log("ARK LOG ********** Data is available: " + device.IsDataAvailable);
+                while (device.IsReading)
+                {
+                    if (device.IsDataAvailable)
+                    {
 
                         //because we called setEndByte(10)..read will always return a packet excluding the last byte 10.
                         byte[] msg = device.read();
@@ -225,16 +237,19 @@ namespace GoogleARCore.HelloAR
                         string[] subStrings;
 
                         // Read string
-                        if (msg != null && msg.Length > 0) {
+                        if (msg != null && msg.Length > 0)
+                        {
                             content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
-                            _ShowAndroidToastMessage("Content: "+content);
+                            //Debug.Log("ARK LOG ********** Content: " + content);
 
                             // Split up by spaces
-                            content = content.Replace("," , "");
+                            content = content.Replace(",", "");
                             subStrings = content.Split(' ');
+                            //Debug.Log("ARK LOG ********** Sensor Data Length:" + subStrings.Length);
                             //_ShowAndroidToastMessage("Sensor Data Length: "+subStrings.Length);
 
-                            for (int i=0; i< subStrings.Length; i++) {
+                            for (int i = 0; i < subStrings.Length; i++)
+                            {
 
                                 double value = double.Parse(subStrings[i]);
                                 SensorData[i] = (float)value;
@@ -242,16 +257,19 @@ namespace GoogleARCore.HelloAR
                             //_ShowAndroidToastMessage("Sensor Data: "+SensorData.Length+"Kick Detection: "+KickDetected);
 
                             // If no kick has been detected and data exists, check if threshold has been reached
-                            if (!KickDetected) {
+                            if (!KickDetected)
+                            {
+                                //Debug.Log("ARK LOG ********** Sensor Value: " + SensorData[0]);
                                 //_ShowAndroidToastMessage("Acc: "+ SensorData[0] + " g");
                                 // If threshold has been reached, kick has been detected
-                                if (SensorData[0] >= Threshold) {
+                                if (SensorData[0] >= Threshold)
+                                {
 
                                     _ShowAndroidToastMessage("Kick Detected!");
                                     KickDetected = true;
                                 }
                             }
-                            /*
+                            
                             // If kick has been detected and data exists, move ball
                             if (KickDetected) {
 
@@ -265,16 +283,11 @@ namespace GoogleARCore.HelloAR
                                 // Applies force to rigidbody, makes movement
                                 SoccerBallRigidbody.AddForce(movement * speed);                
                             }
-                            */
-
-
+                            
                         }
-
-
-
                         //break;
-                    //}
-                
+                    }
+                }
             }
 
         } // end of Update
@@ -286,6 +299,7 @@ namespace GoogleARCore.HelloAR
                 * Also Mac Adress in this library is Case sensitive,  all chars must be capital letters
                 */
             device.MacAddress = "98:D3:35:71:0B:15";
+            ////Debug.Log("ARK LOG ********** Mac Address: " + device.MacAddress);
 
             /* device.Name = "HC-05 #1";
             * 
@@ -308,6 +322,7 @@ namespace GoogleARCore.HelloAR
 
             device.connect();
             _ShowAndroidToastMessage("Bluetooth Connection Initiated");
+            //Debug.Log("ARK LOG ********** Bluetooth Connection Initiated");
         }
 
         void HandleOnBluetoothStateChanged(bool isBtEnabled)
