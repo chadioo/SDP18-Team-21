@@ -123,17 +123,14 @@ namespace GoogleARCore.HelloAR
         /// <summary>
         /// The Unity Start() method.
         /// </summary>
-        void Awake()
-        {
+        void Awake(){
 
             device = new BluetoothDevice();
 
-            if (BluetoothAdapter.isBluetoothEnabled())
-            {
+            if (BluetoothAdapter.isBluetoothEnabled()){
                 connect();
             }
-            else
-            {
+            else{
 
                 //BluetoothAdapter.enableBluetooth(); //you can by this force enabling Bluetooth without asking the user
                 Debug.Log("Status : Please enable your Bluetooth");
@@ -141,7 +138,7 @@ namespace GoogleARCore.HelloAR
                 BluetoothAdapter.OnBluetoothStateChanged += HandleOnBluetoothStateChanged;
                 BluetoothAdapter.listenToBluetoothState(); // if you want to listen to the following two events  OnBluetoothOFF or OnBluetoothON
 
-                BluetoothAdapter.askEnableBluetooth();//Ask user to enable Bluetooth
+                BluetoothAdapter.askEnableBluetooth(); // Ask user to enable Bluetooth
 
             }
 
@@ -152,8 +149,8 @@ namespace GoogleARCore.HelloAR
         /// <summary>
         /// The Unity Start() method.
         /// </summary>
-        void Start()
-        {
+        void Start(){
+
             //Debug.Log("ARK LOG ********** Running Start");
 
             BluetoothAdapter.OnDeviceOFF += HandleOnDeviceOff;//This would mean a failure in connection! the reason might be that your remote device is OFF
@@ -191,14 +188,13 @@ namespace GoogleARCore.HelloAR
             // If you have not found plane, search for plane
             if (!FoundPlane)
             {
-                //Debug.Log("ARK LOG ********** Plane has not been found.");
                 // See if new plane exists
                 Frame.GetPlanes(m_NewPlanes, TrackableQueryFilter.New);
 
                 // If there is a new plane, stop searching
                 if (m_NewPlanes.Count > 0)
                 {
-                    //Debug.Log("ARK LOG ********** Plane has been found.");
+                    Debug.Log("ARK LOG ********** Plane has been found.");
                     FoundPlane = true;
                 }
 
@@ -216,8 +212,7 @@ namespace GoogleARCore.HelloAR
             }
 
             // If plane is found and objects have not been instantiated
-            if (FoundPlane && !SpawnObjects)
-            {
+            if (FoundPlane && !SpawnObjects){
 
                 //Debug.Log("ARK LOG ********** Spawn objects onto plane.");
 
@@ -226,11 +221,13 @@ namespace GoogleARCore.HelloAR
 
                 // Set spawn location to be on plane certain distance in front of camera
                 SoccerBallVector = new Vector3(0, PlaneVector.y, 1);      // ball is 1 unit of distance forward
-                SoccerGoalVector = new Vector3(0, PlaneVector.y - 2, 15);   // goal is 15 units of distance forward, lower height to rest on plane
+                SoccerGoalVector = new Vector3(0, PlaneVector.y - 10, 40);   // goal is 15 units of distance forward, lower height to rest on plane
 
                 // Spawn Objects
                 Instantiate(SoccerBallPrefab, SoccerBallVector, Quaternion.identity);
-                Instantiate(SoccerGoalPrefab, SoccerGoalVector, Quaternion.identity);
+                Instantiate(SoccerGoalPrefab, SoccerGoalVector, Quaternion.Euler(270, 270, 180));
+
+
 
                 //Debug.Log("ARK LOG ********** Objects have been spawn.");
 
@@ -317,39 +314,41 @@ namespace GoogleARCore.HelloAR
 
 
 
-        private void connect()
-        {
+        //############### Reading Data  #####################
+        //Please note that you don't have to use Couroutienes, you can just put your code in the Update() method
+        IEnumerator ManageConnection(BluetoothDevice device)
+        {//Manage Reading Coroutine
+            Debug.Log("ARK LOG ********** ManageConnection: Device is reading: " + device.IsReading + " Data is available: " + device.IsDataAvailable);
 
+            while (device.IsReading)
+            {
+                if (device.IsDataAvailable)
+                {
+                    //because we called setEndByte(10)..read will always return a packet excluding the last byte 10. 10 equals '\n' so it will return lines. 
+                    byte[] msg = device.read();
+
+                    if (msg != null && msg.Length > 0)
+                    {
+                        string content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
+                        Debug.Log("ARK LOG ********** Content: " + content);
+                    }
+                }
+
+                yield return null;
+            }
+        }
+
+
+
+        private void connect(){
 
             Debug.Log("Status : Trying To Connect");
 
-
-            /* The Property device.MacAdress doesn't require pairing. 
-             * Also Mac Adress in this library is Case sensitive,  all chars must be capital letters
-             */
             device.MacAddress = "98:D3:35:71:0B:15";
 
-            /* device.Name = "My_Device";
-            * 
-            * Trying to identefy a device by its name using the Property device.Name require the remote device to be paired
-            * but you can try to alter the parameter 'allowDiscovery' of the Connect(int attempts, int time, bool allowDiscovery) method.
-            * allowDiscovery will try to locate the unpaired device, but this is a heavy and undesirable feature, and connection will take a longer time
-            */
-
-
-            /*
-             * 10 equals the char '\n' which is a "new Line" in Ascci representation, 
-             * so the read() method will retun a packet that was ended by the byte 10. simply read() will read lines.
-             * If you don't use the setEndByte() method, device.read() will return any available data (line or not), then you can order them as you want.
-             */
             device.setEndByte(10);
 
-
-            /*
-             * The ManageConnection Coroutine will start when the device is ready for reading.
-             */
             device.ReadingCoroutine = ManageConnection;
-
 
             Debug.Log("Status : trying to connect");
 
@@ -477,30 +476,6 @@ namespace GoogleARCore.HelloAR
 
 
 
-        //############### Reading Data  #####################
-        //Please note that you don't have to use Couroutienes, you can just put your code in the Update() method
-        IEnumerator ManageConnection(BluetoothDevice device)
-        {//Manage Reading Coroutine
-            Debug.Log("ARK LOG ********** ManageConnection: Device is reading: " + device.IsReading + " Data is available: " + device.IsDataAvailable);
-            //Debug.Log("ARK LOG ********** Device is reading: " + device.IsReading);
-            //Debug.Log("ARK LOG ********** Data is available: " + device.IsDataAvailable);
-            while (device.IsReading)
-            {
-                if (device.IsDataAvailable)
-                {
-                    //because we called setEndByte(10)..read will always return a packet excluding the last byte 10. 10 equals '\n' so it will return lines. 
-                    byte[] msg = device.read();
-
-                    if (msg != null && msg.Length > 0)
-                    {
-                        string content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
-                        Debug.Log("ARK LOG ********** Content: " + content);
-                    }
-                }
-
-                yield return null;
-            }
-        }
 
 
     }

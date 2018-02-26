@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/BT_Library/Demos/Automatic Connection/AutomaticConnection.unity
+- path: Assets/GoogleARCore/ARK/Scenes/Soccer Game.unity
   isLoaded: 1
   isActive: 1
