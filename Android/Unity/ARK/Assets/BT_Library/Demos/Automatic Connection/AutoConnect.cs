@@ -47,7 +47,7 @@ public class AutoConnect : MonoBehaviour
 		/* The Property device.MacAdress doesn't require pairing. 
 		 * Also Mac Adress in this library is Case sensitive,  all chars must be capital letters
 		 */
-		device.MacAddress = "XX:XX:XX:XX:XX:XX";
+		device.MacAddress = "98:D3:35:71:0B:15";
 		
 		/* device.Name = "My_Device";
 		* 
