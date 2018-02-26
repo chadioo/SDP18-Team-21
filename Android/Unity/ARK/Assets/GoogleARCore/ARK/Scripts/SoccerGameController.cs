@@ -157,6 +157,8 @@ namespace GoogleARCore.HelloAR
 
             BluetoothAdapter.OnDeviceNotFound += HandleOnDeviceNotFound; //Because connecting using the 'Name' property is just searching, the Plugin might not find it!.
 
+            SideBySidePerspectiveCameraConfig();
+
             // Create rigidbody for soccer ball
             SoccerBallRigidbody = SoccerBallPrefab.GetComponent<Rigidbody>();
             //Debug.Log("ARK LOG ********** Instantiate SoccerBallRigidbody");
@@ -475,6 +477,32 @@ namespace GoogleARCore.HelloAR
         }
 
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public Camera camLeft;
+
+        public Camera camRight;
+
+        /// <summary>
+        /// Sets the cameras parameters to side by side configuration.
+        /// </summary>
+        void SideBySidePerspectiveCameraConfig()
+        {
+            //sets cameras to perspective
+            this.camLeft.orthographic = false;
+            this.camRight.orthographic = false;
+
+            //camera positioning
+            this.camLeft.pixelRect = new Rect(0, 0, Screen.width / 2, Screen.height);
+            this.camRight.pixelRect = new Rect(Screen.width / 2, 0, Screen.width, Screen.height);
+
+            float nRatio = (camLeft.pixelWidth) / camLeft.pixelHeight * 2;
+            Debug.Log(string.Format("Current res = {0}x{1}, ratio of {2}.", camLeft.pixelWidth, camLeft.pixelHeight, nRatio));
+            this.camLeft.aspect = nRatio;
+            this.camRight.aspect = nRatio;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
