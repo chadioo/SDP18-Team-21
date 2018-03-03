@@ -18,8 +18,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GoogleARCore.HelloAR
-{
+namespace GoogleARCore.HelloAR{
+
+    // IMPORTS
     using System.Collections.Generic;
     using System.Collections;
     using GoogleARCore;
@@ -27,113 +28,54 @@ namespace GoogleARCore.HelloAR
     using UnityEngine.Rendering;
     using TechTweaking.Bluetooth;
 
-    /// <summary>
-    /// Controls the HelloAR example.
-    /// </summary>
-    public class SoccerGameController : MonoBehaviour
-    {
-        /// <summary>
-        /// The first-person camera being used to render the passthrough camera image (i.e. AR background).
-        /// </summary>
-        public Camera FirstPersonCamera;
+    public class SoccerGameController : MonoBehaviour{
+        
+        // CAMERAS
+        public Camera FirstPersonCamera;        // main camera
+        public Camera camLeft;                  // left camera for side by side
+        public Camera camRight;                 // left camera for side by side
 
-        /// <summary>
-        /// A prefab for tracking and visualizing detected planes.
-        /// </summary>
-        public GameObject TrackedPlanePrefab;
+       // GAMEOBJECTS
+        public GameObject SoccerGoalInput;     // soccer goal input
+        public GameObject SoccerFieldInput;    // soccer field input
 
-        /// <summary>
-        /// A model of the soccer ball.
-        /// </summary>
-        public Rigidbody SoccerBallPrefab;
+        // RIGIDBODY
+        public Rigidbody SoccerBallInput;      // soccer ball input
+        private Rigidbody SoccerBallRigidbody;  // instantiated soccer ball
 
-        /// <summary>
-        /// Rigidbody is object that contains soccer goal, allows it to use physics.
-        /// </summary>
-        private Rigidbody SoccerBallRigidbody;
+        // VECTORS
+        private Vector3 SoccerBallVector;       // soccer ball position vector
+        private Vector3 SoccerGoalVector;       // soccer goal position vector
+        private Vector3 SoccerFieldVector;      // soccer field position vector
+        private Vector3 PlaneVector;            // plane position vector
 
-        /// <summary>
-        /// A model of the soccer goal.
-        /// </summary>
-        public GameObject SoccerGoalPrefab;
+        // LISTS
+        private List<TrackedPlane> m_NewPlanes = new List<TrackedPlane>();  // used to store plane data
 
-        /// <summary>
-        /// A model of the soccer goal.
-        /// </summary>
-        public GameObject SoccerFieldPrefab;
+        // BOOLEAN
+        private bool m_IsQuitting = false;      // determines if quitting
+        private bool FoundPlane = false;        // determines if plane found
+        private bool SpawnGoal = false;         // determines if spawned objects
+        private bool SpawnBall = false;         // determines if spawned objects
+        private bool KickDetected = false;      // determines if kick detected
+        private bool ResetBall = false;         // determines if ball needs to be reset
+        private bool GoalScored = false;        // determines if goal scored
+        private bool OutOfBounds = false;       // determines if out of bounds
 
-        /// <summary>
-        /// A model of the soccer ball.
-        /// </summary>
-        private Vector3 SoccerBallVector;
+        // FLOATS
+        private float Threshold = 2f;           // acceleration threshold for determining kick
+        private float speed = 1f;               // speed of ball (not currently used)
+        private float[] SensorData;             // array used to store sensor data from one input line
 
-        /// <summary>
-        /// A model of the soccer goal.
-        /// </summary>
-        private Vector3 SoccerGoalVector;
+        // INTEGERS
+        private int score = 0;
 
-        /// <summary>
-        /// A model of the soccer ball.
-        /// </summary>
-        private Vector3 SoccerFieldVector;
-
-        /// <summary>
-        /// A list to hold new planes ARCore began tracking in the current frame. This object is used across
-        /// the application to avoid per-frame allocations.
-        /// </summary>
-        private List<TrackedPlane> m_NewPlanes = new List<TrackedPlane>();
-
-        /// <summary>
-        /// True if the app is in the process of quitting due to an ARCore connection error, otherwise false.
-        /// </summary>
-        private bool m_IsQuitting = false;
-
-        /// <summary>
-        /// True if the app found plane, otherwise false.
-        /// </summary>
-        private bool FoundPlane = false;
-
-        /// <summary>
-        /// True if the app spawned soccer goal and soccer ball, otherwise false.
-        /// </summary>
-        private bool SpawnObjects = false;
-
-        /// <summary>
-        /// True if threshold for kick was detected, otherwise false.
-        /// </summary>
-        private bool KickDetected = false;
-
-        /// <summary>
-        /// Amount of g (acceleration) needed to detect a kick.
-        /// </summary>
-        private float Threshold = 2f;
-
-        /// <summary>
-        /// PLane vector to use for anchoring objects.
-        /// </summary>
-        private Vector3 PlaneVector;
-
-        /// <summary>
-        /// Speed is value used to control speed of soccer ball
-        /// </summary>
-        public float speed = 1f;
-
-
-        /// <summary>
-        /// Bluetooth device is used to connect to bluetooth module.
-        /// </summary>
-        private BluetoothDevice device;
-
-        /// <summary>
-        /// Sensor data storage.
-        /// </summary>
-        private float[] SensorData;
+        // BLUETOOTH DEVICE
+        private BluetoothDevice device;         // bluetooth device
 
 
 
-        /// <summary>
-        /// The Unity Start() method.
-        /// </summary>
+        // AWAKE METHOD (first method, initializes bluetooth)
         void Awake(){
 
             device = new BluetoothDevice();
@@ -154,9 +96,7 @@ namespace GoogleARCore.HelloAR
 
 
 
-        /// <summary>
-        /// The Unity Start() method.
-        /// </summary>
+        // START METHOD (runs after awake, handles bluetooth exceptions)
         void Start(){
 
             //Debug.Log("ARK LOG ********** Running Start");
@@ -171,9 +111,7 @@ namespace GoogleARCore.HelloAR
 
 
 
-        /// <summary>
-        /// The Unity Update() method.
-        /// </summary>
+        // UPDATE METHOD
         public void Update(){
 
             //Debug.Log("ARK LOG ********** Running Update.");
@@ -196,28 +134,16 @@ namespace GoogleARCore.HelloAR
                 Frame.GetPlanes(m_NewPlanes, TrackableQueryFilter.New);
 
                 // If there is a new plane, stop searching
-                if (m_NewPlanes.Count > 0)
-                {
-                    Debug.Log("ARK LOG ********** Plane has been found.");
+                if (m_NewPlanes.Count > 0){
+
+                    //Debug.Log("ARK LOG ********** Plane has been found.");
                     PlaneVector = m_NewPlanes[0].Position;
                     FoundPlane = true;
                 }
-
-                /*
-                for (int i = 0; i < m_NewPlanes.Count; i++)
-                {
-                    // Instantiate a plane visualization prefab and set it to track the new plane. The transform is set to
-                    // the origin with an identity rotation since the mesh for our prefab is updated in Unity World
-                    // coordinates.
-                    GameObject planeObject = Instantiate(TrackedPlanePrefab, Vector3.zero, Quaternion.identity,
-                        transform);
-                    planeObject.GetComponent<TrackedPlaneVisualizer>().Initialize(m_NewPlanes[i]);
-                }
-                */
             }
 
             // If plane is found and objects have not been instantiated
-            if (FoundPlane && !SpawnObjects){
+            if (FoundPlane && !SpawnGoal && ! SpawnBall){
 
                 //Debug.Log("ARK LOG ********** Spawn objects onto plane.");
 
@@ -225,69 +151,105 @@ namespace GoogleARCore.HelloAR
                 //Vector3 PlaneVector = m_NewPlanes[0].Position;
 
                 // Set spawn location to be on plane certain distance in front of camera
-                SoccerFieldVector = new Vector3(0, PlaneVector.y, 15);           // field vector is everywhere
-                SoccerBallVector = new Vector3(0, PlaneVector.y+1, 1);            // ball is 1 unit of distance forward
+                SoccerFieldVector = new Vector3(0, PlaneVector.y, 15);     // field vector is everywhere
+                SoccerBallVector = new Vector3(0, PlaneVector.y+1, 1);     // ball is 1 unit of distance forward
                 SoccerGoalVector = new Vector3(0, PlaneVector.y, 30);      // goal is 15 units of distance forward, lower height to rest on plane
 
                 // Spawn Objects
-                Instantiate(SoccerFieldPrefab, SoccerFieldVector, Quaternion.identity);
-                //this.transform.localScale = new Vector3(3, 3, 3);
-                SoccerBallRigidbody = Instantiate(SoccerBallPrefab, SoccerBallVector, Quaternion.identity) as Rigidbody;
-                Instantiate(SoccerGoalPrefab, SoccerGoalVector, Quaternion.Euler(270, 270, 180));
+                Instantiate(SoccerFieldInput, SoccerFieldVector, Quaternion.identity);
+                SoccerBallRigidbody = Instantiate(SoccerBallInput, SoccerBallVector, Quaternion.identity) as Rigidbody;
+                Instantiate(SoccerGoalInput, SoccerGoalVector, Quaternion.Euler(270, 270, 180));
 
                 //Debug.Log("ARK LOG ********** Objects have been spawn.");
 
-                SpawnObjects = true;
+                SpawnGoal = true;
+                SpawnBall = true;
             }
 
-            // If kick has been detected and data exists, move ball
+            // If plane is found and objects have not been instantiated
+            if (FoundPlane && SpawnGoal && !SpawnBall){
+
+                // Set spawn location to be on plane certain distance in front of camera
+                SoccerBallVector = new Vector3(0, PlaneVector.y + 1, 1);     // ball is 1 unit of distance forward
+
+                // Spawn Objects
+                SoccerBallRigidbody = Instantiate(SoccerBallInput, SoccerBallVector, Quaternion.identity) as Rigidbody;
+
+                //Debug.Log("ARK LOG ********** Objects have been spawn.");
+
+                SpawnBall = true;
+            }
+
 
         } // end of Update
 
 
-        /// <summary>
-        /// The Unity Update() method.
-        /// </summary>
+        
+        // FIXED UPDATE METHOD
         void FixedUpdate() {
             
-            if (FoundPlane && SpawnObjects & KickDetected){
+            if (FoundPlane && SpawnBall && SpawnGoal && KickDetected){
 
-                if (SensorData.Length >= 2) {
+                Debug.Log("Soccer ball position: x " + SoccerBallRigidbody.position.x + " y " + SoccerBallRigidbody.position.y + " z " + SoccerBallRigidbody.position.z);
+
+                if (SensorData.Length >= 3) {
 
                     //_ShowAndroidToastMessage("Move");
                     // Determines ball movement
                     float moveHorizontal = SensorData[0];
-                    float moveVertical = SensorData[1];
+                    float moveVertical = SensorData[2];
 
                     Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
-                    // Applies force to rigidbody, makes movement
                     SoccerBallRigidbody.AddForce(movement);
-                    //SoccerBallRigidbody.MovePosition(movement);
 
-                    //Debug.Log("Move ball. --- Amnt: "+ movement);
+                    if (SoccerBallRigidbody.position.x > 15 | SoccerBallRigidbody.position.x < -15 | SoccerBallRigidbody.position.z < -5) {
+                        OutOfBounds = true;
+                        _ShowAndroidToastMessage("Out of Bounds");
+                    }
+                    else if (SoccerBallRigidbody.position.x < 5 && SoccerBallRigidbody.position.x > -5 && SoccerBallRigidbody.position.z > 30 && SoccerBallRigidbody.position.y < 10) {
+                        GoalScored = true;
+                    }
+                    else if (SoccerBallRigidbody.position.z > 30) {
+                        OutOfBounds = true;
+                    }
+
+                    if (OutOfBounds) {
+                        Destroy(SoccerBallRigidbody, 1.0f);// remove object
+                        _ShowAndroidToastMessage("Out of Bounds");
+                        OutOfBounds = false;
+                    }
+
+                    if (GoalScored) {
+                        Destroy(SoccerBallRigidbody, 1.0f);// remove object
+                        score++;    // increase score
+                        _ShowAndroidToastMessage("Score: " + score);
+                        GoalScored = false; // reset boolean
+                    }
+
                 }
             }
 
         }
 
-        //############### Reading Data  #####################
-        //Please note that you don't have to use Couroutienes, you can just put your code in the Update() method
-        IEnumerator ManageConnection(BluetoothDevice device)
-        {//Manage Reading Coroutine
+
+
+        // READING DATA
+        IEnumerator ManageConnection(BluetoothDevice device) {
+        //Manage Reading Coroutine
             //Debug.Log("ARK LOG ********** ManageConnection: Device is reading: " + device.IsReading + " Data is available: " + device.IsDataAvailable);
 
-            while (device.IsReading)
-            {
-                if (device.IsDataAvailable)
-                {
+            while (device.IsReading){
+
+                if (device.IsDataAvailable){
+
                     //because we called setEndByte(10)..read will always return a packet excluding the last byte 10.
                     byte[] msg = device.read();
                     string content = "";
                     string[] subStrings;
 
-                    if (msg != null && msg.Length > 0)
-                    {
+                    if (msg != null && msg.Length > 0){
+
                         content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
                         //Debug.Log("ARK LOG ********** Content: " + content);
 
@@ -300,8 +262,8 @@ namespace GoogleARCore.HelloAR
                         SensorData = new float[subStrings.Length];
                         //Debug.Log("ARK LOG ********** Instantiate SensorData Array to Length of 6");
 
-                        for (int i = 0; i < subStrings.Length; i++)
-                        {
+                        for (int i = 0; i < subStrings.Length; i++){
+
                             //Debug.Log("Substring: "+ subStrings[i] + " i:"+i);
                             float temp;
                             if (float.TryParse(subStrings[i], out temp)){
@@ -315,7 +277,7 @@ namespace GoogleARCore.HelloAR
                         //_ShowAndroidToastMessage("Sensor Data: " + SensorData.Length + "Kick Detection: " + KickDetected);
 
                         // If no kick has been detected and data exists, check if threshold has been reached 
-                        if (FoundPlane && SpawnObjects && !KickDetected){
+                        if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected){
                             //Debug.Log("ARK LOG ********** Sensor Value: " + SensorData[0] + " >= ? Threshold: "+Threshold);
                             //_ShowAndroidToastMessage("Acc: "+ SensorData[0] + " g");
                             // If threshold has been reached, kick has been detected
@@ -333,6 +295,9 @@ namespace GoogleARCore.HelloAR
             }
         }
 
+
+
+        // CONNECT METHOD (conencts to bluetooth)
         private void connect(){
 
             Debug.Log("Status : Trying To Connect");
@@ -349,6 +314,7 @@ namespace GoogleARCore.HelloAR
 
 
 
+        // DICONNECT METHOD
         public void disconnect(){
 
             if (device != null){
@@ -465,9 +431,7 @@ namespace GoogleARCore.HelloAR
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public Camera camLeft;
 
-        public Camera camRight;
 
         /// <summary>
         /// Sets the cameras parameters to side by side configuration.
@@ -487,6 +451,8 @@ namespace GoogleARCore.HelloAR
             this.camLeft.aspect = nRatio;
             this.camRight.aspect = nRatio;
         }
+
+
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
