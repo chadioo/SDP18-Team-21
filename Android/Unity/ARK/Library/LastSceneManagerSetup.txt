@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/GoogleARCore/ARK/Scenes/Soccer Game.unity
+- path: Assets/GoogleARCore/ARK/Scenes/Menu.unity
   isLoaded: 1
   isActive: 1

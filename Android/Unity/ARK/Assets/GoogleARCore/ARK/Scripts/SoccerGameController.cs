@@ -58,13 +58,10 @@ namespace GoogleARCore.HelloAR{
         private bool SpawnGoal = false;         // determines if spawned objects
         private bool SpawnBall = false;         // determines if spawned objects
         private bool KickDetected = false;      // determines if kick detected
-        private bool ResetBall = false;         // determines if ball needs to be reset
-        private bool GoalScored = false;        // determines if goal scored
-        private bool OutOfBounds = false;       // determines if out of bounds
 
         // FLOATS
         private float Threshold = 2f;           // acceleration threshold for determining kick
-        private float speed = 1f;               // speed of ball (not currently used)
+        //private float speed = 1f;               // speed of ball (not currently used)
         private float[] SensorData;             // array used to store sensor data from one input line
 
         // INTEGERS
@@ -152,7 +149,7 @@ namespace GoogleARCore.HelloAR{
 
                 // Set spawn location to be on plane certain distance in front of camera
                 SoccerFieldVector = new Vector3(0, PlaneVector.y, 15);     // field vector is everywhere
-                SoccerBallVector = new Vector3(0, PlaneVector.y+1, 1);     // ball is 1 unit of distance forward
+                SoccerBallVector = new Vector3(0, PlaneVector.y, 1);     // ball is 1 unit of distance forward
                 SoccerGoalVector = new Vector3(0, PlaneVector.y, 30);      // goal is 15 units of distance forward, lower height to rest on plane
 
                 // Spawn Objects
@@ -175,7 +172,7 @@ namespace GoogleARCore.HelloAR{
                 // Spawn Objects
                 SoccerBallRigidbody = Instantiate(SoccerBallInput, SoccerBallVector, Quaternion.identity) as Rigidbody;
 
-                //Debug.Log("ARK LOG ********** Objects have been spawn.");
+                Debug.Log("ARK LOG ********** Respawn ball.");
 
                 SpawnBall = true;
             }
@@ -190,43 +187,52 @@ namespace GoogleARCore.HelloAR{
             
             if (FoundPlane && SpawnBall && SpawnGoal && KickDetected){
 
-                Debug.Log("Soccer ball position: x " + SoccerBallRigidbody.position.x + " y " + SoccerBallRigidbody.position.y + " z " + SoccerBallRigidbody.position.z);
+                //Debug.Log("Soccer ball position: x " + SoccerBallRigidbody.position.x + " y " + SoccerBallRigidbody.position.y + " z " + SoccerBallRigidbody.position.z);
 
-                if (SensorData.Length >= 3) {
+                if (SensorData.Length >= 10) {
 
                     //_ShowAndroidToastMessage("Move");
                     // Determines ball movement
-                    float moveHorizontal = SensorData[0];
-                    float moveVertical = SensorData[2];
+                    float xAcc = SensorData[2];     // sensor x axis (in current orientation) is unity y axis
+                    float yAcc = SensorData[0];     // sensor x axis (in current orientation) is unity y axis
+                    float zAcc = SensorData[4];     // sensor z axis (in current orientation) is unity z axis
 
-                    Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+                    Vector3 acc = new Vector3(xAcc, yAcc, zAcc);
 
-                    SoccerBallRigidbody.AddForce(movement);
+                    float xAng = SensorData[8];     // sensor x axis (in current orientation) is unity y axis
+                    float yAng = SensorData[6];     // sensor x axis (in current orientation) is unity y axis
+                    float zAng = SensorData[10];     // sensor z axis (in current orientation) is unity z axis
+
+                    Vector3 angle = new Vector3(xAng, yAng, zAng);
+
+                    Vector3 force = new Vector3(xAcc * SoccerBallRigidbody.mass, yAcc * SoccerBallRigidbody.mass, zAcc * SoccerBallRigidbody.mass);
+
+                    Debug.Log("Acceleration: "+acc+" Anglular Velocity: "+angle+" Force: "+ force);
+
+                    SoccerBallRigidbody.AddForce(force);
 
                     if (SoccerBallRigidbody.position.x > 15 | SoccerBallRigidbody.position.x < -15 | SoccerBallRigidbody.position.z < -5) {
-                        OutOfBounds = true;
+                        Destroy(SoccerBallRigidbody, 1.0f);// remove object
+                        Debug.Log("Destroyed ball oob");
                         _ShowAndroidToastMessage("Out of Bounds");
+                        SpawnBall = false;
+                        KickDetected = false;
                     }
                     else if (SoccerBallRigidbody.position.x < 5 && SoccerBallRigidbody.position.x > -5 && SoccerBallRigidbody.position.z > 30 && SoccerBallRigidbody.position.y < 10) {
-                        GoalScored = true;
-                    }
-                    else if (SoccerBallRigidbody.position.z > 30) {
-                        OutOfBounds = true;
-                    }
-
-                    if (OutOfBounds) {
                         Destroy(SoccerBallRigidbody, 1.0f);// remove object
-                        _ShowAndroidToastMessage("Out of Bounds");
-                        OutOfBounds = false;
-                    }
-
-                    if (GoalScored) {
-                        Destroy(SoccerBallRigidbody, 1.0f);// remove object
+                        Debug.Log("Destroyed ball goal");
                         score++;    // increase score
                         _ShowAndroidToastMessage("Score: " + score);
-                        GoalScored = false; // reset boolean
+                        SpawnBall = false;
+                        KickDetected = false;
                     }
-
+                    else if (SoccerBallRigidbody.position.z > 30) {
+                        Destroy(SoccerBallRigidbody, 1.0f);// remove object
+                        Debug.Log("Destroyed ball oob");
+                        _ShowAndroidToastMessage("Out of Bounds");
+                        SpawnBall = false;
+                        KickDetected = false;
+                    }
                 }
             }
 
@@ -251,7 +257,7 @@ namespace GoogleARCore.HelloAR{
                     if (msg != null && msg.Length > 0){
 
                         content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
-                        //Debug.Log("ARK LOG ********** Content: " + content);
+                        Debug.Log("ARK LOG ********** Content: " + content);
 
                         // Split up by spaces
                         content = content.Replace(",", "");
@@ -268,7 +274,7 @@ namespace GoogleARCore.HelloAR{
                             float temp;
                             if (float.TryParse(subStrings[i], out temp)){
                                 SensorData[i] = temp;
-                                //Debug.Log("Parsed Value " + temp + " at " + i);
+                                Debug.Log("Parsed Value " + temp + " at " + i);
                             }
                             else {
                                 //Debug.Log("Could not parse!");

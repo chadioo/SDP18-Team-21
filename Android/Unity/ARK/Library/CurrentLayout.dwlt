@@ -20,7 +20,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 6}
-  m_MinSize: {x: 950, y: 521}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -70,7 +70,7 @@ MonoBehaviour:
   m_MinSize: {x: 234, y: 471}
   m_MaxSize: {x: 10004, y: 14021}
   vertical: 1
-  controlID: 95
+  controlID: 11
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -114,8 +114,8 @@ MonoBehaviour:
     y: 429
     width: 627
     height: 398
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 19}
@@ -186,10 +186,10 @@ MonoBehaviour:
     y: 30
     width: 1707
     height: 827
-  m_MinSize: {x: 538, y: 471}
+  m_MinSize: {x: 713, y: 471}
   m_MaxSize: {x: 18008, y: 14021}
   vertical: 0
-  controlID: 31
+  controlID: 70
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -233,7 +233,7 @@ MonoBehaviour:
   m_MinSize: {x: 202, y: 442}
   m_MaxSize: {x: 4002, y: 8042}
   vertical: 1
-  controlID: 32
+  controlID: 71
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -252,15 +252,15 @@ MonoBehaviour:
     y: 0
     width: 558
     height: 827
-  m_MinSize: {x: 102, y: 121}
-  m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 14}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
   - {fileID: 16}
   - {fileID: 14}
-  m_Selected: 2
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 2
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -279,8 +279,8 @@ MonoBehaviour:
     y: 0
     width: 627
     height: 429
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 20}
@@ -464,7 +464,7 @@ MonoBehaviour:
   m_ScrollPosition: {x: 0, y: 0}
   m_InspectorMode: 0
   m_PreviewResizer:
-    m_CachedPref: -160
+    m_CachedPref: 207
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_PreviewWindow: {fileID: 0}
@@ -507,7 +507,7 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/GoogleARCore/ARK/Scripts
+    - Assets/GoogleARCore/ARK/Scenes
   m_ViewMode: 0
   m_StartGridSize: 64
   m_LastFolders: []
@@ -518,7 +518,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: ee240000
     m_LastClickedID: 9454
-    m_ExpandedIDs: 00000000800600004228000046280000542800006628000070280000722800008228000084280000aa280000b0280000cc280000e0280000e2280000f2280000f8280000002900003e2900004229000092290000742a0000762a0000782a00007a2a00007c2a00007e2a0000802a0000822a0000
+    m_ExpandedIDs: 00000000800600004228000046280000542800006628000070280000722800008228000084280000aa280000b0280000cc280000e0280000e2280000f4280000fa28000002290000402900004429000094290000982a00009a2a00009c2a00009e2a0000a02a0000a22a0000a42a0000a62a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -543,24 +543,24 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_AssetTreeState:
-    scrollPos: {x: 0, y: 545}
+    scrollPos: {x: 0, y: 600}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000800600004228000046280000542800006628000070280000722800008228000084280000aa280000b0280000cc280000e0280000e2280000f2280000f8280000002900003e2900004229000092290000742a0000762a0000782a00007a2a00007c2a00007e2a0000802a0000822a0000
+    m_ExpandedIDs: 00000000800600004228000046280000542800006628000070280000722800008228000084280000a4280000aa280000b0280000b6280000cc280000e0280000e2280000f4280000fa28000002290000402900004429000094290000982a00009a2a00009c2a00009e2a0000a02a0000a22a0000a42a0000a62a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: Menu
+      m_OriginalName: Menu
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 10556
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 2}
     m_SearchString: 
@@ -706,14 +706,14 @@ MonoBehaviour:
     height: 408
   m_PersistentViewDataDictionary: {fileID: 0}
   m_SceneLighting: 1
-  lastFramingTime: 15620.53103682642
+  lastFramingTime: 6837.585148145065
   m_2DMode: 0
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -1029.5469, y: 1274.4102, z: -1608.2734}
+    m_Target: {x: -1105.5266, y: 1342.6447, z: -1737.3411}
     speed: 2
-    m_Value: {x: -1029.5469, y: 1274.4102, z: -1608.2734}
+    m_Value: {x: -1105.5266, y: 1342.6447, z: -1737.3411}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -741,9 +741,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: -0.22445421, y: -0.33522654, z: 0.08256879, w: -0.91127795}
   m_Size:
-    m_Target: 34.357525
+    m_Target: 17.833946
     speed: 2
-    m_Value: 34.357525
+    m_Value: 17.833946
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -786,7 +786,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: a4f6ffff48f7ffff4ef8ffff74f8ffff84f8ffff9efbffff00000000
+    m_ExpandedIDs: d240feff5841feffa642feffae42feff464ffeffb850feffea51feffdc58feffae59fefffc5afeff045bfeff9015fffffc6bffff8a6cffff906dffffb66dffffc66dffffac71ffff3a72ffff4073ffff6673ffff7673ffff9277ffff2078ffff2679ffff4c79ffff5c79ffff9c81ffff2a82ffff3083ffff5683ffff6683fffffad2ffffa6d3ffffacd4ffffd2d4ffffe2d4ffff86dbffff30dcffff36ddffff5cddffff6cddffff62e4ffff0ae5ffff14e6ffff3ee6ffff52e6ffff9efbffff0000000082460000ba46000038490000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -805,7 +805,7 @@ MonoBehaviour:
       m_ClientGUIView: {fileID: 4}
     m_SearchString: 
   m_ExpandedScenes:
-  - Soccer Game
+  - Menu
   m_CurrenRootInstanceID: 0
   m_Locked: 0
   m_CurrentSortingName: TransformSorting

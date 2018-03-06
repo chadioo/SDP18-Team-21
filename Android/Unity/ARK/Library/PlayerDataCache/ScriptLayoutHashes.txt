@@ -1,7 +1,6 @@
 Android
 SceneListBegin?
 Assets/GoogleARCore/ARK/Scenes/Menu.unity
-Assets/BT_Library/Demos/Bluetooth Terminal/BluetoothInfo.unity
 Assets/GoogleARCore/ARK/Scenes/Soccer Game.unity
 SceneListEnd?
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset

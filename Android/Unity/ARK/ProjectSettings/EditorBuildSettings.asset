@@ -9,17 +9,5 @@ EditorBuildSettings:
     path: Assets/GoogleARCore/ARK/Scenes/Menu.unity
     guid: 41e51dd96f2a8b34a9fffc27bf80eea5
   - enabled: 1
-    path: Assets/BT_Library/Demos/Bluetooth Terminal/BluetoothInfo.unity
-    guid: dce7e863a777c6c4082f09c67b7a9d12
-  - enabled: 1
     path: Assets/GoogleARCore/ARK/Scenes/Soccer Game.unity
     guid: a62f0b4cf4c7df2469e0920fd35fa91a
-  - enabled: 0
-    path: Assets/BT_Library/Demos/Automatic Connection/AutomaticConnection.unity
-    guid: c046636012f2345fb8fe62cdda314b69
-  - enabled: 0
-    path: Assets/BT_Library/Demos/Basic Demo/BasicDemo.unity
-    guid: 7b3aa303831fb41fea738959d2ee31b9
-  - enabled: 0
-    path: Assets/BT_Library/Demos/Devices Discovery/Discovery.unity
-    guid: 674846c9207ac496baa75a4edbe6704a

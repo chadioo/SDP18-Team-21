@@ -306,17 +306,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FirstPersonCamera: {fileID: 99422748}
-  TrackedPlanePrefab: {fileID: 1654175882956584, guid: 6a35c744e5010405c847fad90282d2be,
-    type: 2}
-  SoccerBallPrefab: {fileID: 54122048708221640, guid: a0fe39359e064414c8c562dc09497883,
-    type: 2}
-  SoccerGoalPrefab: {fileID: 1000663454618440, guid: 39d1f45b8455a57408659d82fcdc69f3,
-    type: 2}
-  SoccerFieldPrefab: {fileID: 1527861299716584, guid: 3604a6ecdb9d3af438b68e25ccb79b3f,
-    type: 2}
-  speed: 1
   camLeft: {fileID: 99422748}
   camRight: {fileID: 1316637059}
+  SoccerGoalInput: {fileID: 1000663454618440, guid: 39d1f45b8455a57408659d82fcdc69f3,
+    type: 2}
+  SoccerFieldInput: {fileID: 1527861299716584, guid: 3604a6ecdb9d3af438b68e25ccb79b3f,
+    type: 2}
+  SoccerBallInput: {fileID: 54122048708221640, guid: a0fe39359e064414c8c562dc09497883,
+    type: 2}
 --- !u!1 &1316637058
 GameObject:
   m_ObjectHideFlags: 0
