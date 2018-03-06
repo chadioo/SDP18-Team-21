@@ -25,6 +25,7 @@ namespace GoogleARCore.HelloAR{
     using System.Collections;
     using GoogleARCore;
     using UnityEngine;
+    using UnityEngine.UI;
     using UnityEngine.Rendering;
     using TechTweaking.Bluetooth;
 
@@ -58,6 +59,7 @@ namespace GoogleARCore.HelloAR{
         private bool SpawnGoal = false;         // determines if spawned objects
         private bool SpawnBall = false;         // determines if spawned objects
         private bool KickDetected = false;      // determines if kick detected
+        private bool Bluetooth = false;         // determines if bluetooth implemented
 
         // FLOATS
         private float Threshold = 2f;           // acceleration threshold for determining kick
@@ -70,41 +72,81 @@ namespace GoogleARCore.HelloAR{
         // BLUETOOTH DEVICE
         private BluetoothDevice device;         // bluetooth device
 
+        // TEXT BOXE
+        public Text message;
 
+
+        //
+        // METHODS FOR HANDLING BLUETOOTH
+        //
 
         // AWAKE METHOD (first method, initializes bluetooth)
         void Awake(){
+            SideBySidePerspectiveCameraConfig();
+            message.text = "Click Devices Button";
+            BluetoothAdapter.askEnableBluetooth();                   //Ask user to enable Bluetooth
+            BluetoothAdapter.OnDeviceOFF += HandleOnDeviceOff;
+            BluetoothAdapter.OnDevicePicked += HandleOnDevicePicked; //To get what device the user picked out of the devices list
+        }
 
-            device = new BluetoothDevice();
-
-            if (BluetoothAdapter.isBluetoothEnabled()){
-                connect();
+        void HandleOnDeviceOff(BluetoothDevice dev){                // Bluetooth Handler
+            if (!string.IsNullOrEmpty(dev.Name)){
+                message.text = "Can't connect to " + dev.Name + ", device is OFF";
+                Debug.Log("Can't connect to " + dev.Name + ", device is OFF");
             }
-            else{
-
-                //BluetoothAdapter.enableBluetooth(); //you can by this force enabling Bluetooth without asking the user
-                Debug.Log("Status : Please enable your Bluetooth");
-
-                BluetoothAdapter.OnBluetoothStateChanged += HandleOnBluetoothStateChanged;
-                BluetoothAdapter.listenToBluetoothState(); // if you want to listen to the following two events  OnBluetoothOFF or OnBluetoothON
-                BluetoothAdapter.askEnableBluetooth(); // Ask user to enable Bluetooth
+            else if (!string.IsNullOrEmpty(dev.Name)){
+                message.text = "Can't connect to " + dev.MacAddress + ", device is OFF";
+                Debug.Log("Can't connect to " + dev.MacAddress + ", device is OFF");
             }
         }
 
 
-
-        // START METHOD (runs after awake, handles bluetooth exceptions)
-        void Start(){
-
-            //Debug.Log("ARK LOG ********** Running Start");
-
-            BluetoothAdapter.OnDeviceOFF += HandleOnDeviceOff;//This would mean a failure in connection! the reason might be that your remote device is OFF
-
-            BluetoothAdapter.OnDeviceNotFound += HandleOnDeviceNotFound; //Because connecting using the 'Name' property is just searching, the Plugin might not find it!.
-
-            //SideBySidePerspectiveCameraConfig();
-
+        //############### UI BUTTONS RELATED METHODS #####################
+        public void showDevices() {
+            BluetoothAdapter.showDevices();//show a list of all devices//any picked device will be sent to this.HandleOnDevicePicked()
         }
+
+
+        public void connect(){ //Connect to the public global variable "device" if it's not null.
+        
+            if (device != null){
+                message.text = "Connecting to device";
+                device.connect();
+            }
+            message.text = "Connection successful";
+            Bluetooth = true;
+        }
+
+
+        public void disconnect(){ //Disconnect the public global variable "device" if it's not null.
+        
+            if (device != null) {
+                message.text = "Connection terminated";
+                device.close();
+                Bluetooth = false;
+            }
+        }
+
+
+        void HandleOnDevicePicked(BluetoothDevice device){//Called when device is Picked by user
+        
+            this.device = device;//save a global reference to the device
+
+            device.setEndByte(10);
+
+            device.ReadingCoroutine = ManageConnection;
+
+            Debug.Log("Decvice Name: "+device.Name);
+
+            message.text = "Click Connect Button";
+        }
+
+        void OnDestroy(){
+            BluetoothAdapter.OnDevicePicked -= HandleOnDevicePicked;
+            BluetoothAdapter.OnDeviceOFF -= HandleOnDeviceOff;
+        }
+
+        // GAME FUNCTIONALITY
 
 
 
@@ -124,47 +166,38 @@ namespace GoogleARCore.HelloAR{
 
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
-            // If you have not found plane, search for plane
-            if (!FoundPlane){
+            if (!FoundPlane & Bluetooth){   // If you have not found plane, search for plane
 
-                // See if new plane exists
-                Frame.GetPlanes(m_NewPlanes, TrackableQueryFilter.New);
+                Frame.GetPlanes(m_NewPlanes, TrackableQueryFilter.New); // See if new plane exists
 
-                // If there is a new plane, stop searching
-                if (m_NewPlanes.Count > 0){
+                if (m_NewPlanes.Count > 0){ // See if new plane exists
 
-                    //Debug.Log("ARK LOG ********** Plane has been found.");
                     PlaneVector = m_NewPlanes[0].Position;
                     FoundPlane = true;
                 }
             }
 
-            // If plane is found and objects have not been instantiated
-            if (FoundPlane && !SpawnGoal && ! SpawnBall){
-
-                //Debug.Log("ARK LOG ********** Spawn objects onto plane.");
-
-                // Sample plane location
-                //Vector3 PlaneVector = m_NewPlanes[0].Position;
+            if (FoundPlane && !SpawnGoal && ! SpawnBall){ // If plane is found and objects have not been instantiated
 
                 // Set spawn location to be on plane certain distance in front of camera
-                SoccerFieldVector = new Vector3(0, PlaneVector.y, 15);     // field vector is everywhere
-                SoccerBallVector = new Vector3(0, PlaneVector.y, 1);     // ball is 1 unit of distance forward
-                SoccerGoalVector = new Vector3(0, PlaneVector.y, 30);      // goal is 15 units of distance forward, lower height to rest on plane
+                SoccerFieldVector = new Vector3(0, PlaneVector.y, 15);          // field vector is everywhere
+                SoccerBallVector = new Vector3(0, PlaneVector.y+0.10f, 1);      // ball is 1 unit of distance forward
+                SoccerGoalVector = new Vector3(0, PlaneVector.y, 30);           // goal is 15 units of distance forward, lower height to rest on plane
 
                 // Spawn Objects
                 Instantiate(SoccerFieldInput, SoccerFieldVector, Quaternion.identity);
                 SoccerBallRigidbody = Instantiate(SoccerBallInput, SoccerBallVector, Quaternion.identity) as Rigidbody;
                 Instantiate(SoccerGoalInput, SoccerGoalVector, Quaternion.Euler(270, 270, 180));
 
-                //Debug.Log("ARK LOG ********** Objects have been spawn.");
+                Debug.Log("ARK LOG ********** Spawn ball and goal and field.");
+
+                message.text = "Score: " + score;
 
                 SpawnGoal = true;
                 SpawnBall = true;
             }
-
-            // If plane is found and objects have not been instantiated
-            if (FoundPlane && SpawnGoal && !SpawnBall){
+            
+            if (FoundPlane && SpawnGoal && !SpawnBall){ // If ball needs to be respawn
 
                 // Set spawn location to be on plane certain distance in front of camera
                 SoccerBallVector = new Vector3(0, PlaneVector.y + 1, 1);     // ball is 1 unit of distance forward
@@ -174,9 +207,10 @@ namespace GoogleARCore.HelloAR{
 
                 Debug.Log("ARK LOG ********** Respawn ball.");
 
+                message.text = "Score: " + score;
+
                 SpawnBall = true;
             }
-
 
         } // end of Update
 
@@ -242,14 +276,13 @@ namespace GoogleARCore.HelloAR{
 
         // READING DATA
         IEnumerator ManageConnection(BluetoothDevice device) {
-        //Manage Reading Coroutine
+            
             //Debug.Log("ARK LOG ********** ManageConnection: Device is reading: " + device.IsReading + " Data is available: " + device.IsDataAvailable);
 
             while (device.IsReading){
 
                 if (device.IsDataAvailable){
 
-                    //because we called setEndByte(10)..read will always return a packet excluding the last byte 10.
                     byte[] msg = device.read();
                     string content = "";
                     string[] subStrings;
@@ -259,14 +292,10 @@ namespace GoogleARCore.HelloAR{
                         content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
                         Debug.Log("ARK LOG ********** Content: " + content);
 
-                        // Split up by spaces
-                        content = content.Replace(",", "");
-                        subStrings = content.Split(' ');
-                        //Debug.Log("ARK LOG ********** Sensor Data Length:" + subStrings.Length + " 0: " + subStrings[0]);
-                        //_ShowAndroidToastMessage("Sensor Data Length: "+subStrings.Length);
+                        content = content.Replace(",", "");     // Remove commas
+                        subStrings = content.Split(' ');        // Split up by spaces
 
                         SensorData = new float[subStrings.Length];
-                        //Debug.Log("ARK LOG ********** Instantiate SensorData Array to Length of 6");
 
                         for (int i = 0; i < subStrings.Length; i++){
 
@@ -280,22 +309,16 @@ namespace GoogleARCore.HelloAR{
                                 //Debug.Log("Could not parse!");
                             }
                         }
-                        //_ShowAndroidToastMessage("Sensor Data: " + SensorData.Length + "Kick Detection: " + KickDetected);
 
-                        // If no kick has been detected and data exists, check if threshold has been reached 
-                        if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected){
-                            //Debug.Log("ARK LOG ********** Sensor Value: " + SensorData[0] + " >= ? Threshold: "+Threshold);
-                            //_ShowAndroidToastMessage("Acc: "+ SensorData[0] + " g");
-                            // If threshold has been reached, kick has been detected
-                            if (SensorData[0] >= Threshold){
-                                
+                        if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected){ // If no kick has been detected and data exists, check if threshold has been reached 
+                            
+                            if (SensorData[0] >= Threshold){ // If threshold has been reached, kick has been detected
+                                Debug.Log("Kick Detected!");
                                 _ShowAndroidToastMessage("Kick Detected!");
                                 KickDetected = true;
                             }
                         }
-
                     }
-
                 }
                 yield return null;
             }
@@ -303,79 +326,7 @@ namespace GoogleARCore.HelloAR{
 
 
 
-        // CONNECT METHOD (conencts to bluetooth)
-        private void connect(){
-
-            Debug.Log("Status : Trying To Connect");
-
-            device.MacAddress = "98:D3:35:71:0B:15";
-
-            device.setEndByte(10);
-
-            device.ReadingCoroutine = ManageConnection;
-
-            device.connect();
-
-        }
-
-
-
-        // DICONNECT METHOD
-        public void disconnect(){
-
-            if (device != null){
-                Debug.Log("Status : Device Disconnected");
-                device.close();
-            }
-        }
-
-
-
-        //############### Handlers/Recievers #####################
-        void HandleOnBluetoothStateChanged(bool isBtEnabled){
-
-            if (isBtEnabled){
-                connect();
-                //We now don't need our recievers
-                BluetoothAdapter.OnBluetoothStateChanged -= HandleOnBluetoothStateChanged;
-                BluetoothAdapter.stopListenToBluetoothState();
-            }
-        }
-
-
-
-        //This would mean a failure in connection! the reason might be that your remote device is OFF
-        void HandleOnDeviceOff(BluetoothDevice dev){
-
-            if (!string.IsNullOrEmpty(dev.Name)){
-                Debug.Log("Status : can't connect to '" + dev.Name + "', device is OFF ");
-            }
-            else if (!string.IsNullOrEmpty(dev.MacAddress)){
-                Debug.Log("Status : can't connect to '" + dev.MacAddress + "', device is OFF ");
-            }
-        }
-
-
-
-        //Because connecting using the 'Name' property is just searching, the Plugin might not find it!.
-        void HandleOnDeviceNotFound(BluetoothDevice dev){
-
-            if (!string.IsNullOrEmpty(dev.Name)){
-
-                Debug.Log("Status : Can't find a device with the name '" + dev.Name + "', device might be OFF or not paird yet ");
-            }
-        }
-
-
-
         //############### Deregister Events  #####################
-        void OnDestroy(){
-
-            BluetoothAdapter.OnDeviceOFF -= HandleOnDeviceOff;
-            BluetoothAdapter.OnDeviceNotFound -= HandleOnDeviceNotFound;
-
-        }
-
 
 
         /// <summary>
