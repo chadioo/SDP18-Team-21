@@ -21,6 +21,7 @@
 namespace GoogleARCore.HelloAR{
 
     // IMPORTS
+    using System.IO;
     using System.Collections.Generic;
     using System.Collections;
     using GoogleARCore;
@@ -295,6 +296,8 @@ namespace GoogleARCore.HelloAR{
                         content = content.Replace(",", "");     // Remove commas
                         subStrings = content.Split(' ');        // Split up by spaces
 
+                        sensorSave(content);
+
                         SensorData = new float[subStrings.Length];
 
                         for (int i = 0; i < subStrings.Length; i++){
@@ -303,7 +306,7 @@ namespace GoogleARCore.HelloAR{
                             float temp;
                             if (float.TryParse(subStrings[i], out temp)){
                                 SensorData[i] = temp;
-                                Debug.Log("Parsed Value " + temp + " at " + i);
+                                //Debug.Log("Parsed Value " + temp + " at " + i);
                             }
                             else {
                                 //Debug.Log("Could not parse!");
@@ -412,6 +415,41 @@ namespace GoogleARCore.HelloAR{
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+        int dataCount = 0;
+
+		public void sensorSave(string data){
+			System.IO.StreamWriter writer;
+			System.IO.StreamReader reader;
+			string line;
+            //Debug.Log("ARK LOG ********** sensorSave");
+            if (!File.Exists(Application.persistentDataPath + "/sensorCache.txt")){
+				FileStream fileStr = File.Create(Application.persistentDataPath + "/sensorCache.txt");
+                //Debug.Log("ARK LOG ********** Create File");
+            }
+			if (dataCount < 10) {
+                //Debug.Log("ARK LOG ********** Write Data");
+                using (writer = new System.IO.StreamWriter (Application.persistentDataPath + "/sensorCache.txt", true)) {
+					writer.WriteLine (data);
+                    dataCount++;
+				}
+			}
+			else {
+                //Debug.Log("ARK LOG ********** Read Data");
+                reader = new System.IO.StreamReader(Application.persistentDataPath + "/sensorCache.txt");  
+				while((line = reader.ReadLine()) != null) {  
+					Debug.Log("ARK LOG ********** Data: " + line);
+				}  
+				reader.Close();
+                dataCount = 0;
+				using (writer = new System.IO.StreamWriter (Application.persistentDataPath + "/sensorCache.txt", false)) {
+					writer.WriteLine (data);
+				}
+			}
+		}
 
 
 
