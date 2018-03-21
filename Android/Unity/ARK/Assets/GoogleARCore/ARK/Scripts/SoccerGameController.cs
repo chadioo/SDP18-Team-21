@@ -60,7 +60,9 @@ namespace GoogleARCore.HelloAR{
         private bool SpawnGoal = false;         // determines if spawned objects
         private bool SpawnBall = false;         // determines if spawned objects
         private bool KickDetected = false;      // determines if kick detected
+        private bool KickExecuted = false;      // determines if kick detected
         private bool Bluetooth = false;         // determines if bluetooth implemented
+        private bool BluetoothInit = false;
 
         // FLOATS
         private float Threshold = 2f;           // acceleration threshold for determining kick
@@ -114,7 +116,7 @@ namespace GoogleARCore.HelloAR{
                 message.text = "Connecting to device";
                 device.connect();
             }
-            message.text = "Connection successful";
+            message.text = "Connection initializing";
             Bluetooth = true;
         }
 
@@ -147,7 +149,6 @@ namespace GoogleARCore.HelloAR{
             BluetoothAdapter.OnDeviceOFF -= HandleOnDeviceOff;
         }
 
-        // GAME FUNCTIONALITY
 
 
 
@@ -183,7 +184,7 @@ namespace GoogleARCore.HelloAR{
                 // Set spawn location to be on plane certain distance in front of camera
                 SoccerFieldVector = new Vector3(0, PlaneVector.y, 15);          // field vector is everywhere
                 SoccerBallVector = new Vector3(0, PlaneVector.y+0.10f, 1);      // ball is 1 unit of distance forward
-                SoccerGoalVector = new Vector3(0, PlaneVector.y, 30);           // goal is 15 units of distance forward, lower height to rest on plane
+                SoccerGoalVector = new Vector3(0, PlaneVector.y, 6);           // goal is 15 units of distance forward, lower height to rest on plane
 
                 // Spawn Objects
                 Instantiate(SoccerFieldInput, SoccerFieldVector, Quaternion.identity);
@@ -220,57 +221,55 @@ namespace GoogleARCore.HelloAR{
         // FIXED UPDATE METHOD
         void FixedUpdate() {
             
-            if (FoundPlane && SpawnBall && SpawnGoal && KickDetected){
+            if (FoundPlane && SpawnBall && SpawnGoal && KickDetected && !KickExecuted){
 
                 //Debug.Log("Soccer ball position: x " + SoccerBallRigidbody.position.x + " y " + SoccerBallRigidbody.position.y + " z " + SoccerBallRigidbody.position.z);
 
-                if (SensorData.Length >= 10) {
+                if (SensorData.Length >= 5) {
 
                     //_ShowAndroidToastMessage("Move");
                     // Determines ball movement
-                    float xAcc = SensorData[2];     // sensor x axis (in current orientation) is unity y axis
-                    float yAcc = SensorData[0];     // sensor x axis (in current orientation) is unity y axis
-                    float zAcc = SensorData[4];     // sensor z axis (in current orientation) is unity z axis
+                    float xAcc = SensorData[4];     // sensor x axis (in current orientation) is unity y axis
+                    float yAcc = SensorData[0] - 1;     // sensor x axis (in current orientation) is unity y axis
+                    float zAcc = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
 
-                    Vector3 acc = new Vector3(xAcc, yAcc, zAcc);
+                    Vector3 acc = new Vector3(-xAcc*50, yAcc*50, zAcc*50);
 
-                    float xAng = SensorData[8];     // sensor x axis (in current orientation) is unity y axis
-                    float yAng = SensorData[6];     // sensor x axis (in current orientation) is unity y axis
-                    float zAng = SensorData[10];     // sensor z axis (in current orientation) is unity z axis
+                    //float xAng = SensorData[8];     // sensor x axis (in current orientation) is unity y axis
+                    //float yAng = SensorData[6];     // sensor x axis (in current orientation) is unity y axis
+                    //float zAng = SensorData[10];     // sensor z axis (in current orientation) is unity z axis
 
-                    Vector3 angle = new Vector3(xAng, yAng, zAng);
+                    //Vector3 force = new Vector3(xAcc * SoccerBallRigidbody.mass, yAcc * SoccerBallRigidbody.mass, zAcc * SoccerBallRigidbody.mass);
 
-                    Vector3 force = new Vector3(xAcc * SoccerBallRigidbody.mass, yAcc * SoccerBallRigidbody.mass, zAcc * SoccerBallRigidbody.mass);
+                    //Debug.Log("Acceleration: "+acc+" Force: "+ force);
 
-                    Debug.Log("Acceleration: "+acc+" Anglular Velocity: "+angle+" Force: "+ force);
+                    SoccerBallRigidbody.AddForce(acc);
 
-                    SoccerBallRigidbody.AddForce(force);
-
-                    if (SoccerBallRigidbody.position.x > 15 | SoccerBallRigidbody.position.x < -15 | SoccerBallRigidbody.position.z < -5) {
-                        Destroy(SoccerBallRigidbody, 1.0f);// remove object
-                        Debug.Log("Destroyed ball oob");
-                        _ShowAndroidToastMessage("Out of Bounds");
-                        SpawnBall = false;
-                        KickDetected = false;
-                    }
-                    else if (SoccerBallRigidbody.position.x < 5 && SoccerBallRigidbody.position.x > -5 && SoccerBallRigidbody.position.z > 30 && SoccerBallRigidbody.position.y < 10) {
-                        Destroy(SoccerBallRigidbody, 1.0f);// remove object
-                        Debug.Log("Destroyed ball goal");
-                        score++;    // increase score
-                        _ShowAndroidToastMessage("Score: " + score);
-                        SpawnBall = false;
-                        KickDetected = false;
-                    }
-                    else if (SoccerBallRigidbody.position.z > 30) {
-                        Destroy(SoccerBallRigidbody, 1.0f);// remove object
-                        Debug.Log("Destroyed ball oob");
-                        _ShowAndroidToastMessage("Out of Bounds");
-                        SpawnBall = false;
-                        KickDetected = false;
-                    }
+                    KickExecuted = true;
                 }
             }
 
+            if (FoundPlane && SpawnBall && SpawnGoal && KickDetected && KickExecuted){
+
+                if (SoccerBallRigidbody.position.x > 6 | SoccerBallRigidbody.position.x < -6 | SoccerBallRigidbody.position.z < -2 | SoccerBallRigidbody.position.z > 6.5){
+                    Destroy(SoccerBallRigidbody, 1.0f);// remove object
+                    Debug.Log("Destroyed ball oob");
+                    _ShowAndroidToastMessage("Out of Bounds");
+                    SpawnBall = false;
+                    KickDetected = false;
+                    KickExecuted = false;
+                }
+                else if (SoccerBallRigidbody.position.x < 1.5 && SoccerBallRigidbody.position.x > -1.5 && SoccerBallRigidbody.position.z > 6 && SoccerBallRigidbody.position.y < 1){
+                    Destroy(SoccerBallRigidbody, 1.0f);// remove object
+                    Debug.Log("Destroyed ball goal");
+                    score++;    // increase score
+                    _ShowAndroidToastMessage("Score: " + score);
+                    SpawnBall = false;
+                    KickDetected = false;
+                    KickExecuted = false;
+                }
+
+            }
         }
 
 
@@ -278,11 +277,15 @@ namespace GoogleARCore.HelloAR{
         // READING DATA
         IEnumerator ManageConnection(BluetoothDevice device) {
             
-            //Debug.Log("ARK LOG ********** ManageConnection: Device is reading: " + device.IsReading + " Data is available: " + device.IsDataAvailable);
 
             while (device.IsReading){
 
                 if (device.IsDataAvailable){
+
+                    if (BluetoothInit == false) {
+                        message.text = "Bluetooth successful";
+                        BluetoothInit = true;
+                    }
 
                     byte[] msg = device.read();
                     string content = "";
@@ -299,7 +302,7 @@ namespace GoogleARCore.HelloAR{
                         sensorSave(content);
 
                         SensorData = new float[subStrings.Length];
-
+                        
                         for (int i = 0; i < subStrings.Length; i++){
 
                             //Debug.Log("Substring: "+ subStrings[i] + " i:"+i);
@@ -315,7 +318,7 @@ namespace GoogleARCore.HelloAR{
 
                         if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected){ // If no kick has been detected and data exists, check if threshold has been reached 
                             
-                            if (SensorData[0] >= Threshold){ // If threshold has been reached, kick has been detected
+                            if (SensorData[2] >= Threshold){ // If threshold has been reached, kick has been detected
                                 Debug.Log("Kick Detected!");
                                 _ShowAndroidToastMessage("Kick Detected!");
                                 KickDetected = true;
@@ -327,6 +330,25 @@ namespace GoogleARCore.HelloAR{
             }
         }
 
+        // DEMO
+
+        public void demo() {
+
+            if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected && !KickExecuted){
+
+                KickDetected = true;
+
+                Vector3 demo = 50 * transform.forward;
+
+                SoccerBallRigidbody.AddForce(demo);
+
+                KickExecuted = true;
+
+            }
+
+
+
+         }
 
 
         //############### Deregister Events  #####################
@@ -441,7 +463,7 @@ namespace GoogleARCore.HelloAR{
                 //Debug.Log("ARK LOG ********** Read Data");
                 reader = new System.IO.StreamReader(Application.persistentDataPath + "/sensorCache.txt");  
 				while((line = reader.ReadLine()) != null) {  
-					Debug.Log("ARK LOG ********** Data: " + line);
+					//Debug.Log("ARK LOG ********** Data: " + line);
 				}  
 				reader.Close();
                 dataCount = 0;
