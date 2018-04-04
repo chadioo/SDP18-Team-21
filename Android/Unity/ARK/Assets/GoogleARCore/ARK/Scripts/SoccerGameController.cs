@@ -73,9 +73,13 @@ namespace GoogleARCore.HelloAR
         // FLOAT ARRAYS
         private float[] Straight = { 1.50f, 1.40f, 0.30f };  // acceleration threshold for determining kick
         private float[] Angle = { 1.40f, 1.28f, 0.50f };     // acceleration threshold for determining kick
-        private float[] Ninety = { 1.50f, 1.40f, 0.3f };    // acceleration threshold for determining kick
-        private float[] Dig = { 1.50f, 1.40f, 0.3f };       // acceleration threshold for determining kick
+        private float[] Ninety = { 10f, 10f, 10f };    // acceleration threshold for determining kick
+        private float[] Dig = { 10f, 10f, 10f };       // acceleration threshold for determining kick
         private float[] SensorData;                         // array used to store sensor data from one input line
+
+        private float[] xAvg = new float[6];    // moving average for x
+        private float[] yAvg = new float[6];    // moving average for y
+        private float[] zAvg = new float[6];    // moving average for z
 
         // INTEGERS
         private int score = 0;
@@ -329,12 +333,12 @@ namespace GoogleARCore.HelloAR
                     if (msg != null && msg.Length > 0)
                     {
                         content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
-                        Debug.Log("ARK LOG ********** Content: " + content);
+                        //Debug.Log("ARK LOG ********** Content: " + content);
 
                         content = content.Replace(",", "");     // Remove commas
                         subStrings = content.Split(' ');        // Split up by spaces
 
-                        sensorSave(content);
+                        //sensorSave(content);
 
                         SensorData = new float[subStrings.Length];
 
@@ -347,32 +351,64 @@ namespace GoogleARCore.HelloAR
                                 SensorData[i] = temp;
                                 //Debug.Log("Parsed Value " + temp + " at " + i);
                             }
-                            if (SensorData.Length >= 5)
-                            {
-                                if (LeftFoot)
-                                {
-                                }
-                                else
-                                {
-                                    xAcc = SensorData[4];     // sensor x axis (in current orientation) is unity y axis
-                                    yAcc = SensorData[0] - 1;     // sensor x axis (in current orientation) is unity y axis
-                                    zAcc = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
 
-                                    //xAng = SensorData[8];     // sensor x axis (in current orientation) is unity y axis
-                                    //yAng = SensorData[6];     // sensor x axis (in current orientation) is unity y axis
-                                    //zAng = SensorData[10];     // sensor z axis (in current orientation) is unity z axis
-                                }
+                        }
+                        if (SensorData.Length >= 5)
+                        {
+                            if (LeftFoot)
+                            {
+                                xAcc = -SensorData[4];    // sensor x axis (in current orientation) is unity y axis
+                                yAcc = SensorData[0];     // sensor x axis (in current orientation) is unity y axis
+                                zAcc = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
                             }
+
+                            else
+                            {
+                                xAcc = SensorData[4];     // sensor x axis (in current orientation) is unity y axis
+                                yAcc = SensorData[0];     // sensor x axis (in current orientation) is unity y axis
+                                zAcc = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
+
+                                //xAng = SensorData[8];     // sensor x axis (in current orientation) is unity y axis
+                                //yAng = SensorData[6];     // sensor x axis (in current orientation) is unity y axis
+                                //zAng = SensorData[10];     // sensor z axis (in current orientation) is unity z axis
+                            }
+                            //Debug.Log("ARK LOG ********** Content: " +yAcc+" "+zAcc+" "+xAcc);
                         }
 
                         if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected)
                         { // If no kick has been detected and data exists, check if threshold has been reached 
-
-                            // NOTE: UNITY AXIS X = left / right, Y = up/down, Z = forwards/backwards
-                            if (xAcc <= Straight[0] && yAcc >= Straight[1] && zAcc >= Straight[2])
-                            { // If threshold has been reached, kick has been detected
+                            // NOTE: ACCEL AXIS     X = up/down,        Y = forwards/backwards, Z = left/right
+                            // NOTE: UNITY AXIS     X = left / right,   Y = up/down,            Z = forwards/backwards
+                            if (xAcc <= Straight[2] && yAcc >= Straight[0] && zAcc >= Straight[1])
+                            {
                                 Debug.Log("Straight Kick Detected!");
+
                                 _ShowAndroidToastMessage("Straight Kick Detected!");
+
+                                KickDetected = true;
+
+                               // Vector3 straight = new Vector3(0, 50, 100);
+
+                               // SoccerBallRigidbody.AddForce(straight);
+
+                                //KickExecuted = true;
+                            }
+                            else if (xAcc <= Angle[2] && yAcc >= Angle[0] && zAcc >= Angle[1])
+                            {
+                                Debug.Log("Angle Kick Detected!");
+                                _ShowAndroidToastMessage("Angle Kick Detected!");
+                                KickDetected = true;
+                            }
+                            else if (xAcc <= Ninety[0] && yAcc >= Ninety[1] && zAcc >= Ninety[2])
+                            {
+                                Debug.Log("Ninety Kick Detected!");
+                                _ShowAndroidToastMessage("Ninety Kick Detected!");
+                                KickDetected = true;
+                            }
+                            else if (xAcc <= Dig[0] && yAcc >= Dig[1] && zAcc >= Dig[2])
+                            {
+                                Debug.Log("Dig Kick Detected!");
+                                _ShowAndroidToastMessage("Dig Kick Detected!");
                                 KickDetected = true;
                             }
                         }
@@ -402,7 +438,7 @@ namespace GoogleARCore.HelloAR
             {
                 KickDetected = true;
 
-                Vector3 demo = 50 * transform.forward;
+                Vector3 demo = new Vector3(0, 50, 100);
 
                 SoccerBallRigidbody.AddForce(demo);
 
