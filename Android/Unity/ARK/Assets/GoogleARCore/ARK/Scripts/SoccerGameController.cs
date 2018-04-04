@@ -22,6 +22,7 @@ namespace GoogleARCore.HelloAR
 {
 
     // IMPORTS
+    using System.Linq;
     using System.IO;
     using System.Collections.Generic;
     using System.Collections;
@@ -77,9 +78,12 @@ namespace GoogleARCore.HelloAR
         private float[] Dig = { 10f, 10f, 10f };       // acceleration threshold for determining kick
         private float[] SensorData;                         // array used to store sensor data from one input line
 
-        private float[] xAvg = new float[6];    // moving average for x
-        private float[] yAvg = new float[6];    // moving average for y
-        private float[] zAvg = new float[6];    // moving average for z
+        private float[] xAvg = { 0f, 0f, 0f, 0f, 0f, 0f};    // moving average for x
+        private float[] xTemp = { 0f, 0f, 0f, 0f, 0f, 0f };    // for copying purposes
+        private float[] yAvg = { 0f, 0f, 0f, 0f, 0f, 0f };    // moving average for z
+        private float[] yTemp = { 0f, 0f, 0f, 0f, 0f, 0f };    // for copying purposes
+        private float[] zAvg = { 0f, 0f, 0f, 0f, 0f, 0f };    // moving average for y
+        private float[] zTemp = { 0f, 0f, 0f, 0f, 0f, 0f };    // for copying purposes
 
         // INTEGERS
         private int score = 0;
@@ -333,7 +337,7 @@ namespace GoogleARCore.HelloAR
                     if (msg != null && msg.Length > 0)
                     {
                         content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
-                        //Debug.Log("ARK LOG ********** Content: " + content);
+                        Debug.Log("ARK LOG ********** Content: " + content);
 
                         content = content.Replace(",", "");     // Remove commas
                         subStrings = content.Split(' ');        // Split up by spaces
@@ -341,12 +345,12 @@ namespace GoogleARCore.HelloAR
                         //sensorSave(content);
 
                         SensorData = new float[subStrings.Length];
-
+                        Debug.Log("subStrings: "+ (string.Join(",", subStrings)));
                         for (int i = 0; i < subStrings.Length; i++)
                         {
                             //Debug.Log("Substring: "+ subStrings[i] + " i:"+i);
                             float temp;
-                            if (float.TryParse(subStrings[i], out temp))
+                            if(float.TryParse(subStrings[i], out temp))
                             {
                                 SensorData[i] = temp;
                                 //Debug.Log("Parsed Value " + temp + " at " + i);
@@ -355,24 +359,36 @@ namespace GoogleARCore.HelloAR
                         }
                         if (SensorData.Length >= 5)
                         {
+                            System.Array.Copy(xAvg, 1, xTemp, 0, 5);
+                            System.Array.Copy(yAvg, 1, yTemp, 0, 5);
+                            System.Array.Copy(zAvg, 1, zTemp, 0, 5);
+
+                            System.Array.Copy(xTemp, xAvg, 5);
+                            System.Array.Copy(yTemp, yAvg, 5);
+                            System.Array.Copy(zTemp, zAvg, 5);
+
                             if (LeftFoot)
                             {
-                                xAcc = -SensorData[4];    // sensor x axis (in current orientation) is unity y axis
-                                yAcc = SensorData[0];     // sensor x axis (in current orientation) is unity y axis
-                                zAcc = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
+                                xAvg[5] = SensorData[4];    // sensor x axis (in current orientation) is unity y axis
+                                yAvg[5] = SensorData[0];     // sensor x axis (in current orientation) is unity y axis
+                                zAvg[5] = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
                             }
 
                             else
                             {
-                                xAcc = SensorData[4];     // sensor x axis (in current orientation) is unity y axis
-                                yAcc = SensorData[0];     // sensor x axis (in current orientation) is unity y axis
-                                zAcc = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
+                                xAvg[5] = -SensorData[4];     // sensor x axis (in current orientation) is unity y axis
+                                yAvg[5] = SensorData[0];     // sensor x axis (in current orientation) is unity y axis
+                                zAvg[5] = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
 
                                 //xAng = SensorData[8];     // sensor x axis (in current orientation) is unity y axis
                                 //yAng = SensorData[6];     // sensor x axis (in current orientation) is unity y axis
                                 //zAng = SensorData[10];     // sensor z axis (in current orientation) is unity z axis
                             }
-                            //Debug.Log("ARK LOG ********** Content: " +yAcc+" "+zAcc+" "+xAcc);
+
+                            xAcc = xAvg.Sum() / 6;
+                            yAcc = yAvg.Sum() / 6;
+                            zAcc = zAvg.Sum() / 6;
+                            Debug.Log("ARK LOG ********** Content: " +yAcc+" "+zAcc+" "+xAcc);
                         }
 
                         if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected)
@@ -382,16 +398,8 @@ namespace GoogleARCore.HelloAR
                             if (xAcc <= Straight[2] && yAcc >= Straight[0] && zAcc >= Straight[1])
                             {
                                 Debug.Log("Straight Kick Detected!");
-
                                 _ShowAndroidToastMessage("Straight Kick Detected!");
-
                                 KickDetected = true;
-
-                               // Vector3 straight = new Vector3(0, 50, 100);
-
-                               // SoccerBallRigidbody.AddForce(straight);
-
-                                //KickExecuted = true;
                             }
                             else if (xAcc <= Angle[2] && yAcc >= Angle[0] && zAcc >= Angle[1])
                             {
