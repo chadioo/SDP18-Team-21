@@ -18,7 +18,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GoogleARCore.HelloAR{
+namespace GoogleARCore.HelloAR
+{
 
     // IMPORTS
     using System.IO;
@@ -30,14 +31,15 @@ namespace GoogleARCore.HelloAR{
     using UnityEngine.Rendering;
     using TechTweaking.Bluetooth;
 
-    public class SoccerGameController : MonoBehaviour{
-        
+    public class SoccerGameController : MonoBehaviour
+    {
+
         // CAMERAS
         public Camera FirstPersonCamera;        // main camera
         public Camera camLeft;                  // left camera for side by side
         public Camera camRight;                 // left camera for side by side
 
-       // GAMEOBJECTS
+        // GAMEOBJECTS
         public GameObject SoccerGoalInput;     // soccer goal input
         public GameObject SoccerFieldInput;    // soccer field input
 
@@ -62,12 +64,18 @@ namespace GoogleARCore.HelloAR{
         private bool KickDetected = false;      // determines if kick detected
         private bool KickExecuted = false;      // determines if kick detected
         private bool Bluetooth = false;         // determines if bluetooth implemented
-        private bool BluetoothInit = false;
+        private bool BluetoothInit = false;     // determines if bluetooth connection successful
+        private bool LeftFoot = false;          // determines if on left or right foot
 
         // FLOATS
-        private float Threshold = 2f;           // acceleration threshold for determining kick
-        //private float speed = 1f;               // speed of ball (not currently used)
-        private float[] SensorData;             // array used to store sensor data from one input line
+        float xAcc, yAcc, zAcc, xAng, yAng, zAng;
+
+        // FLOAT ARRAYS
+        private float[] Straight = { 1.50f, 1.40f, 0.30f };  // acceleration threshold for determining kick
+        private float[] Angle = { 1.40f, 1.28f, 0.50f };     // acceleration threshold for determining kick
+        private float[] Ninety = { 1.50f, 1.40f, 0.3f };    // acceleration threshold for determining kick
+        private float[] Dig = { 1.50f, 1.40f, 0.3f };       // acceleration threshold for determining kick
+        private float[] SensorData;                         // array used to store sensor data from one input line
 
         // INTEGERS
         private int score = 0;
@@ -79,12 +87,12 @@ namespace GoogleARCore.HelloAR{
         public Text message;
 
 
-        //
-        // METHODS FOR HANDLING BLUETOOTH
-        //
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         // AWAKE METHOD (first method, initializes bluetooth)
-        void Awake(){
+        void Awake()
+        {
             SideBySidePerspectiveCameraConfig();
             message.text = "Click Devices Button";
             BluetoothAdapter.askEnableBluetooth();                   //Ask user to enable Bluetooth
@@ -92,27 +100,36 @@ namespace GoogleARCore.HelloAR{
             BluetoothAdapter.OnDevicePicked += HandleOnDevicePicked; //To get what device the user picked out of the devices list
         }
 
-        void HandleOnDeviceOff(BluetoothDevice dev){                // Bluetooth Handler
-            if (!string.IsNullOrEmpty(dev.Name)){
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        void HandleOnDeviceOff(BluetoothDevice dev)
+        {                // Bluetooth Handler
+            if (!string.IsNullOrEmpty(dev.Name))
+            {
                 message.text = "Can't connect to " + dev.Name + ", device is OFF";
                 Debug.Log("Can't connect to " + dev.Name + ", device is OFF");
             }
-            else if (!string.IsNullOrEmpty(dev.Name)){
+            else if (!string.IsNullOrEmpty(dev.Name))
+            {
                 message.text = "Can't connect to " + dev.MacAddress + ", device is OFF";
                 Debug.Log("Can't connect to " + dev.MacAddress + ", device is OFF");
             }
         }
 
 
-        //############### UI BUTTONS RELATED METHODS #####################
-        public void showDevices() {
+        public void showDevices()
+        {
             BluetoothAdapter.showDevices();//show a list of all devices//any picked device will be sent to this.HandleOnDevicePicked()
         }
 
 
-        public void connect(){ //Connect to the public global variable "device" if it's not null.
-        
-            if (device != null){
+        public void connect()
+        { //Connect to the public global variable "device" if it's not null.
+
+            if (device != null)
+            {
                 message.text = "Connecting to device";
                 device.connect();
             }
@@ -121,9 +138,11 @@ namespace GoogleARCore.HelloAR{
         }
 
 
-        public void disconnect(){ //Disconnect the public global variable "device" if it's not null.
-        
-            if (device != null) {
+        public void disconnect()
+        { //Disconnect the public global variable "device" if it's not null.
+
+            if (device != null)
+            {
                 message.text = "Connection terminated";
                 device.close();
                 Bluetooth = false;
@@ -131,35 +150,40 @@ namespace GoogleARCore.HelloAR{
         }
 
 
-        void HandleOnDevicePicked(BluetoothDevice device){//Called when device is Picked by user
-        
+        void HandleOnDevicePicked(BluetoothDevice device)
+        {//Called when device is Picked by user
+
             this.device = device;//save a global reference to the device
 
             device.setEndByte(10);
 
             device.ReadingCoroutine = ManageConnection;
 
-            Debug.Log("Decvice Name: "+device.Name);
+            Debug.Log("Decvice Name: " + device.Name);
 
             message.text = "Click Connect Button";
         }
 
-        void OnDestroy(){
+        void OnDestroy()
+        {
             BluetoothAdapter.OnDevicePicked -= HandleOnDevicePicked;
             BluetoothAdapter.OnDeviceOFF -= HandleOnDeviceOff;
         }
 
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         // UPDATE METHOD
-        public void Update(){
+        public void Update()
+        {
 
             //Debug.Log("ARK LOG ********** Running Update.");
             _QuitOnConnectionErrors();
 
             // Check that motion tracking is tracking.
-            if (Frame.TrackingState != TrackingState.Tracking){
+            if (Frame.TrackingState != TrackingState.Tracking)
+            {
 
                 const int lostTrackingSleepTimeout = 15;
                 Screen.sleepTimeout = lostTrackingSleepTimeout;
@@ -168,23 +192,27 @@ namespace GoogleARCore.HelloAR{
 
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
-            if (!FoundPlane & Bluetooth){   // If you have not found plane, search for plane
+            if (!FoundPlane & Bluetooth)
+            {   // If you have not found plane, search for plane
 
                 Frame.GetPlanes(m_NewPlanes, TrackableQueryFilter.New); // See if new plane exists
 
-                if (m_NewPlanes.Count > 0){ // See if new plane exists
+                if (m_NewPlanes.Count > 0)
+                { // See if new plane exists
 
                     PlaneVector = m_NewPlanes[0].Position;
                     FoundPlane = true;
                 }
             }
 
-            if (FoundPlane && !SpawnGoal && ! SpawnBall){ // If plane is found and objects have not been instantiated
+            if (FoundPlane && !SpawnGoal && !SpawnBall)
+            { // If plane is found and objects have not been instantiated
 
+                // NOTE: UNITY AXIS X = left / right, Y = up/down, Z = forwards/backwards
                 // Set spawn location to be on plane certain distance in front of camera
                 SoccerFieldVector = new Vector3(0, PlaneVector.y, 15);          // field vector is everywhere
-                SoccerBallVector = new Vector3(0, PlaneVector.y+0.10f, 1);      // ball is 1 unit of distance forward
-                SoccerGoalVector = new Vector3(0, PlaneVector.y, 6);           // goal is 15 units of distance forward, lower height to rest on plane
+                SoccerBallVector = new Vector3(0, PlaneVector.y + 0.10f, 1);    // ball is 1 unit of distance forward
+                SoccerGoalVector = new Vector3(0, PlaneVector.y, 6);            // goal is 15 units of distance forward, lower height to rest on plane
 
                 // Spawn Objects
                 Instantiate(SoccerFieldInput, SoccerFieldVector, Quaternion.identity);
@@ -198,8 +226,9 @@ namespace GoogleARCore.HelloAR{
                 SpawnGoal = true;
                 SpawnBall = true;
             }
-            
-            if (FoundPlane && SpawnGoal && !SpawnBall){ // If ball needs to be respawn
+
+            if (FoundPlane && SpawnGoal && !SpawnBall)
+            { // If ball needs to be respawn
 
                 // Set spawn location to be on plane certain distance in front of camera
                 SoccerBallVector = new Vector3(0, PlaneVector.y + 1, 1);     // ball is 1 unit of distance forward
@@ -217,27 +246,28 @@ namespace GoogleARCore.HelloAR{
         } // end of Update
 
 
-        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
         // FIXED UPDATE METHOD
-        void FixedUpdate() {
-            
-            if (FoundPlane && SpawnBall && SpawnGoal && KickDetected && !KickExecuted){
+        void FixedUpdate()
+        {
+            if (FoundPlane && SpawnBall && SpawnGoal && KickDetected && !KickExecuted)
+            {
+                if (LeftFoot) // NEED TO MAKE CORRECT
+                {
+                    //Vector3 acc = new Vector3(-xAcc * 50, yAcc * 50, zAcc * 50);
 
-                //Debug.Log("Soccer ball position: x " + SoccerBallRigidbody.position.x + " y " + SoccerBallRigidbody.position.y + " z " + SoccerBallRigidbody.position.z);
+                    //Vector3 force = new Vector3(xAcc * SoccerBallRigidbody.mass, yAcc * SoccerBallRigidbody.mass, zAcc * SoccerBallRigidbody.mass);
 
-                if (SensorData.Length >= 5) {
+                    //Debug.Log("Acceleration: "+acc+" Force: "+ force);
 
-                    //_ShowAndroidToastMessage("Move");
-                    // Determines ball movement
-                    float xAcc = SensorData[4];     // sensor x axis (in current orientation) is unity y axis
-                    float yAcc = SensorData[0] - 1;     // sensor x axis (in current orientation) is unity y axis
-                    float zAcc = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
+                    //SoccerBallRigidbody.AddForce(acc);
 
-                    Vector3 acc = new Vector3(-xAcc*50, yAcc*50, zAcc*50);
-
-                    //float xAng = SensorData[8];     // sensor x axis (in current orientation) is unity y axis
-                    //float yAng = SensorData[6];     // sensor x axis (in current orientation) is unity y axis
-                    //float zAng = SensorData[10];     // sensor z axis (in current orientation) is unity z axis
+                    KickExecuted = true;
+                }
+                else {
+                    Vector3 acc = new Vector3(-xAcc * 50, yAcc * 50, zAcc * 50);
 
                     //Vector3 force = new Vector3(xAcc * SoccerBallRigidbody.mass, yAcc * SoccerBallRigidbody.mass, zAcc * SoccerBallRigidbody.mass);
 
@@ -246,12 +276,14 @@ namespace GoogleARCore.HelloAR{
                     SoccerBallRigidbody.AddForce(acc);
 
                     KickExecuted = true;
-                }
+                }     
             }
 
-            if (FoundPlane && SpawnBall && SpawnGoal && KickDetected && KickExecuted){
+            if (FoundPlane && SpawnBall && SpawnGoal && KickDetected && KickExecuted)
+            {
 
-                if (SoccerBallRigidbody.position.x > 6 | SoccerBallRigidbody.position.x < -6 | SoccerBallRigidbody.position.z < -2 | SoccerBallRigidbody.position.z > 6.5){
+                if (SoccerBallRigidbody.position.x > 6 | SoccerBallRigidbody.position.x < -6 | SoccerBallRigidbody.position.z < -2 | SoccerBallRigidbody.position.z > 6.5)
+                {
                     Destroy(SoccerBallRigidbody, 1.0f);// remove object
                     Debug.Log("Destroyed ball oob");
                     _ShowAndroidToastMessage("Out of Bounds");
@@ -259,7 +291,8 @@ namespace GoogleARCore.HelloAR{
                     KickDetected = false;
                     KickExecuted = false;
                 }
-                else if (SoccerBallRigidbody.position.x < 1.5 && SoccerBallRigidbody.position.x > -1.5 && SoccerBallRigidbody.position.z > 6 && SoccerBallRigidbody.position.y < 1){
+                else if (SoccerBallRigidbody.position.x < 1.5 && SoccerBallRigidbody.position.x > -1.5 && SoccerBallRigidbody.position.z > 6 && SoccerBallRigidbody.position.y < 1)
+                {
                     Destroy(SoccerBallRigidbody, 1.0f);// remove object
                     Debug.Log("Destroyed ball goal");
                     score++;    // increase score
@@ -273,16 +306,18 @@ namespace GoogleARCore.HelloAR{
         }
 
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
         // READING DATA
-        IEnumerator ManageConnection(BluetoothDevice device) {
-            
-
-            while (device.IsReading){
-
-                if (device.IsDataAvailable){
-
-                    if (BluetoothInit == false) {
+        IEnumerator ManageConnection(BluetoothDevice device)
+        {
+            while (device.IsReading)
+            {
+                if (device.IsDataAvailable)
+                {
+                    if (BluetoothInit == false)
+                    {
                         message.text = "Bluetooth successful";
                         BluetoothInit = true;
                     }
@@ -291,8 +326,8 @@ namespace GoogleARCore.HelloAR{
                     string content = "";
                     string[] subStrings;
 
-                    if (msg != null && msg.Length > 0){
-
+                    if (msg != null && msg.Length > 0)
+                    {
                         content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
                         Debug.Log("ARK LOG ********** Content: " + content);
 
@@ -302,25 +337,42 @@ namespace GoogleARCore.HelloAR{
                         sensorSave(content);
 
                         SensorData = new float[subStrings.Length];
-                        
-                        for (int i = 0; i < subStrings.Length; i++){
 
+                        for (int i = 0; i < subStrings.Length; i++)
+                        {
                             //Debug.Log("Substring: "+ subStrings[i] + " i:"+i);
                             float temp;
-                            if (float.TryParse(subStrings[i], out temp)){
+                            if (float.TryParse(subStrings[i], out temp))
+                            {
                                 SensorData[i] = temp;
                                 //Debug.Log("Parsed Value " + temp + " at " + i);
                             }
-                            else {
-                                //Debug.Log("Could not parse!");
+                            if (SensorData.Length >= 5)
+                            {
+                                if (LeftFoot)
+                                {
+                                }
+                                else
+                                {
+                                    xAcc = SensorData[4];     // sensor x axis (in current orientation) is unity y axis
+                                    yAcc = SensorData[0] - 1;     // sensor x axis (in current orientation) is unity y axis
+                                    zAcc = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
+
+                                    //xAng = SensorData[8];     // sensor x axis (in current orientation) is unity y axis
+                                    //yAng = SensorData[6];     // sensor x axis (in current orientation) is unity y axis
+                                    //zAng = SensorData[10];     // sensor z axis (in current orientation) is unity z axis
+                                }
                             }
                         }
 
-                        if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected){ // If no kick has been detected and data exists, check if threshold has been reached 
-                            
-                            if (SensorData[2] >= Threshold){ // If threshold has been reached, kick has been detected
-                                Debug.Log("Kick Detected!");
-                                _ShowAndroidToastMessage("Kick Detected!");
+                        if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected)
+                        { // If no kick has been detected and data exists, check if threshold has been reached 
+
+                            // NOTE: UNITY AXIS X = left / right, Y = up/down, Z = forwards/backwards
+                            if (xAcc <= Straight[0] && yAcc >= Straight[1] && zAcc >= Straight[2])
+                            { // If threshold has been reached, kick has been detected
+                                Debug.Log("Straight Kick Detected!");
+                                _ShowAndroidToastMessage("Straight Kick Detected!");
                                 KickDetected = true;
                             }
                         }
@@ -330,12 +382,24 @@ namespace GoogleARCore.HelloAR{
             }
         }
 
-        // DEMO
 
-        public void demo() {
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected && !KickExecuted){
 
+        public void SwapFoot()
+        {
+            LeftFoot = !LeftFoot;
+        }
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        public void demo()
+        {
+
+            if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected && !KickExecuted)
+            {
                 KickDetected = true;
 
                 Vector3 demo = 50 * transform.forward;
@@ -345,32 +409,33 @@ namespace GoogleARCore.HelloAR{
                 KickExecuted = true;
 
             }
+        }
 
 
-
-         }
-
-
-        //############### Deregister Events  #####################
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         /// <summary>
         /// Quit the application if there was a connection error for the ARCore session.
         /// </summary>
-        private void _QuitOnConnectionErrors(){
+        private void _QuitOnConnectionErrors()
+        {
 
-            if (m_IsQuitting){
+            if (m_IsQuitting)
+            {
                 return;
             }
 
             // Quit if ARCore was unable to connect and give Unity some time for the toast to appear.
-            if (Session.ConnectionState == SessionConnectionState.UserRejectedNeededPermission){
+            if (Session.ConnectionState == SessionConnectionState.UserRejectedNeededPermission)
+            {
 
                 _ShowAndroidToastMessage("Camera permission is needed to run this application.");
                 m_IsQuitting = true;
                 Invoke("DoQuit", 0.5f);
             }
-            else if (Session.ConnectionState == SessionConnectionState.ConnectToServiceFailed){
+            else if (Session.ConnectionState == SessionConnectionState.ConnectToServiceFailed)
+            {
 
                 _ShowAndroidToastMessage("ARCore encountered a problem connecting.  Please start the app again.");
                 m_IsQuitting = true;
@@ -383,7 +448,8 @@ namespace GoogleARCore.HelloAR{
         /// <summary>
         /// Actually quit the application.
         /// </summary>
-        private void DoQuit(){
+        private void DoQuit()
+        {
             Application.Quit();
         }
 
@@ -393,16 +459,19 @@ namespace GoogleARCore.HelloAR{
         /// Show an Android toast message.
         /// </summary>
         /// <param name="message">Message string to show in the toast.</param>
-        private void _ShowAndroidToastMessage(string message){
+        private void _ShowAndroidToastMessage(string message)
+        {
 
             AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
             AndroidJavaObject unityActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
 
-            if (unityActivity != null){
+            if (unityActivity != null)
+            {
 
                 AndroidJavaClass toastClass = new AndroidJavaClass("android.widget.Toast");
 
-                unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>{
+                unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+                {
 
                     AndroidJavaObject toastObject = toastClass.CallStatic<AndroidJavaObject>("makeText", unityActivity, message, 0);
                     toastObject.Call("show");
@@ -414,11 +483,11 @@ namespace GoogleARCore.HelloAR{
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
         /// <summary>
         /// Sets the cameras parameters to side by side configuration.
         /// </summary>
-        void SideBySidePerspectiveCameraConfig(){
+        void SideBySidePerspectiveCameraConfig()
+        {
 
             //sets cameras to perspective
             this.camLeft.orthographic = false;
@@ -435,45 +504,50 @@ namespace GoogleARCore.HelloAR{
         }
 
 
-
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
         int dataCount = 0;
 
-		public void sensorSave(string data){
-			System.IO.StreamWriter writer;
-			System.IO.StreamReader reader;
-			string line;
+        public void sensorSave(string data)
+        {
+            System.IO.StreamWriter writer;
+            System.IO.StreamReader reader;
+            string line;
             //Debug.Log("ARK LOG ********** sensorSave");
-            if (!File.Exists(Application.persistentDataPath + "/sensorCache.txt")){
-				FileStream fileStr = File.Create(Application.persistentDataPath + "/sensorCache.txt");
+            if (!File.Exists(Application.persistentDataPath + "/sensorCache.txt"))
+            {
+                FileStream fileStr = File.Create(Application.persistentDataPath + "/sensorCache.txt");
                 //Debug.Log("ARK LOG ********** Create File");
             }
-			if (dataCount < 10) {
+            if (dataCount < 10)
+            {
                 //Debug.Log("ARK LOG ********** Write Data");
-                using (writer = new System.IO.StreamWriter (Application.persistentDataPath + "/sensorCache.txt", true)) {
-					writer.WriteLine (data);
+                using (writer = new System.IO.StreamWriter(Application.persistentDataPath + "/sensorCache.txt", true))
+                {
+                    writer.WriteLine(data);
                     dataCount++;
-				}
-			}
-			else {
+                }
+            }
+            else
+            {
                 //Debug.Log("ARK LOG ********** Read Data");
-                reader = new System.IO.StreamReader(Application.persistentDataPath + "/sensorCache.txt");  
-				while((line = reader.ReadLine()) != null) {  
-					//Debug.Log("ARK LOG ********** Data: " + line);
-				}  
-				reader.Close();
+                reader = new System.IO.StreamReader(Application.persistentDataPath + "/sensorCache.txt");
+                while ((line = reader.ReadLine()) != null)
+                {
+                    //Debug.Log("ARK LOG ********** Data: " + line);
+                }
+                reader.Close();
                 dataCount = 0;
-				using (writer = new System.IO.StreamWriter (Application.persistentDataPath + "/sensorCache.txt", false)) {
-					writer.WriteLine (data);
-				}
-			}
-		}
+                using (writer = new System.IO.StreamWriter(Application.persistentDataPath + "/sensorCache.txt", false))
+                {
+                    writer.WriteLine(data);
+                }
+            }
+        }
 
 
 
     }
+
 }
