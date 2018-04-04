@@ -3,7 +3,7 @@
 // 																		  //
 // SDP Team 21 - ARK												      //
 // Matteo Bolognese, Jackie Lagasse, Chad Klinefleter, Ethan Miller		  //
-// Last Updated: February 7, 2018										  //
+// Last Updated: March 20, 2018										  	  //
 // 																		  //
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -225,10 +225,10 @@ void Read_RawValue()
 	Acc_x = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
 	Acc_y = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
 	Acc_z = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
-	Temperature = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
-	Gyro_x = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
-	Gyro_y = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
-	Gyro_z = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Nack());
+	//Temperature = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
+	//Gyro_x = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
+	//Gyro_y = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
+	//Gyro_z = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Nack());
 	I2C_Stop();
 }
 
@@ -361,7 +361,7 @@ int main(void) {
 	// global variables
 	char buffer[20], float_[10];
 	float Xa,Ya,Za;
-	float Xg=0,Yg=0,Zg=0;
+	//float Xg=0,Yg=0,Zg=0;
 //	tot_overflow = 0;
 
 	// initialize bluetooth, USART, mpu6050
@@ -375,7 +375,8 @@ int main(void) {
 	//start timer
 //	timer0_init();
 	
-	sprintf(buffer,"\nAx\tAy\tAz\tGx\tGy\tGz\n",float_);
+	sprintf(buffer,"\nAx\tAy\tAz\n",float_);
+	//sprintf(buffer,"\nAx\tAy\tAz\tGx\tGy\tGz\n",float_);
 	USART_SendString(buffer);
 
 	while(1){
@@ -388,9 +389,9 @@ int main(void) {
 		Ya = Acc_y/16384.0;
 		Za = Acc_z/16384.0;
 		
-		Xg = Gyro_x/16.4;
-		Yg = Gyro_y/16.4;
-		Zg = Gyro_z/16.4;
+		//Xg = Gyro_x/16.4;
+		//Yg = Gyro_y/16.4;
+		//Zg = Gyro_z/16.4;
 
 		//if(DATA_IN == '1') {	// print all continuously
 				
@@ -406,10 +407,10 @@ int main(void) {
 				USART_SendString(buffer);
 
 				dtostrf( Za, 3, 2, float_ );
-				sprintf(buffer," %s, ",float_);
+				sprintf(buffer," %s\n",float_);
 				USART_SendString(buffer);
 
-				dtostrf( Xg, 3, 2, float_ );
+				/*dtostrf( Xg, 3, 2, float_ );
 				sprintf(buffer," %s, ",float_);
 				USART_SendString(buffer);
 
@@ -419,7 +420,7 @@ int main(void) {
 
 				dtostrf( Zg, 3, 2, float_ );
 				sprintf(buffer," %s\n",float_);
-				USART_SendString(buffer);
+				USART_SendString(buffer);*/
 
 		//} // end if statment
 
