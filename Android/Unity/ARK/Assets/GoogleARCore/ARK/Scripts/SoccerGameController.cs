@@ -72,10 +72,10 @@ namespace GoogleARCore.HelloAR
         float xAcc, yAcc, zAcc, xAng, yAng, zAng;
 
         // FLOAT ARRAYS
-        private float[] Straight = { 1.50f, 1.40f, 0.30f };  // acceleration threshold for determining kick
-        private float[] Angle = { 1.40f, 1.28f, 0.50f };     // acceleration threshold for determining kick
-        private float[] Ninety = { 10f, 10f, 10f };    // acceleration threshold for determining kick
-        private float[] Dig = { 10f, 10f, 10f };       // acceleration threshold for determining kick
+        private float[] Straight = { 0.96f, 0.90f, 0.30f };  // acceleration threshold for determining kick  1.50f, 1.40f, 0.30f 
+        private float[] Angle = { 0.90f, 0.82f, 0.50f };     // acceleration threshold for determining kick  1.40f, 1.28f, 0.50f 
+        private float[] Ninety = { 10f, 10f, 10f };    // acceleration threshold for determining kick  10f, 10f, 10f 
+        private float[] Dig = { 10f, 10f, 10f };       // acceleration threshold for determining kick  10f, 10f, 10f 
         private float[] SensorData;                         // array used to store sensor data from one input line
 
         private float[] xAvg = { 0f, 0f, 0f, 0f, 0f, 0f};    // moving average for x
@@ -433,6 +433,13 @@ namespace GoogleARCore.HelloAR
         public void SwapFoot()
         {
             LeftFoot = !LeftFoot;
+            if (LeftFoot)
+            {
+                message.text = "Left Foot";
+            }
+            else {
+                message.text = "Right Foot";
+            }
         }
 
 
