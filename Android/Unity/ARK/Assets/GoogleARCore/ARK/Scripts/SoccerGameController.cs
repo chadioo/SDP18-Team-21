@@ -91,14 +91,14 @@ namespace GoogleARCore.HelloAR
         // BLUETOOTH DEVICE
         private BluetoothDevice device;         // bluetooth device
 
-        // TEXT BOXE
+        // TEXT BOXES
         public Text message;
-
+        public Text scoreText;
+        public Text countText;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // FIRST METHOD TO RUN, INITIALIZES BLUETOOTH FUNCTIONALITY
 
-
-        // AWAKE METHOD (first method, initializes bluetooth)
         void Awake()
         {
             SideBySidePerspectiveCameraConfig();
@@ -106,10 +106,12 @@ namespace GoogleARCore.HelloAR
             BluetoothAdapter.askEnableBluetooth();                   //Ask user to enable Bluetooth
             BluetoothAdapter.OnDeviceOFF += HandleOnDeviceOff;
             BluetoothAdapter.OnDevicePicked += HandleOnDevicePicked; //To get what device the user picked out of the devices list
+            showDevices();
         }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // BLUETOOTH CONNECTION HANDLERS
 
 
         void HandleOnDeviceOff(BluetoothDevice dev)
@@ -129,13 +131,12 @@ namespace GoogleARCore.HelloAR
 
         public void showDevices()
         {
-            BluetoothAdapter.showDevices();//show a list of all devices//any picked device will be sent to this.HandleOnDevicePicked()
+            BluetoothAdapter.showDevices(); //show a list of all devices//any picked device will be sent to this.HandleOnDevicePicked()
         }
 
 
-        public void connect()
-        { //Connect to the public global variable "device" if it's not null.
-
+        public void connect() //Connect to the public global variable "device" if it's not null.
+        {
             if (device != null)
             {
                 message.text = "Connecting to device";
@@ -146,31 +147,27 @@ namespace GoogleARCore.HelloAR
         }
 
 
-        public void disconnect()
-        { //Disconnect the public global variable "device" if it's not null.
-
+        public void disconnect() //Disconnect the public global variable "device" if it's not null.
+        {
             if (device != null)
             {
                 message.text = "Connection terminated";
                 device.close();
                 Bluetooth = false;
+                BluetoothInit = false;
             }
         }
 
 
-        void HandleOnDevicePicked(BluetoothDevice device)
-        {//Called when device is Picked by user
-
-            this.device = device;//save a global reference to the device
-
+        void HandleOnDevicePicked(BluetoothDevice device) // Called when device is Picked by user
+        {
+            this.device = device; //save a global reference to the device
             device.setEndByte(10);
-
             device.ReadingCoroutine = ManageConnection;
-
             Debug.Log("Decvice Name: " + device.Name);
-
             message.text = "Click Connect Button";
         }
+
 
         void OnDestroy()
         {
@@ -180,17 +177,17 @@ namespace GoogleARCore.HelloAR
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // UPDATE IF PLANE IS FOUND, SPAWNING BALL AND NET
 
 
-        // UPDATE METHOD
         public void Update()
         {
-
-            //Debug.Log("ARK LOG ********** Running Update.");
+            if (BluetoothInit == false) {
+                connect();
+            }
             _QuitOnConnectionErrors();
 
-            // Check that motion tracking is tracking.
-            if (Frame.TrackingState != TrackingState.Tracking)
+            if (Frame.TrackingState != TrackingState.Tracking) // Check that motion tracking is tracking.
             {
 
                 const int lostTrackingSleepTimeout = 15;
@@ -200,22 +197,18 @@ namespace GoogleARCore.HelloAR
 
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
-            if (!FoundPlane & Bluetooth)
-            {   // If you have not found plane, search for plane
-
+            if (!FoundPlane & Bluetooth) // If you have not found plane, search for plane
+            {   
                 Frame.GetPlanes(m_NewPlanes, TrackableQueryFilter.New); // See if new plane exists
 
-                if (m_NewPlanes.Count > 0)
-                { // See if new plane exists
-
+                if (m_NewPlanes.Count > 0) // See if new plane exists
+                { 
                     PlaneVector = m_NewPlanes[0].Position;
                     FoundPlane = true;
                 }
             }
-
-            if (FoundPlane && !SpawnGoal && !SpawnBall)
-            { // If plane is found and objects have not been instantiated
-
+            if (FoundPlane && !SpawnGoal && !SpawnBall) // If plane is found and objects have not been instantiated
+            { 
                 // NOTE: UNITY AXIS X = left / right, Y = up/down, Z = forwards/backwards
                 // Set spawn location to be on plane certain distance in front of camera
                 SoccerFieldVector = new Vector3(0, PlaneVector.y, 15);          // field vector is everywhere
@@ -230,66 +223,54 @@ namespace GoogleARCore.HelloAR
                 Debug.Log("ARK LOG ********** Spawn ball and goal and field.");
 
                 message.text = "Score: " + score;
+                scoreText.text = "Score: "+score.ToString();
 
                 SpawnGoal = true;
                 SpawnBall = true;
+                StartCountdown();
             }
-
-            if (FoundPlane && SpawnGoal && !SpawnBall)
-            { // If ball needs to be respawn
-
+            if (FoundPlane && SpawnGoal && !SpawnBall) // If ball needs to be respawn
+            {
                 // Set spawn location to be on plane certain distance in front of camera
                 SoccerBallVector = new Vector3(0, PlaneVector.y + 1, 1);     // ball is 1 unit of distance forward
 
                 // Spawn Objects
                 SoccerBallRigidbody = Instantiate(SoccerBallInput, SoccerBallVector, Quaternion.identity) as Rigidbody;
-
                 Debug.Log("ARK LOG ********** Respawn ball.");
-
                 message.text = "Score: " + score;
-
+                scoreText.text = "Score: " + score.ToString();
                 SpawnBall = true;
             }
-
-        } // end of Update
+        }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // UPDATING PHYSICS INCLUDING BALL MOVEMENT AND IF BALL IS OUT OF BOUNDS OR IN GOAL
 
-
-        // FIXED UPDATE METHOD
+        
         void FixedUpdate()
         {
             if (FoundPlane && SpawnBall && SpawnGoal && KickDetected && !KickExecuted)
             {
                 if (LeftFoot) // NEED TO MAKE CORRECT
                 {
-                    //Vector3 acc = new Vector3(-xAcc * 50, yAcc * 50, zAcc * 50);
-
+                    Vector3 acc = new Vector3(-xAcc * 50, yAcc * 50, zAcc * 50);
                     //Vector3 force = new Vector3(xAcc * SoccerBallRigidbody.mass, yAcc * SoccerBallRigidbody.mass, zAcc * SoccerBallRigidbody.mass);
-
                     //Debug.Log("Acceleration: "+acc+" Force: "+ force);
-
-                    //SoccerBallRigidbody.AddForce(acc);
-
+                    SoccerBallRigidbody.AddForce(acc);
                     KickExecuted = true;
                 }
                 else {
                     Vector3 acc = new Vector3(-xAcc * 50, yAcc * 50, zAcc * 50);
-
                     //Vector3 force = new Vector3(xAcc * SoccerBallRigidbody.mass, yAcc * SoccerBallRigidbody.mass, zAcc * SoccerBallRigidbody.mass);
-
                     //Debug.Log("Acceleration: "+acc+" Force: "+ force);
-
                     SoccerBallRigidbody.AddForce(acc);
-
                     KickExecuted = true;
                 }     
             }
 
             if (FoundPlane && SpawnBall && SpawnGoal && KickDetected && KickExecuted)
             {
-
                 if (SoccerBallRigidbody.position.x > 6 | SoccerBallRigidbody.position.x < -6 | SoccerBallRigidbody.position.z < -2 | SoccerBallRigidbody.position.z > 6.5)
                 {
                     Destroy(SoccerBallRigidbody, 1.0f);// remove object
@@ -304,20 +285,18 @@ namespace GoogleARCore.HelloAR
                     Destroy(SoccerBallRigidbody, 1.0f);// remove object
                     Debug.Log("Destroyed ball goal");
                     score++;    // increase score
-                    _ShowAndroidToastMessage("Score: " + score);
                     SpawnBall = false;
                     KickDetected = false;
                     KickExecuted = false;
                 }
-
             }
         }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // READING DATA FROM THE SENSOR AND DETERMINING THRESHOLD
 
-
-        // READING DATA
+        int connectionLostCount = 0;
         IEnumerator ManageConnection(BluetoothDevice device)
         {
             while (device.IsReading)
@@ -326,13 +305,14 @@ namespace GoogleARCore.HelloAR
                 {
                     if (BluetoothInit == false)
                     {
-                        message.text = "Bluetooth successful";
+                        message.text = "Bluetooth successful, receiving data";
                         BluetoothInit = true;
                     }
 
                     byte[] msg = device.read();
                     string content = "";
                     string[] subStrings;
+                    connectionLostCount = 0;
 
                     if (msg != null && msg.Length > 0)
                     {
@@ -422,49 +402,97 @@ namespace GoogleARCore.HelloAR
                         }
                     }
                 }
+                else // if no data is returned, make sure it is abnormal amount, then display error message
+                {
+                    connectionLostCount++;
+                    if (connectionLostCount > 5) {
+                        message.text = "Connection Lost";
+                        Debug.Log("Connection Lost");
+                        BluetoothInit = false;
+                    }
+                }
                 yield return null;
             }
         }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+        // SWAP LEFT / RIGHT FOOT COORDINATES
+            
 
         public void SwapFoot()
         {
             LeftFoot = !LeftFoot;
             if (LeftFoot)
             {
-                message.text = "Left Foot";
+                Debug.Log("Left Foot Mode");
+                message.text = "Left Foot Mode";
+                _ShowAndroidToastMessage("Left Foot Mode");
             }
             else {
-                message.text = "Right Foot";
+                Debug.Log("Right Foot Mode");
+                message.text = "Right Foot Mode";
+                _ShowAndroidToastMessage("Right Foot Mode");
             }
         }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // COUNTDOWN USED TO TIME GAME LENGTH (initiated when arena spawned)
+
+
+        public int duration = 60;   // units are seconds
+        public int timeRemaining;
+        public bool isCountingDown = false;
+
+
+        public void StartCountdown()
+        {
+            if (!isCountingDown)
+            {
+                message.text = "Start Count";
+                isCountingDown = true;
+                timeRemaining = duration;
+                Invoke("_tick", 1f);
+            }
+        }
+
+        private void _tick()
+        {
+            timeRemaining--;
+            if (timeRemaining > 0)
+            {
+                message.text = timeRemaining.ToString();
+                countText.text = timeRemaining.ToString();
+                Invoke("_tick", 1f);
+            }
+            else
+            {
+                message.text = "Times Up";
+                countText.text = "Times Up";
+                isCountingDown = false;
+            }
+        }
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // DEMO USED TO VERIFY FUNCTIONING OF APP WITHOUT HARDWARE
 
 
         public void demo()
         {
-
             if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected && !KickExecuted)
             {
                 KickDetected = true;
-
                 Vector3 demo = new Vector3(0, 50, 100);
-
                 SoccerBallRigidbody.AddForce(demo);
-
                 KickExecuted = true;
-
             }
         }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+        // ERROR HANDLERS
 
         /// <summary>
         /// Quit the application if there was a connection error for the ARCore session.
@@ -505,11 +533,10 @@ namespace GoogleARCore.HelloAR
         }
 
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // FOR DISPLAYING ANDROID TOAST MESSAGES
 
-        /// <summary>
-        /// Show an Android toast message.
-        /// </summary>
-        /// <param name="message">Message string to show in the toast.</param>
+
         private void _ShowAndroidToastMessage(string message)
         {
 
@@ -532,11 +559,9 @@ namespace GoogleARCore.HelloAR
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // SIDE BY SIDE CAMERA FOR DEPTH
 
 
-        /// <summary>
-        /// Sets the cameras parameters to side by side configuration.
-        /// </summary>
         void SideBySidePerspectiveCameraConfig()
         {
 
@@ -556,6 +581,7 @@ namespace GoogleARCore.HelloAR
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // SAVE DATA TO FILE FOR USE IN DATA AVERAGING
 
 
         int dataCount = 0;
