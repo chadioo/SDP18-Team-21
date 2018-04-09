@@ -307,8 +307,11 @@
     <Compile Include="Assets\BT_Library\Scripts\CoreLibrary\BtPackets.cs" />
     <Compile Include="Assets\BT_Library\Scripts\ScrollTerminalUI.cs" />
     <Compile Include="Assets\GoogleARCore\ARK\Scripts\ChangeScene.cs" />
+    <Compile Include="Assets\GoogleARCore\ARK\Scripts\DontDestroy.cs" />
     <Compile Include="Assets\GoogleARCore\ARK\Scripts\HelloARController.cs" />
+    <Compile Include="Assets\GoogleARCore\ARK\Scripts\MailSender.cs" />
     <Compile Include="Assets\GoogleARCore\ARK\Scripts\PointcloudVisualizer.cs" />
+    <Compile Include="Assets\GoogleARCore\ARK\Scripts\Scoreboard.cs" />
     <Compile Include="Assets\GoogleARCore\ARK\Scripts\SoccerGameController.cs" />
     <Compile Include="Assets\GoogleARCore\ARK\Scripts\TrackedPlaneVisualizer.cs" />
     <Compile Include="Assets\GoogleARCore\SDK\Scripts\Anchor.cs" />

@@ -43,6 +43,7 @@ namespace GoogleARCore.HelloAR
         // GAMEOBJECTS
         public GameObject SoccerGoalInput;     // soccer goal input
         public GameObject SoccerFieldInput;    // soccer field input
+        public GameObject ScoreProfile;
 
         // RIGIDBODY
         public Rigidbody SoccerBallInput;      // soccer ball input
@@ -468,9 +469,10 @@ namespace GoogleARCore.HelloAR
             }
             else
             {
-                message.text = "Times Up";
-                countText.text = "Times Up";
+                message.text = "Press Me!";
+                countText.text = "Press Me!";
                 isCountingDown = false;
+                saveScore(score.ToString());
             }
         }
 
@@ -577,6 +579,37 @@ namespace GoogleARCore.HelloAR
             Debug.Log(string.Format("Current res = {0}x{1}, ratio of {2}.", camLeft.pixelWidth, camLeft.pixelHeight, nRatio));
             this.camLeft.aspect = nRatio;
             this.camRight.aspect = nRatio;
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // SAVE SCORE
+
+
+        public void saveScore(string data)
+        {
+            System.IO.StreamWriter writer;
+            string filePath = "/ARKscore.txt";
+
+            if (!File.Exists(Application.persistentDataPath + filePath))
+            {
+                Debug.Log("No score previously saved, saving new score");
+                FileStream fileStr = File.Create(Application.persistentDataPath + filePath);
+
+                using (writer = new System.IO.StreamWriter(Application.persistentDataPath + filePath, false))
+                {
+                    Debug.Log("Saving Data: "+data);
+                    writer.WriteLine(data);
+                }
+            }
+            else
+            {
+                Debug.Log("Score previously saved, saving new score");
+                using (writer = new System.IO.StreamWriter(Application.persistentDataPath + filePath, false))
+                {
+                    writer.WriteLine(data);
+                }
+            }
         }
 
 

@@ -11,9 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/GoogleARCore/ARK/Scenes/Soccer Game.unity
     guid: a62f0b4cf4c7df2469e0920fd35fa91a
-  - enabled: 0
-    path: Assets/BT_Library/Demos/Devices Discovery/Discovery.unity
-    guid: 674846c9207ac496baa75a4edbe6704a
-  - enabled: 0
-    path: Assets/BT_Library/Demos/High Bit Rate Terminal/HighRateTerminal.unity
-    guid: 4136e45edb80f43a1abdf714887511ac
+  - enabled: 1
+    path: Assets/GoogleARCore/ARK/Scenes/End Game.unity
+    guid: d561745d11c2e61458c59782f93dcb21
