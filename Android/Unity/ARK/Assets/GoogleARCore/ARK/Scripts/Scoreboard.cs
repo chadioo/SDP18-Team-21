@@ -101,28 +101,29 @@ public class Scoreboard : MonoBehaviour {
     }
 
 
-    public void initNames() {
-        Score1.text = scoreBoardScores[0];
-        Score1.text = scoreBoardScores[0];
-        Score1.text = scoreBoardScores[0];
-        Score1.text = scoreBoardScores[0];
-        Score1.text = scoreBoardScores[0];
-        Score1.text = scoreBoardScores[0];
-        Score1.text = scoreBoardScores[0];
-        Score1.text = scoreBoardScores[0];
-        Score1.text = scoreBoardScores[0];
-        Score1.text = scoreBoardScores[0];
+    public void initNames()
+    {
+        Score1.text = scoreBoardScores[0].ToString();
+        Score2.text = scoreBoardScores[1].ToString();
+        Score3.text = scoreBoardScores[2].ToString();
+        Score4.text = scoreBoardScores[3].ToString();
+        Score5.text = scoreBoardScores[4].ToString();
+        Score6.text = scoreBoardScores[5].ToString();
+        Score7.text = scoreBoardScores[6].ToString();
+        Score8.text = scoreBoardScores[7].ToString();
+        Score9.text = scoreBoardScores[8].ToString();
+        Score10.text = scoreBoardScores[9].ToString();
 
         Name1.text = scoreBoardNames[0];
-        Name1.text = scoreBoardNames[0];
-        Name1.text = scoreBoardNames[0];
-        Name1.text = scoreBoardNames[0];
-        Name1.text = scoreBoardNames[0];
-        Name1.text = scoreBoardNames[0];
-        Name1.text = scoreBoardNames[0];
-        Name1.text = scoreBoardNames[0];
-        Name1.text = scoreBoardNames[0];
-        Name1.text = scoreBoardNames[0];
+        Name2.text = scoreBoardNames[1];
+        Name3.text = scoreBoardNames[2];
+        Name4.text = scoreBoardNames[3];
+        Name5.text = scoreBoardNames[4];
+        Name6.text = scoreBoardNames[5];
+        Name7.text = scoreBoardNames[6];
+        Name8.text = scoreBoardNames[7];
+        Name9.text = scoreBoardNames[8];
+        Name10.text = scoreBoardNames[9];
     }
 
 }

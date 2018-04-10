@@ -73,18 +73,22 @@ namespace GoogleARCore.HelloAR
         float xAcc, yAcc, zAcc, xAng, yAng, zAng;
 
         // FLOAT ARRAYS
-        private float[] Straight = { 0.96f, 0.90f, 0.30f };  // acceleration threshold for determining kick  1.50f, 1.40f, 0.30f 
-        private float[] Angle = { 0.90f, 0.82f, 0.50f };     // acceleration threshold for determining kick  1.40f, 1.28f, 0.50f 
-        private float[] Ninety = { 10f, 10f, 10f };    // acceleration threshold for determining kick  10f, 10f, 10f 
-        private float[] Dig = { 10f, 10f, 10f };       // acceleration threshold for determining kick  10f, 10f, 10f 
+        private float[] StraightLow =   { 1.50f, 0.75f, -0.50f };  // acceleration threshold for determining kick  1.50f, 1.40f, 0.30f 
+        private float[] StraightHigh =  { 2.00f, 1.50f, 0.75f };  // acceleration threshold for determining kick  1.50f, 1.40f, 0.30f 
+        private float[] AngleLow =      { 1.40f, 0.6f, 0.15f };     // acceleration threshold for determining kick  1.40f, 1.28f, 0.50f 
+        private float[] AngleHigh =     { 2.00f, 1.50f, 0.75f };     // acceleration threshold for determining kick  1.40f, 1.28f, 0.50f 
+        private float[] NinetyLow =     { 1.50f, 0.00f, 0.50f };    // acceleration threshold for determining kick  10f, 10f, 10f 
+        private float[] NinetyHigh =    { 2.00f, 1.00f, 1.50f };    // acceleration threshold for determining kick  10f, 10f, 10f 
+        private float[] DigLow =        { 10f, 10f, 10f };       // acceleration threshold for determining kick  10f, 10f, 10f 
+        private float[] DigHigh =       { 10f, 10f, 10f };       // acceleration threshold for determining kick  10f, 10f, 10f 
         private float[] SensorData;                         // array used to store sensor data from one input line
 
-        private float[] xAvg = { 0f, 0f, 0f, 0f, 0f, 0f};    // moving average for x
-        private float[] xTemp = { 0f, 0f, 0f, 0f, 0f, 0f };    // for copying purposes
-        private float[] yAvg = { 0f, 0f, 0f, 0f, 0f, 0f };    // moving average for z
-        private float[] yTemp = { 0f, 0f, 0f, 0f, 0f, 0f };    // for copying purposes
-        private float[] zAvg = { 0f, 0f, 0f, 0f, 0f, 0f };    // moving average for y
-        private float[] zTemp = { 0f, 0f, 0f, 0f, 0f, 0f };    // for copying purposes
+        private float[] xAvg = { 0f, 0f, 0f, 0f, 0f};    // moving average for x
+        private float[] xTemp = { 0f, 0f, 0f, 0f};    // for copying purposes
+        private float[] yAvg = { 0f, 0f, 0f, 0f, 0f};    // moving average for z
+        private float[] yTemp = { 0f, 0f, 0f, 0f};    // for copying purposes
+        private float[] zAvg = { 0f, 0f, 0f, 0f, 0f};    // moving average for y
+        private float[] zTemp = { 0f, 0f, 0f, 0f};    // for copying purposes
 
         // INTEGERS
         private int score = 0;
@@ -96,6 +100,9 @@ namespace GoogleARCore.HelloAR
         public Text message;
         public Text scoreText;
         public Text countText;
+        public Text avgX_display;
+        public Text avgY_display;
+        public Text avgZ_display;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // FIRST METHOD TO RUN, INITIALIZES BLUETOOTH FUNCTIONALITY
@@ -297,6 +304,7 @@ namespace GoogleARCore.HelloAR
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // READING DATA FROM THE SENSOR AND DETERMINING THRESHOLD
 
+
         int connectionLostCount = 0;
         IEnumerator ManageConnection(BluetoothDevice device)
         {
@@ -340,61 +348,64 @@ namespace GoogleARCore.HelloAR
                         }
                         if (SensorData.Length >= 5)
                         {
-                            System.Array.Copy(xAvg, 1, xTemp, 0, 5);
-                            System.Array.Copy(yAvg, 1, yTemp, 0, 5);
-                            System.Array.Copy(zAvg, 1, zTemp, 0, 5);
+                            System.Array.Copy(xAvg, 1, xTemp, 0, 4);
+                            System.Array.Copy(yAvg, 1, yTemp, 0, 4);
+                            System.Array.Copy(zAvg, 1, zTemp, 0, 4);
 
-                            System.Array.Copy(xTemp, xAvg, 5);
-                            System.Array.Copy(yTemp, yAvg, 5);
-                            System.Array.Copy(zTemp, zAvg, 5);
+                            System.Array.Copy(xTemp, xAvg, 4);
+                            System.Array.Copy(yTemp, yAvg, 4);
+                            System.Array.Copy(zTemp, zAvg, 4);
 
                             if (LeftFoot)
                             {
-                                xAvg[5] = SensorData[4];    // sensor x axis (in current orientation) is unity y axis
-                                yAvg[5] = SensorData[0];     // sensor x axis (in current orientation) is unity y axis
-                                zAvg[5] = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
+                                xAvg[4] = -SensorData[4];    // sensor x axis (in current orientation) is unity y axis
+                                yAvg[4] = SensorData[0];     // sensor x axis (in current orientation) is unity y axis
+                                zAvg[4] = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
                             }
 
                             else
                             {
-                                xAvg[5] = -SensorData[4];     // sensor x axis (in current orientation) is unity y axis
-                                yAvg[5] = SensorData[0];     // sensor x axis (in current orientation) is unity y axis
-                                zAvg[5] = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
+                                xAvg[4] = SensorData[4];     // sensor x axis (in current orientation) is unity y axis
+                                yAvg[4] = SensorData[0];     // sensor x axis (in current orientation) is unity y axis
+                                zAvg[4] = SensorData[2];     // sensor z axis (in current orientation) is unity z axis
 
                                 //xAng = SensorData[8];     // sensor x axis (in current orientation) is unity y axis
                                 //yAng = SensorData[6];     // sensor x axis (in current orientation) is unity y axis
                                 //zAng = SensorData[10];     // sensor z axis (in current orientation) is unity z axis
                             }
 
-                            xAcc = xAvg.Sum() / 6;
-                            yAcc = yAvg.Sum() / 6;
-                            zAcc = zAvg.Sum() / 6;
+                            xAcc = xAvg.Sum() / 5;
+                            yAcc = yAvg.Sum() / 5;
+                            zAcc = zAvg.Sum() / 5;
                             Debug.Log("ARK LOG ********** Content: " +yAcc+" "+zAcc+" "+xAcc);
+                            avgX_display.text = string.Join(" \t ", xAvg);
+                            avgY_display.text = string.Join(" \t ", yAvg);
+                            avgZ_display.text = string.Join(" \t ", zAvg);
                         }
 
                         if (FoundPlane && SpawnBall && SpawnGoal && !KickDetected)
                         { // If no kick has been detected and data exists, check if threshold has been reached 
                             // NOTE: ACCEL AXIS     X = up/down,        Y = forwards/backwards, Z = left/right
                             // NOTE: UNITY AXIS     X = left / right,   Y = up/down,            Z = forwards/backwards
-                            if (xAcc <= Straight[2] && yAcc >= Straight[0] && zAcc >= Straight[1])
+                            if (zAcc >= StraightLow[1] && zAcc <= StraightHigh[1] && xAcc >= StraightLow[2] && xAcc <= StraightHigh[2] && yAcc >= StraightLow[0] && yAcc <= StraightHigh[0])
                             {
                                 Debug.Log("Straight Kick Detected!");
                                 _ShowAndroidToastMessage("Straight Kick Detected!");
                                 KickDetected = true;
                             }
-                            else if (xAcc <= Angle[2] && yAcc >= Angle[0] && zAcc >= Angle[1])
+                            else if (zAcc >= AngleLow[1] && zAcc <= AngleHigh[1] && xAcc >= AngleLow[2] && xAcc <= AngleHigh[2] && yAcc >= AngleLow[0] && yAcc <= AngleHigh[0])
                             {
                                 Debug.Log("Angle Kick Detected!");
                                 _ShowAndroidToastMessage("Angle Kick Detected!");
                                 KickDetected = true;
                             }
-                            else if (xAcc <= Ninety[0] && yAcc >= Ninety[1] && zAcc >= Ninety[2])
+                            else if (zAcc >= NinetyLow[1] && zAcc <= NinetyHigh[1] && xAcc >= NinetyLow[2] && xAcc <= NinetyHigh[2] && yAcc >= NinetyLow[0] && yAcc <= NinetyHigh[0])
                             {
                                 Debug.Log("Ninety Kick Detected!");
                                 _ShowAndroidToastMessage("Ninety Kick Detected!");
                                 KickDetected = true;
                             }
-                            else if (xAcc <= Dig[0] && yAcc >= Dig[1] && zAcc >= Dig[2])
+                            else if (false)
                             {
                                 Debug.Log("Dig Kick Detected!");
                                 _ShowAndroidToastMessage("Dig Kick Detected!");
@@ -442,9 +453,9 @@ namespace GoogleARCore.HelloAR
         // COUNTDOWN USED TO TIME GAME LENGTH (initiated when arena spawned)
 
 
-        public int duration = 60;   // units are seconds
-        public int timeRemaining;
-        public bool isCountingDown = false;
+        private int duration = 999;   // units are seconds
+        private int timeRemaining;
+        private bool isCountingDown = false;
 
 
         public void StartCountdown()
