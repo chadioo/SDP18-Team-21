@@ -36,21 +36,46 @@ public class Scoreboard : MonoBehaviour {
     public Text Name10;
 
     int newScore;
+    int newRank;
+
     int[] scoreBoardScores = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    string[] scoreBoardNames = { "", "", "", "", "", "", "", "", "", "" };
+    string[] scoreBoardNames = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+    //string[] scoreBoardNames = { "", "", "", "", "", "", "", "", "", "" };
+
+    string newScorePath = "/ARKscore.txt";
+    string scoreBoardPath = "/ARKscoreBoard.txt";
+
+    bool gotHighScore = false;
+
+    public InputField usernameInput;
+    public static string username;
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     void Start() {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
         calculateScoreBoard();
         initNames();
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    void Update() {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     public void calculateScoreBoard()
     {
-        System.IO.StreamWriter writer;
         System.IO.StreamReader reader;
 
-        string newScorePath = "/ARKscore.txt";
-        string scoreBoardPath = "/ARKscoreBoard.txt";
         string line;
 
         // check if new score has been saved
@@ -66,39 +91,115 @@ public class Scoreboard : MonoBehaviour {
             while ((line = reader.ReadLine()) != null)
             {
                 Debug.Log("ARK LOG ********** Saved Score: " + line);
+                newScore = int.Parse(line);
             }
             reader.Close();
+            Debug.Log("ARK LOG ********** Value of newScore: " + newScore);
 
             // check if scoreboard exists
             if (!File.Exists(Application.persistentDataPath + scoreBoardPath))
             {
                 Debug.Log("No high scores have been saved");
+                //File.Create(Application.persistentDataPath + scoreBoardPath);
+                writeFromArrays();
+                // scoreBoardScores[0] = newScore;
             }
             // retrieve old scores and store in array
-            else {
-                Debug.Log("A scoreboard has been saved");
-                reader = new System.IO.StreamReader(Application.persistentDataPath + newScorePath);
-                int count = 0;
-                while ((line = reader.ReadLine()) != null && count<10)
+            Debug.Log("A scoreboard has been saved");
+            reader = new System.IO.StreamReader(Application.persistentDataPath + scoreBoardPath);
+            int count = 0;
+            while ((line = reader.ReadLine()) != null && count<20)
+            {
+                Debug.Log("ARK LOG ********** High Score "+count+": "+(count/2)+": "+(count%2)+": " + line);
+
+                if (count % 2 == 0)
                 {
-                    Debug.Log("ARK LOG ********** High Score "+count+": " + line);
-
-                    scoreBoardScores[count] = int.Parse(line);  // might switch to try parse
-                    count++;
-                    // need to include code for saving names strings
+                    scoreBoardNames[count / 2] = line;
                 }
-                reader.Close();
+                else
+                {
+                    scoreBoardScores[count / 2] = int.Parse(line);  // might switch to try parse
+                }
+                count++;
+                // need to include code for saving names strings
+            }
+            reader.Close();
 
-                // insert new score into this list
+            // insert new score into this list and sort
+            sortList();
 
-                // if we will insert, need way to add name
+            //File.Delete(Application.persistentDataPath + scoreBoardPath); // delete old score file to pevent people from using previous score
+            File.Delete(Application.persistentDataPath + newScorePath); // delete old score file to pevent people from using previous score
+        }
+    }
 
-                // resave over data stored in array if needed
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    public void sortList() {
+        for (int i=0; i<10; i++) {
+            if (newScore >= scoreBoardScores[i])
+            {
+                Debug.Log("ARK LOG ********** Got A High Score!");
+                newRank = i;
+                Debug.Log("ARK LOG ********** Score ranking is: " + newRank);
+                gotHighScore = true;
+                break;
             }
         }
-
+        if (gotHighScore) {
+            for (int j = 9; j>newRank; j--)
+            {
+                Debug.Log("value "+ scoreBoardNames[j]+" of index " +j+" equals value "+ scoreBoardNames[j - 1] + " of index "+(j-1));
+                scoreBoardScores[j] = scoreBoardScores[j-1];
+                scoreBoardNames[j] = scoreBoardNames[j-1];
+            }
+            scoreBoardScores[newRank] = newScore;
+            scoreBoardNames[newRank] = "Enter your name!";
+            Debug.Log("ARK LOG ********** The score saved was: " + scoreBoardScores[newRank]);
+            writeFromArrays();
+        }
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    public void writeFromArrays()
+    {
+        System.IO.StreamWriter writer;
+
+        using (writer = new System.IO.StreamWriter(Application.persistentDataPath + scoreBoardPath, false))
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                writer.WriteLine(scoreBoardNames[i]);
+                writer.WriteLine(scoreBoardScores[i]);
+                Debug.Log("writeFromArray index "+i+" name "+ scoreBoardNames[i] + " score"+ scoreBoardScores[i]);
+            }
+        }
+        writer.Close();
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    public void saveName() {
+        username = usernameInput.text;
+        Debug.Log("Call saveName: username "+username+" gotHighScore "+gotHighScore);
+        if (gotHighScore)
+        {
+            scoreBoardNames[newRank] = username;
+            initNames();
+            writeFromArrays();
+            Debug.Log("Saving name");
+        }
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     public void initNames()
@@ -125,5 +226,27 @@ public class Scoreboard : MonoBehaviour {
         Name9.text = scoreBoardNames[8];
         Name10.text = scoreBoardNames[9];
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    public void SendEmail()
+    {
+        string email = "";
+
+        string subject = MyEscapeURL("Your ARK Score");
+
+        string body = MyEscapeURL("Congratulations!\r\nHere is your score from your most recent game.\r\nScore " + newScore + "\r\n" + "Thank you for playing!");
+
+        Application.OpenURL("mailto:" + email + "?subject=" + subject + "&body=" + body);
+
+    }
+
+    public string MyEscapeURL(string url)
+    {
+        return WWW.EscapeURL(url).Replace("+", "%20");
+    }
+
 
 }

@@ -92,6 +92,7 @@ namespace GoogleARCore.HelloAR
 
         // INTEGERS
         private int score = 0;
+        private int kickType = 1;
 
         // BLUETOOTH DEVICE
         private BluetoothDevice device;         // bluetooth device
@@ -109,6 +110,7 @@ namespace GoogleARCore.HelloAR
 
         void Awake()
         {
+            Screen.orientation = ScreenOrientation.LandscapeLeft;
             SideBySidePerspectiveCameraConfig();
             message.text = "Click Devices Button";
             BluetoothAdapter.askEnableBluetooth();                   //Ask user to enable Bluetooth
@@ -203,6 +205,7 @@ namespace GoogleARCore.HelloAR
                 return;
             }
 
+            Screen.orientation = ScreenOrientation.LandscapeLeft;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
             if (!FoundPlane & Bluetooth) // If you have not found plane, search for plane
@@ -260,37 +263,40 @@ namespace GoogleARCore.HelloAR
         {
             if (FoundPlane && SpawnBall && SpawnGoal && KickDetected && !KickExecuted)
             {
-                if (LeftFoot) // NEED TO MAKE CORRECT
+                if (kickType == 1) // 90 degree kick has flipped coordinates
                 {
-                    Vector3 acc = new Vector3(-xAcc * 50, yAcc * 50, zAcc * 50);
-                    //Vector3 force = new Vector3(xAcc * SoccerBallRigidbody.mass, yAcc * SoccerBallRigidbody.mass, zAcc * SoccerBallRigidbody.mass);
-                    //Debug.Log("Acceleration: "+acc+" Force: "+ force);
+                    Vector3 acc = new Vector3(-zAcc * 50 * 1.1f, yAcc * 50 * 1.1f, xAcc * 50 * 1.1f);
                     SoccerBallRigidbody.AddForce(acc);
                     KickExecuted = true;
                 }
-                else {
-                    Vector3 acc = new Vector3(-xAcc * 50, yAcc * 50, zAcc * 50);
-                    //Vector3 force = new Vector3(xAcc * SoccerBallRigidbody.mass, yAcc * SoccerBallRigidbody.mass, zAcc * SoccerBallRigidbody.mass);
-                    //Debug.Log("Acceleration: "+acc+" Force: "+ force);
+                else if (kickType == 2) // angle
+                {
+                    Vector3 acc = new Vector3(-xAcc * 50 * 1.2f, yAcc * 50 * 1.2f, zAcc * 50 * 1.2f);
                     SoccerBallRigidbody.AddForce(acc);
                     KickExecuted = true;
-                }     
+                }
+                else if (kickType == 3) // straight
+                {
+                    Vector3 acc = new Vector3(-xAcc * 50 * 1.3f, yAcc * 50 * 1.3f, zAcc * 50 * 1.3f);
+                    SoccerBallRigidbody.AddForce(acc);
+                    KickExecuted = true;
+                }
             }
 
             if (FoundPlane && SpawnBall && SpawnGoal && KickDetected && KickExecuted)
             {
                 if (SoccerBallRigidbody.position.x > 6 | SoccerBallRigidbody.position.x < -6 | SoccerBallRigidbody.position.z < -2 | SoccerBallRigidbody.position.z > 6.5)
                 {
-                    Destroy(SoccerBallRigidbody, 1.0f);// remove object
+                    Destroy(SoccerBallRigidbody);// remove object
                     Debug.Log("Destroyed ball oob");
                     _ShowAndroidToastMessage("Out of Bounds");
                     SpawnBall = false;
                     KickDetected = false;
                     KickExecuted = false;
                 }
-                else if (SoccerBallRigidbody.position.x < 1.5 && SoccerBallRigidbody.position.x > -1.5 && SoccerBallRigidbody.position.z > 6 && SoccerBallRigidbody.position.y < 1)
+                else if (SoccerBallRigidbody.position.x < 1.49 && SoccerBallRigidbody.position.x > -1.49 && SoccerBallRigidbody.position.z > 6 && SoccerBallRigidbody.position.y < 1)
                 {
-                    Destroy(SoccerBallRigidbody, 1.0f);// remove object
+                    Destroy(SoccerBallRigidbody);// remove object
                     Debug.Log("Destroyed ball goal");
                     score++;    // increase score
                     SpawnBall = false;
@@ -326,7 +332,7 @@ namespace GoogleARCore.HelloAR
                     if (msg != null && msg.Length > 0)
                     {
                         content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
-                        Debug.Log("ARK LOG ********** Content: " + content);
+                        //Debug.Log("ARK LOG ********** Content: " + content);
 
                         content = content.Replace(",", "");     // Remove commas
                         subStrings = content.Split(' ');        // Split up by spaces
@@ -334,7 +340,7 @@ namespace GoogleARCore.HelloAR
                         //sensorSave(content);
 
                         SensorData = new float[subStrings.Length];
-                        Debug.Log("subStrings: "+ (string.Join(",", subStrings)));
+                        //Debug.Log("subStrings: "+ (string.Join(",", subStrings)));
                         for (int i = 0; i < subStrings.Length; i++)
                         {
                             //Debug.Log("Substring: "+ subStrings[i] + " i:"+i);
@@ -377,7 +383,7 @@ namespace GoogleARCore.HelloAR
                             xAcc = xAvg.Sum() / 5;
                             yAcc = yAvg.Sum() / 5;
                             zAcc = zAvg.Sum() / 5;
-                            Debug.Log("ARK LOG ********** Content: " +yAcc+" "+zAcc+" "+xAcc);
+                            //Debug.Log("ARK LOG ********** Content: " +yAcc+" "+zAcc+" "+xAcc);
                             avgX_display.text = string.Join(" \t ", xAvg);
                             avgY_display.text = string.Join(" \t ", yAvg);
                             avgZ_display.text = string.Join(" \t ", zAvg);
@@ -391,18 +397,21 @@ namespace GoogleARCore.HelloAR
                             {
                                 Debug.Log("Straight Kick Detected!");
                                 _ShowAndroidToastMessage("Straight Kick Detected!");
+                                kickType = 3;
                                 KickDetected = true;
                             }
                             else if (zAcc >= AngleLow[1] && zAcc <= AngleHigh[1] && xAcc >= AngleLow[2] && xAcc <= AngleHigh[2] && yAcc >= AngleLow[0] && yAcc <= AngleHigh[0])
                             {
                                 Debug.Log("Angle Kick Detected!");
                                 _ShowAndroidToastMessage("Angle Kick Detected!");
+                                kickType = 2;
                                 KickDetected = true;
                             }
                             else if (zAcc >= NinetyLow[1] && zAcc <= NinetyHigh[1] && xAcc >= NinetyLow[2] && xAcc <= NinetyHigh[2] && yAcc >= NinetyLow[0] && yAcc <= NinetyHigh[0])
                             {
                                 Debug.Log("Ninety Kick Detected!");
                                 _ShowAndroidToastMessage("Ninety Kick Detected!");
+                                kickType = 1;
                                 KickDetected = true;
                             }
                             else if (false)
@@ -453,7 +462,7 @@ namespace GoogleARCore.HelloAR
         // COUNTDOWN USED TO TIME GAME LENGTH (initiated when arena spawned)
 
 
-        private int duration = 999;   // units are seconds
+        private int duration = 90;   // units are seconds
         private int timeRemaining;
         private bool isCountingDown = false;
 
@@ -480,10 +489,10 @@ namespace GoogleARCore.HelloAR
             }
             else
             {
+                saveScore(score.ToString());
                 message.text = "Press Me!";
                 countText.text = "Press Me!";
                 isCountingDown = false;
-                saveScore(score.ToString());
             }
         }
 
@@ -605,13 +614,14 @@ namespace GoogleARCore.HelloAR
             if (!File.Exists(Application.persistentDataPath + filePath))
             {
                 Debug.Log("No score previously saved, saving new score");
-                FileStream fileStr = File.Create(Application.persistentDataPath + filePath);
+                //FileStream fileStr = File.Create(Application.persistentDataPath + filePath);
 
                 using (writer = new System.IO.StreamWriter(Application.persistentDataPath + filePath, false))
                 {
                     Debug.Log("Saving Data: "+data);
                     writer.WriteLine(data);
                 }
+                writer.Close();
             }
             else
             {
@@ -620,6 +630,7 @@ namespace GoogleARCore.HelloAR
                 {
                     writer.WriteLine(data);
                 }
+                writer.Close();
             }
         }
 
@@ -638,7 +649,7 @@ namespace GoogleARCore.HelloAR
             //Debug.Log("ARK LOG ********** sensorSave");
             if (!File.Exists(Application.persistentDataPath + "/sensorCache.txt"))
             {
-                FileStream fileStr = File.Create(Application.persistentDataPath + "/sensorCache.txt");
+                //FileStream fileStr = File.Create(Application.persistentDataPath + "/sensorCache.txt");
                 //Debug.Log("ARK LOG ********** Create File");
             }
             if (dataCount < 10)
@@ -649,6 +660,7 @@ namespace GoogleARCore.HelloAR
                     writer.WriteLine(data);
                     dataCount++;
                 }
+                writer.Close();
             }
             else
             {
@@ -664,6 +676,7 @@ namespace GoogleARCore.HelloAR
                 {
                     writer.WriteLine(data);
                 }
+                writer.Close();
             }
         }
 

@@ -124,7 +124,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 8bb8d2e63730f43bf5eeaa11a50e0cc8 Assembly-CSharp.dll:GoogleARCore.HelloAR.HelloARController
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TechTweaking.Bluetooth.BluetoothAdapter
 0352182229dc15ceae98dd2533712b4a Assembly-CSharp.dll:GoogleARCore.ARCoreBackgroundRenderer
-f5b5427e04a226cd9a4724737849583c Assembly-CSharp.dll:.Scoreboard
+ae5ad29dd6b8eb2f62a5122cb4579201 Assembly-CSharp.dll:.Scoreboard
 ffa3dcaeb2b3237dcf5daa17ee949962 Assembly-CSharp.dll:.HighRateTerminal
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.CallbackExecutor
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.Editor.Placeholder
