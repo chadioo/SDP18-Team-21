@@ -226,9 +226,9 @@ void Read_RawValue()
 	Acc_y = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
 	Acc_z = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
 	//Temperature = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
-	//Gyro_x = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
-	//Gyro_y = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
-	//Gyro_z = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Nack());
+	Gyro_x = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
+	Gyro_y = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Ack());
+	Gyro_z = (((int)I2C_Read_Ack()<<8) | (int)I2C_Read_Nack());
 	I2C_Stop();
 }
 
@@ -329,7 +329,6 @@ void timer0_init()
 	TIMSK 	|= (1 << TOIE0);
 	TIFR 	|= (1 << TOV0);
 }
-
 // TIMER0 overflow interrupt service routine
 // called whenever TCNT0 overflows
 ISR(TIMER0_OVF_vect)
@@ -361,7 +360,7 @@ int main(void) {
 	// global variables
 	char buffer[20], float_[10];
 	float Xa,Ya,Za;
-	//float Xg=0,Yg=0,Zg=0;
+	float Xg=0,Yg=0,Zg=0;
 //	tot_overflow = 0;
 
 	// initialize bluetooth, USART, mpu6050
@@ -389,9 +388,9 @@ int main(void) {
 		Ya = Acc_y/16384.0;
 		Za = Acc_z/16384.0;
 		
-		//Xg = Gyro_x/16.4;
-		//Yg = Gyro_y/16.4;
-		//Zg = Gyro_z/16.4;
+		Xg = Gyro_x/16.4;
+		Yg = Gyro_y/16.4;
+		Zg = Gyro_z/16.4;
 
 		//if(DATA_IN == '1') {	// print all continuously
 				
@@ -407,10 +406,10 @@ int main(void) {
 				USART_SendString(buffer);
 
 				dtostrf( Za, 3, 2, float_ );
-				sprintf(buffer," %s\n",float_);
+				sprintf(buffer," %s, ",float_);
 				USART_SendString(buffer);
 
-				/*dtostrf( Xg, 3, 2, float_ );
+				dtostrf( Xg, 3, 2, float_ );
 				sprintf(buffer," %s, ",float_);
 				USART_SendString(buffer);
 
@@ -420,11 +419,10 @@ int main(void) {
 
 				dtostrf( Zg, 3, 2, float_ );
 				sprintf(buffer," %s\n",float_);
-				USART_SendString(buffer);*/
+				USART_SendString(buffer);
 
 		//} // end if statment
 
 	} // end while loop
 
 } // end main
-
